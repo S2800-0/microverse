@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Microverse · motion workbench</title>
+<style>
+body{font:16px system-ui;max-width:1000px;margin:32px auto;padding:0 20px;background:#f4eedf;color:#2b2a26}h1{font-size:26px}p{max-width:70ch;line-height:1.5}fieldset{display:flex;gap:16px;flex-wrap:wrap;border:1px solid #b5ad9b;padding:16px}label{display:grid;gap:6px}button,select,input{font:inherit;padding:8px}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #4e7a96;outline-offset:2px}.canvases{display:flex;gap:16px;flex-wrap:wrap}canvas{max-width:100%;height:auto;background:repeating-conic-gradient(#e9e0cb 0 25%,#faf7ef 0 50%) 0/20px 20px;border:1px solid #b5ad9b}figcaption{margin-top:8px}#status{min-height:48px}
+</style></head><body>
+<h1>Motion workbench</h1>
+<p>A developer preview, independent of the future product UI. Synthetic fixtures test geometry; the optional local QA cutout reuses existing artwork. Preparing a rig makes no model calls.</p>
+<fieldset><legend>Preview controls</legend>
+<label>Fixture<select id="fixture"><option value="separated">Four separated legs</option><option value="merged">Merged hind pair</option><option value="opaque">Opaque image · reject</option><option value="local">Local QA cutout · if configured</option></select></label>
+<label>Profile<select id="profile"><option value="dog">Dog</option><option value="cat">Cat</option><option value="penguin">Penguin · whole-image fallback</option></select></label>
+<label>Gait<select id="gait"><option value="walk">Walk</option><option value="trot">Trot</option></select></label>
+<label>Knee cut<input id="knee" type="range" min="0.5" max="0.9" step="0.01" value="0.65"></label>
+<button id="prepare">Prepare preview</button><button id="pause" disabled>Pause motion</button>
+<button id="accept" disabled>Accept this rig</button><button id="fallback" disabled>Use whole-image movement</button>
+</fieldset>
+<p id="status" role="status" aria-live="polite">Choose a fixture and prepare a preview.</p>
+<div class="canvases"><figure><canvas id="source" width="320" height="320" aria-label="Source animal cutout"></canvas><figcaption>Source cutout</figcaption></figure><figure><canvas id="motion" width="320" height="320" aria-label="Puppet motion preview"></canvas><figcaption>Reviewed motion</figcaption></figure></div>
+<p>Four extracted pieces are a geometry check. They do not establish anatomy. The current rig keeps the head and accessories in the torso image; separate head/accessory motion is future work.</p>
+<script type="module" src="/examples/motion/workbench.js"></script></body></html>
