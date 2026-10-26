@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "file": "maps/spring.png",
+      "sha256": "35c6a871f27d923638fc5619117ef4fec788bc1846decb499791caf01a14e0ed",
+      "origin": "Pre-event generated prototype art; unchanged binary import"
+    },
+    {
+      "file": "animals/deer-standing.png",
+      "sha256": "45d4eec61fbd1992cebd1f7366a7b2563f15691fe9ae8fcbac93f52462ad7d2d",
+      "origin": "Pre-event generated prototype art; unchanged binary import"
+    },
+    {
+      "file": "animals/dog-standing.png",
+      "sha256": "7b71db01ece9ded4269b23e0f0a586f0f213677e1b9499bdbe0274fa36cda1bc",
+      "origin": "Pre-event generated prototype art; unchanged binary import"
+    },
+    {
+      "file": "animals/fox-standing.png",
+      "sha256": "409f2c33b208094315c767492555d562977b208082e67fbe4016f858826f21ed",
+      "origin": "Pre-event generated prototype art; unchanged binary import"
+    },
+    {
+      "file": "animals/rabbit-standing.png",
+      "sha256": "d92a9418696ae9e9ec2a3810a2c1cab58793c195ff39b123ff0db35e7a743951",
+      "origin": "Pre-event generated prototype art; unchanged binary import"
+    },
+    {
+      "file": "animals/tabby-character-preview.png",
+      "sha256": "69ed92778ffccbb72b1fe08947a6dd4693e0fedc1f470036e6767045cc6ce944",
+      "origin": "Pre-event generated prototype art; unchanged binary import"
+    },
+    {
+      "file": "animals/wolf-standing.png",
+      "sha256": "77dec4825c4fd88ba05c28eea1030606d48b7d31a48ca41bd588192528625981",
+      "origin": "Pre-event generated prototype art; unchanged binary import"
+    }
+  ]
+}

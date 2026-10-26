@@ -2,7 +2,7 @@
 
 An illustrated ecosystem playground: bring a creature to life, predict what an environmental change will do, and compare repeatable model experiments.
 
-This public repository is being assembled one feature at a time. It is not a complete product yet. The intended first classroom activity is a short **predict → experiment → inspect → explain** lesson about indirect ecological effects.
+This public repository is being assembled one feature at a time. The first living forest now runs locally; complete paired-world replay and Meta inference remain upcoming features. The intended classroom activity is a short **predict → experiment → inspect → explain** lesson about indirect ecological effects.
 
 ## Development
 
@@ -11,6 +11,8 @@ Use Node.js 24 or newer. No runtime dependencies are required for the initial si
 ```sh
 npm test
 npm run check
+npm run preview
+npm run build
 ```
 
 Feature branches and pull requests carry their own tests, limitations, and provenance. See [development workflow](docs/development.md), [migration sequence](docs/migration.md), and [classroom design](docs/classroom.md).
@@ -18,6 +20,8 @@ Feature branches and pull requests carry their own tests, limitations, and prove
 The [indirect contributions plan](docs/indirect-contributions.md) specifies how to evaluate reasoning skills and make the engine, replay format and puppet tools useful to other builders.
 
 Run `npm run preview:motion` for the local [motion workbench](docs/motion.md). The [UI boundary guide](docs/ui-boundaries.md) keeps the eventual product layout open to redesign while retaining tested model and animation logic.
+
+The [living forest guide](docs/forest.md) documents the current interaction, browser checks, asset provenance and remaining limits. The UI draft is intentionally changeable.
 
 ## Provenance and event contributions
 

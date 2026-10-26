@@ -2,27 +2,30 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve, extname } from 'node:path';
+import { stripTypeScriptTypes } from 'node:module';
 
-const root = fileURLToPath(new URL('..', import.meta.url));
-const server = createServer(async (req, res) => {
-  const pathname = new URL(req.url, 'http://localhost').pathname;
-  const path = pathname === '/' ? '/examples/motion/index.html' : pathname;
-  // Optional existing local QA sprite. Never copied into the repo or uploaded.
-  if (path === '/test-fixture.png' && ['GET','HEAD'].includes(req.method) && process.env.MICROVERSE_TEST_SPRITE) {
-    try {
-      const data = await readFile(resolve(root, process.env.MICROVERSE_TEST_SPRITE));
-      res.writeHead(200, {'Content-Type':'image/png','Cache-Control':'no-store'});
-      res.end(req.method==='HEAD'?undefined:data);
-    } catch { res.writeHead(404);res.end('Local test fixture unavailable'); }
-    return;
-  }
-  if (!['GET','HEAD'].includes(req.method) || !/^\/(?:examples\/motion|src\/motion)\/[a-z-]+\.(?:html|js)$/.test(path)) {
-    res.writeHead(404);res.end('Not found');return;
-  }
-  try {
-    const data = await readFile(resolve(root, `.${path}`));
-    res.writeHead(200, {'Content-Type':extname(path)==='.html'?'text/html; charset=utf-8':'text/javascript; charset=utf-8','Cache-Control':'no-store'});
-    res.end(req.method==='HEAD'?undefined:data);
-  } catch { res.writeHead(404);res.end('Not found'); }
-});
-server.listen(Number(process.env.PORT ?? 8895), '127.0.0.1', () => console.log('Motion workbench: http://127.0.0.1:8895/'));
+const root=fileURLToPath(new URL('..',import.meta.url));
+export function createPreviewServer({ motion=false, testSprite=process.env.MICROVERSE_TEST_SPRITE }={}) {
+  return createServer(async(req,res)=>{
+    if(!['GET','HEAD'].includes(req.method)){res.writeHead(404);res.end('Not found');return;}
+    const path=new URL(req.url,'http://localhost').pathname;
+    let file;
+    if(path==='/')file=motion?'examples/motion/index.html':'app/index.html';
+    else if(path==='/forest.css')file='app/forest.css';
+    else if(path==='/test-fixture.png'&&testSprite)file=testSprite;
+    else if(/^\/examples\/(motion|forest)\/[a-z-]+\.(html|js)$/.test(path)||/^\/src\/(motion|sim|scene)\/[a-z-]+\.(js|ts)$/.test(path))file=`.${path}`;
+    else if(/^\/(animals|maps)\/[a-z-]+\.png$/.test(path))file=`public${path}`;
+    else {res.writeHead(404);res.end('Not found');return;}
+    try{
+      let data=await readFile(resolve(root,file));
+      const extension=extname(file);
+      if(extension==='.ts')data=stripTypeScriptTypes(data.toString());
+      const contentType={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.ts':'text/javascript; charset=utf-8','.png':'image/png'}[extension];
+      res.writeHead(200,{'Content-Type':contentType,'Cache-Control':'no-store'});res.end(req.method==='HEAD'?undefined:data);
+    }catch{res.writeHead(404);res.end('Not found');}
+  });
+}
+if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
+  const server=createPreviewServer({motion:process.argv.includes('--motion')});
+  server.listen(Number(process.env.PORT??8895),'127.0.0.1',()=>console.log(`Microverse preview: http://127.0.0.1:${server.address().port}/`));
+}
