@@ -1,0 +1,132 @@
+import {createExperiment,experimentFromReplay,validateReplay,runContinuation} from './experiment.ts';
+import {ART} from './art.js';
+import {buildRig,GAITS} from '../motion/rig.js';
+import {assessRig} from '../motion/rig-analysis.js';
+import {prepareJointPieces,drawPuppet} from '../motion/puppet-motion.js';
+import {getMotion} from '../motion/motion-library.js';
+
+// The comparison view owns its canvases/timer; it never advances the exploring forest.
+export function installExperimentView({snapshot,eventText,onStatus=()=>{}}){
+  const el=id=>document.getElementById(id),dialog=el('comparison-dialog');
+  let experiment=null,timer=null,revision=0,startWeek=0,analysisRevision=0;
+  const images=new Map(),rigs=new Map();
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  const message=text=>{el('comparison-status').textContent=text;};
+  function pause(){clearInterval(timer);timer=null;el('comparison-play').textContent='Play experiment';}
+  function renderWorld(canvas,state){
+    const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
+    ctx.clearRect(0,0,w,h);ctx.fillStyle='#c6c79c';ctx.fillRect(0,0,w,h);
+    const map=images.get('/maps/spring.png');if(map)ctx.drawImage(map,0,0,w,h);
+    ctx.fillStyle=`rgba(151,114,68,${Math.max(0,.8-state.grass)*.35})`;ctx.fillRect(0,0,w,h);
+    for(const a of [...state.animals].sort((a,b)=>a.y-b.y)){
+      const custom=state.appearances.get(a.id),art=ART[a.species],src=custom?.image||art?.image;
+      const image=images.get(src),rig=rigs.get(src),x=a.x/state.world.params.width*w,y=a.y/state.world.params.height*h;
+      const size=44*(art?.size||1);
+      ctx.save();ctx.translate(x,y);
+      if(rig){ctx.scale(size/180,size/180);drawPuppet(ctx,rig,{size:180,phase:a.id*.37,moving:false,preset:getMotion(art?.motion==='cat'?'cat':'dog'),phases:GAITS.walk.phase,clock:0});}
+      else if(image)ctx.drawImage(image,-size/2,-size*.85,size,size);
+      else{ctx.fillStyle='#f4eedf';ctx.beginPath();ctx.arc(0,-5,5,0,Math.PI*2);ctx.fill();}
+      ctx.restore();
+      if(custom){ctx.font='11px system-ui';ctx.textAlign='center';const name=custom.name;
+        const tw=ctx.measureText(name).width;const labelX=Math.max(tw/2+3,Math.min(w-tw/2-3,x));
+        ctx.fillStyle='#f4eedfe8';ctx.fillRect(labelX-tw/2-3,y+2,tw+6,15);ctx.fillStyle='#2b2a26';ctx.fillText(name,labelX,y+13);}
+    }
+  }
+  async function prepareArt(initial){
+    const current=++revision;images.clear();rigs.clear();
+    const sources=new Map([['/maps/spring.png',null]]);
+    for(const art of Object.values(ART))if(art.image)sources.set(art.image,art.cut||null);
+    for(const a of initial.appearances)if(a.image)sources.set(a.image,a.rigConfig||null);
+    let unavailable=0,rigFallbacks=0;
+    await Promise.all([...sources].map(async([src,cut])=>{
+      try{
+        const image=new Image();image.src=src;await image.decode();if(current!==revision)return;images.set(src,image);
+        if(cut){try{const candidate=await buildRig(src,cut);if(current!==revision)return;if(assessRig(candidate).warnings.length)throw new Error();rigs.set(src,prepareJointPieces(candidate));}catch{rigFallbacks++;}}
+      }catch{unavailable++;}
+    }));
+    if(current===revision&&dialog.open){render();message(unavailable?`${unavailable} image(s) unavailable. Model records remain intact.`:rigFallbacks?`${rigFallbacks} illustration(s) use whole-image display.`:'Ready. Advance both worlds together, then inspect the evidence.');}
+  }
+  function render(){
+    if(!experiment)return;const s=experiment.getState(),a=s.baseline,b=s.changed;
+    el('comparison-week').textContent=`${s.elapsed} ${s.elapsed===1?'week':'weeks'}`;el('comparison-seek').value=s.elapsed;
+    el('evidence-caption').textContent=`Elapsed week ${s.elapsed} · forest week ${a.week} · changed minus baseline`;
+    for(const [prefix,state]of [['baseline',a],['changed',b]]){
+      renderWorld(el(`${prefix}-world`),state);
+      el(`${prefix}-summary`).textContent=`Forest week ${state.week} · ${state.animals.length} creatures · grass ${Math.round(state.grass*100)}% · browse ${Math.round(state.browse*100)}%`;
+      const list=el(`${prefix}-events`);list.replaceChildren();
+      const recorded=state.world.events.filter(e=>e.t>=startWeek);
+      const recent=recorded.slice(-10),events=[...recorded.filter(e=>e.type==='intervention'&&!recent.includes(e)),...recent].reverse();
+      if(!events.length){const li=document.createElement('li');li.textContent='No events since this experiment began.';list.append(li);}
+      for(const e of events){const li=document.createElement('li');li.textContent=eventText(e);list.append(li);}
+    }
+    const rows=el('comparison-evidence');rows.replaceChildren();
+    const measures=[['Grass cover (%)',a.grass*100,b.grass*100],['Browse cover (%)',a.browse*100,b.browse*100],
+      ...Object.keys(a.counts).map(k=>[ART[k]?.label||k,a.counts[k],b.counts[k]])];
+    for(const [label,before,after]of measures){const tr=document.createElement('tr');for(const [i,value]of [label,before,after,after-before].entries()){
+      const cell=document.createElement(i===0?'th':'td');if(!i)cell.scope='row';cell.textContent=typeof value==='number'?`${i===3&&value>0?'+':''}${Number(value.toFixed(1))}`:value;tr.append(cell);
+    }rows.append(tr);}
+    const identities=[...a.appearances].map(([id,v])=>`${v.name} (#${id}): baseline ${a.animals.some(x=>x.id===id)?'alive':'absent'}, changed ${b.animals.some(x=>x.id===id)?'alive':'absent'}`);
+    el('comparison-identity').textContent=identities.join(' · ');
+    const end=s.elapsed===156;el('comparison-step').disabled=end;el('comparison-season').disabled=end;
+    if(end)pause();
+  }
+  function seek(week){try{experiment.seek(week);render();}catch(error){pause();message(error.message);}}
+  function show(next,prediction,reflection){
+    pause();analysisRevision++;experiment=next;
+    el('continuation-results').textContent='';el('run-continuations').disabled=false;
+    const file=next.toReplay();
+    startWeek=file.initial.world.week;
+    el('saved-prediction').textContent=prediction?`Your prediction: ${prediction}`:'No prediction recorded. You can still inspect and explain the evidence.';
+    el('reflection').value=reflection;
+    el('comparison-description').textContent=file.scenario==='drought'?'Rainfall changes to 40% for three model years. All other starting conditions are copied.':'Wolves are removed on the first experiment tick and cannot immigrate back.';
+    el('changed-label').textContent=file.scenario==='drought'?'Changed · less rain':'Changed · wolves removed';
+    if(!dialog.open)dialog.showModal();render();message('Preparing illustrations locally…');prepareArt(file.initial);
+  }
+  el('comparison-play').onclick=()=>{
+    if(timer){pause();return;}if(experiment.getState().elapsed===156)seek(0);
+    el('comparison-play').textContent='Pause experiment';timer=setInterval(()=>{if(!document.hidden)seek(Math.min(156,experiment.getState().elapsed+1));},reduced.matches?1200:650);
+  };
+  el('comparison-step').onclick=()=>{pause();seek(Math.min(156,experiment.getState().elapsed+1));};
+  el('comparison-season').onclick=()=>{pause();seek(Math.min(156,experiment.getState().elapsed+13));};
+  el('comparison-restart').onclick=()=>{pause();seek(0);};
+  el('comparison-seek').oninput=()=>pause();
+  el('comparison-seek').onchange=()=>seek(Number(el('comparison-seek').value));
+  el('comparison-close').onclick=()=>dialog.close();
+  dialog.addEventListener('close',()=>{pause();revision++;analysisRevision++;experiment=null;images.clear();rigs.clear();el('replay-file').value='';});
+  el('run-continuations').onclick=async()=>{
+    pause();const current=++analysisRevision,file=experiment.toReplay(),results=[];
+    el('run-continuations').disabled=true;
+    // Yield after each replicate so the dialog remains responsive and close cancels.
+    try{for(let randomState=1;randomState<=10;randomState++){
+      if(current!==analysisRevision)return;
+      results.push(runContinuation(file.initial,file.scenario,randomState));
+      el('continuation-results').textContent=`Checking continuation ${randomState} of 10…`;
+      await new Promise(resolve=>setTimeout(resolve,0));
+    }
+    if(current!==analysisRevision)return;
+    const delta=(key,species)=>results.map(r=>species?r.changed.counts[species]-r.baseline.counts[species]:(r.changed[key]-r.baseline[key])*100);
+    const range=values=>`${Math.min(...values).toFixed(1)} to ${Math.max(...values).toFixed(1)}`;
+    el('continuation-results').textContent=`At elapsed week 156, changed minus baseline: grass ${range(delta('grass'))} percentage points; rabbits ${range(delta(null,'rabbit'))}; deer ${range(delta(null,'deer'))}. Range across 10 fixed random continuation states (1–10). Starting creatures and resources stay fixed; only future random draws vary. This is variation within the model, not a confidence interval or forecast.`;
+    }catch(error){if(current===analysisRevision)el('continuation-results').textContent=`Continuation check could not finish: ${error.message}`;}
+    finally{if(current===analysisRevision)el('run-continuations').disabled=false;}
+  };
+  el('download-replay').onclick=()=>{
+    try{const file=experiment.toReplay(el('reflection').value),url=URL.createObjectURL(new Blob([JSON.stringify(file)],{type:'application/json'}));
+      const a=document.createElement('a');a.href=url;a.download=`microverse-${file.scenario}-week-${file.elapsed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+      message('Replay saved locally, including your creature images and notes.');
+    }catch(error){message(error.message);}
+  };
+  el('replay-file').onchange=async()=>{
+    pause();const file=el('replay-file').files[0];if(!file)return;
+    const current=++revision;
+    try{
+      if(file.size>16_000_000)throw new Error('Choose a replay under 16 MB.');
+      const input=JSON.parse(await file.text());validateReplay(input);
+      if(current!==revision)return;
+      show(experimentFromReplay(input),input.prediction,input.reflection);
+    }catch(error){if(current===revision){const text=`Replay could not be opened: ${error.message}`;message(text);if(!dialog.open)onStatus(text);}}
+    finally{el('replay-file').value='';}
+  };
+  return {open(scenario,prediction){show(createExperiment(snapshot(),scenario,prediction),prediction,'');},
+    chooseReplay(){el('replay-file').click();}};
+}

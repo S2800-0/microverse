@@ -1,6 +1,8 @@
 // Microverse ecosystem engine (spike).
 // Deterministic agent-based model: same seed + params => identical event log.
 // One tick = one week. 52 ticks = one year.
+import { ENGINE_VERSION, validateWorldSnapshot } from './snapshot.ts';
+import type { WorldSnapshot } from './snapshot.ts';
 
 export type SpeciesId = "rabbit" | "deer" | "fox" | "wolf" | "dog" | "cat" | "penguin";
 export type Season = "spring" | "summer" | "autumn" | "winter";
@@ -74,13 +76,16 @@ export type Event =
 // ---------- seeded RNG (mulberry32) ----------
 export function rng(seed: number) {
   let a = seed >>> 0;
-  return () => {
+  const next = () => {
     a = (a + 0x6d2b79f5) >>> 0;
     let t = a;
     t = Math.imul(t ^ (t >>> 15), t | 1);
     t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
+  next.getState = () => a;
+  next.setState = (state: number) => { a = state >>> 0; };
+  return next;
 }
 
 export function seasonOf(week: number): Season {
@@ -157,7 +162,7 @@ export class World {
   animals: Animal[] = [];
   events: Event[] = [];
   private nextId = 1;
-  private r: () => number;
+  private r: ReturnType<typeof rng>;
   private predatorsOf: Record<SpeciesId, SpeciesId[]>;
   private rain: number;
   private buckets = new Map<SpeciesId, Map<number, Animal[]>>();
@@ -202,6 +207,27 @@ export class World {
         if ((s === "fox" || s === "wolf") && named < NAMES.length) a.name = NAMES[named++];
       }
     }
+  }
+
+  toSnapshot(): WorldSnapshot {
+    // JSON normalization removes optional undefined fields and detaches all data.
+    return JSON.parse(JSON.stringify({version:ENGINE_VERSION,seed:this.seed,week:this.week,
+      randomState:this.r.getState(),nextId:this.nextId,rain:this.rain,params:this.params,
+      animals:this.animals,events:this.events,interventions:this.interventions,
+      grass:Array.from(this.grass),browse:Array.from(this.browse),open:Array.from(this.open),excluded:[...this.excluded]}));
+  }
+
+  static fromSnapshot(input: unknown, walkable?: (x:number,y:number)=>boolean,
+    canTraverse?: (x0:number,y0:number,x1:number,y1:number)=>boolean): World {
+    validateWorldSnapshot(input);
+    const s: WorldSnapshot = structuredClone(input);
+    if(s.open.some(v=>!v)&&(!walkable||!canTraverse))throw new Error('Restoring terrain requires its movement callbacks.');
+    const w=new World({...s.params,initial:{}},s.seed,[],walkable,canTraverse);
+    if(w.open.some((v,i)=>v!==s.open[i])||s.animals.some(a=>!w.walkable(a.x,a.y)))throw new Error('Snapshot terrain does not match.');
+    w.params=s.params;w.week=s.week;w.r.setState(s.randomState);w.nextId=s.nextId;w.rain=s.rain;
+    w.animals=s.animals;w.events=s.events;w.interventions=s.interventions;
+    w.grass=Float32Array.from(s.grass);w.browse=Float32Array.from(s.browse);w.excluded=new Set(s.excluded);
+    return w;
   }
 
   private spawn(s: SpeciesId, x: number, y: number, energy: number, parent: number): Animal {
