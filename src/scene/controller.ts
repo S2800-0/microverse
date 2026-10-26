@@ -3,13 +3,13 @@ import type { SpeciesId } from '../sim/engine.ts';
 import { sceneParams } from '../sim/scene-ecology.ts';
 import { buildTerrain, MEADOW_V2_TERRAIN } from './terrain.js';
 import { TERRAIN_VERSION, validateSceneSnapshot } from './snapshot.ts';
-import type { SceneSnapshot } from './snapshot.ts';
+import type { SceneSnapshot,AssetSource } from './snapshot.ts';
 
 export function createForestController({ seed = 7, populated = true } = {}) {
   const terrain = buildTerrain(MEADOW_V2_TERRAIN);
   let world: World;
   let selectedId: number | null = null;
-  const appearances = new Map<number, { name: string; image?: string; rig?: unknown; rigConfig?:Record<string,unknown> }>();
+  const appearances = new Map<number, { name: string; image?: string; rig?: unknown; rigConfig?:Record<string,unknown>;source?:AssetSource }>();
   function reset(fill = populated) {
     populated = fill; appearances.clear(); selectedId = null;
     const p = sceneParams({ populated });
@@ -22,7 +22,7 @@ export function createForestController({ seed = 7, populated = true } = {}) {
       counts: world.counts(), grass: world.grassCover(), browse: world.browseCover(),
       animals: world.animals.filter(a=>a.alive) };
   }
-  function add({ species, name = '', image, rig, rigConfig }: { species: SpeciesId; name?: string; image?: string; rig?: unknown; rigConfig?:Record<string,unknown> }) {
+  function add({ species, name = '', image, rig, rigConfig,source }: { species: SpeciesId; name?: string; image?: string; rig?: unknown; rigConfig?:Record<string,unknown>;source?:AssetSource }) {
     if (!Object.hasOwn(world.params.species,species)) throw new Error('Unsupported ecological role.');
     const n = world.animals.length;
     let position: {x:number;y:number} | null = null;
@@ -35,7 +35,7 @@ export function createForestController({ seed = 7, populated = true } = {}) {
     if (!position) throw new Error('No open ground available for this creature.');
     const animal=world.addCreature({species,...position});
     const cleanName=String(name).trim().slice(0,24)||`${species[0].toUpperCase()+species.slice(1)} ${animal.id}`;
-    appearances.set(animal.id,{name:cleanName,image,rig,rigConfig});selectedId=animal.id;
+    appearances.set(animal.id,{name:cleanName,image,rig,rigConfig,source});selectedId=animal.id;
     return animal;
   }
   function schedule(kind: 'drought' | 'remove-wolves') {
@@ -47,7 +47,7 @@ export function createForestController({ seed = 7, populated = true } = {}) {
     // Expired selected creatures can have left the retained animal array.
     return JSON.parse(JSON.stringify({version:1,terrain:TERRAIN_VERSION,populated,
       selectedId:world.animals.some(a=>a.id===selectedId)?selectedId:null,world:world.toSnapshot(),
-      appearances:[...appearances].map(([id,{name,image,rigConfig}])=>({id,name,image,rigConfig}))}));
+      appearances:[...appearances].map(([id,{name,image,rigConfig,source}])=>({id,name,image,rigConfig,source}))}));
   }
   function restore(input:unknown) {
     validateSceneSnapshot(input);const s:SceneSnapshot=structuredClone(input),p=s.world.params;

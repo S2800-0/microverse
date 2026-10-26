@@ -3,12 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "preview": "node scripts/preview.mjs",
+    "preview:meta": "node --env-file-if-exists=.env scripts/creature-server.mjs",
     "preview:motion": "node scripts/preview.mjs --motion",
     "build": "node scripts/build.mjs",
     "test": "node --test",
     "check": "node scripts/check-syntax.mjs"
+  },
+  "dependencies": {
+    "@meta-sam/parser": "0.1.0"
   }
 }

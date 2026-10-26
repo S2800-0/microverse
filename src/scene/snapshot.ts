@@ -3,7 +3,8 @@ import type { WorldSnapshot } from '../sim/snapshot.ts';
 import { sceneParams } from '../sim/scene-ecology.ts';
 
 export const TERRAIN_VERSION='meadow-v2-1';
-export interface Appearance { id:number; name:string; image?:string; rigConfig?:Record<string,unknown> }
+export interface AssetSource {provider:'Meta';imageModel:'muse-image-1.0';maskModel:'sam-3.1';promptVersion:string}
+export interface Appearance { id:number; name:string; image?:string; rigConfig?:Record<string,unknown>;source?:AssetSource }
 export interface SceneSnapshot {
   version:1; terrain:typeof TERRAIN_VERSION; populated:boolean; selectedId:number|null;
   world:WorldSnapshot; appearances:Appearance[];
@@ -51,6 +52,7 @@ export function validateSceneSnapshot(input:unknown):asserts input is SceneSnaps
     ids.add(a.id);
     if(a.image!==undefined){validateCreatureImage(a.image);bytes+=a.image.length;}
     if(a.rigConfig!==undefined){if(!a.image)invalid();validateRig(a.rigConfig);}
+    if(a.source!==undefined){const m=a.source;if(!a.image||!m||m.provider!=='Meta'||m.imageModel!=='muse-image-1.0'||m.maskModel!=='sam-3.1'||m.promptVersion!=='watercolor-side-profile-1')invalid();}
   }
   if(bytes>12_000_000)throw new Error('Keep creature images in a replay under 12 MB.');
 }

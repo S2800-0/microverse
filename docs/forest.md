@@ -34,4 +34,4 @@ Browser QA also found overlapping notes/card panels, mobile camera controls over
 
 UI/UX remains open to redesign. The model uses illustrative assumptions, manually traced terrain and artistic gaits. The background is the imported spring painting; calendar changes are model data and resource tinting is an index, not freshly generated seasonal imagery. No Meta inference, automatic identification, SAM segmentation or generative map step is enabled here. Initial PNGs retain their source resolution; a first-load performance/art optimization pass is still needed.
 
-Next integration: a bounded Meta creature adapter and custom experiment translation after credits/API access are available. Headline claims about ecological effect size or classroom learning require separate evidence.
+The [optional Meta creature bridge](meta-creature.md) now supplies local adapters and explicit image sending, paused by default. Next: funded live validation and custom experiment translation. Headline claims about ecological effect size or classroom learning require separate evidence.
