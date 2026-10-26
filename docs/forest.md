@@ -8,7 +8,7 @@ Run `npm run preview`, then open `http://127.0.0.1:8895/`. `npm run preview:moti
 - Play/pause, single-week stepping, speed control, deterministic seed-7 reset and empty clearing.
 - Existing generated watercolor map and six species images, with reviewed prepared rigs where geometry permits. Non-rigged art remains whole-image movement; art is illustrative and does not accurately encode every individual's sex/age.
 - Local dog/cat import with file restrictions, resize/re-encoding, review before rig acceptance, explicit fallback, name reuse and the same model addition API as the collection. Saved dog/tabby samples exercise the complete path without a new generation request. Photo bytes stay in the page; close clears pending/source file state; reset clears imported actor data. Physical device camera is not implemented in this feature.
-- Two named interventions applied to the current world after an exact-change dialog: 40% rainfall for 156 weeks and wolf removal with immigration exclusion. No free-text model call or side-by-side comparison is represented as ready.
+- Two named interventions compared against a baseline copied from the complete current forest: 40% rainfall for 156 weeks and wolf removal with immigration exclusion. Prediction, synchronized controls, event evidence, reflection and local replay are described in [the replay guide](replay.md). The exploring forest stays paused and unchanged. No free-text model call is enabled.
 - Keyboard creature buttons, focus-driven camera visibility, native modal dialogs, keyboard/drag/wheel camera controls, reduced-motion handling and a narrow-screen layout. No claims of complete accessibility or device testing yet.
 
 ## Architecture
@@ -28,10 +28,10 @@ Browser QA also found overlapping notes/card panels, mobile camera controls over
 - Tests cover scene/reset determinism, custom identity and memory reset, 104 weeks of open-ground placement, companion preservation under an intervention, invalid terrain/step inputs, blocked-channel movement/predation, file validation, asset hashes and preview-route restrictions.
 - Desktop browser: field card/step, named saved dog → review → acceptance → model arrival, live clock advancement and event updates.
 - 390 × 660 CSS-pixel iframe: initial layout, scrollable import dialog, saved tabby → review → model arrival. This tests responsive CSS, not phone hardware, camera permissions, touchscreen gestures or measured device performance.
-- Static build checked independently; complete snapshot/RNG restore and paired-world experiments remain the next feature.
+- Static build checked independently. The subsequent replay feature adds complete snapshot/RNG restoration and paired-world experiments, with its own tests and browser checks.
 
 ## Limits and next steps
 
 UI/UX remains open to redesign. The model uses illustrative assumptions, manually traced terrain and artistic gaits. The background is the imported spring painting; calendar changes are model data and resource tinting is an index, not freshly generated seasonal imagery. No Meta inference, automatic identification, SAM segmentation or generative map step is enabled here. Initial PNGs retain their source resolution; a first-load performance/art optimization pass is still needed.
 
-Next PR: full snapshots, RNG state, imported appearance/rig identity, versioned experiment export/import and synchronized paired worlds. Headline claims about ecological effect size or classroom learning require separate evidence.
+Next integration: a bounded Meta creature adapter and custom experiment translation after credits/API access are available. Headline claims about ecological effect size or classroom learning require separate evidence.

@@ -61,7 +61,7 @@ export function installCreatureImport({ onAdd, onPause }) {
   el('import-accept').onclick=()=>review.accept();el('import-fallback').onclick=()=>review.useFallback();
   el('import-add').onclick=()=>{
     const state=review.getState();if(!state.approved||!image)return;
-    try{onAdd({species:el('import-species').value,name:el('import-name').value,image,rig:state.candidate?.rig});dialog.close();}
+    try{onAdd({species:el('import-species').value,name:el('import-name').value,image,rig:state.candidate?.rig,rigConfig:state.candidate?.config});dialog.close();}
     catch(error){el('import-status').textContent=error.message;}
   };
   el('import-close').onclick=()=>dialog.close();dialog.addEventListener('close',close);

@@ -5,6 +5,7 @@ import { assessRig } from '../motion/rig-analysis.js';
 import { prepareJointPieces, drawPuppet } from '../motion/puppet-motion.js';
 import { getMotion } from '../motion/motion-library.js';
 import { installCreatureImport } from './creature-import.js';
+import { installExperimentView } from './experiment-view.js';
 
 const el=id=>document.getElementById(id);
 const forest=createForestController();
@@ -96,6 +97,8 @@ el('add').onclick=()=>{try{add({species:el('species').value});}catch(error){stat
 el('fieldnotes').onclick=()=>{const open=el('notes').hidden;forest.select(null);updateCard();el('notes').hidden=!open;};el('notes-close').onclick=()=>{el('notes').hidden=true;};
 el('card-close').onclick=()=>{forest.select(null);updateCard();};
 const importer=installCreatureImport({onAdd:add,onPause:()=>setPlaying(false)});el('bring').onclick=()=>importer.open();
+const experiments=installExperimentView({snapshot:()=>forest.toSnapshot(),eventText,onStatus:status});
+el('open-replay').onclick=()=>{setPlaying(false);experiments.chooseReplay();};
 for(const button of document.querySelectorAll('[data-experiment]'))button.onclick=()=>{
   setPlaying(false);pending=button.dataset.experiment;
   el('experiment-title').textContent=pending==='drought'?'What if there were less rain?':'What if the wolves disappeared?';
@@ -103,7 +106,10 @@ for(const button of document.querySelectorAll('[data-experiment]'))button.onclic
   el('experiment-dialog').showModal();
 };
 el('cancel-experiment').onclick=()=>el('experiment-dialog').close();
-el('run-experiment').onclick=()=>{forest.schedule(pending);step(false);el('experiment-dialog').close();status('Change applied to this world. Step or play to observe the model.');};
+el('run-experiment').onclick=()=>{
+  try{experiments.open(pending,el('prediction').value);el('experiment-dialog').close();status('Your forest is paused. Compare both experiment worlds and inspect their records.');}
+  catch(error){el('experiment-description').textContent=error.message;}
+};
 
 function layout(){
   needsDraw=true;
@@ -155,7 +161,7 @@ function render(now){
       drawPuppet(ctx,rig,{size:180,phase:actor.phase,moving:playing&&moved>.001&&!reduced.matches,preset,phases:GAITS.walk.phase,clock:reduced.matches?0:clock});
     }else{
       let image=loaded?.image;
-      if(custom?.image){if(!actor.image){actor.image=new Image();actor.image.src=custom.image;}image=actor.image;}
+      if(custom?.image){if(!actor.image){actor.image=new Image();actor.image.onload=()=>{needsDraw=true;};actor.image.src=custom.image;}image=actor.image;}
       if(image?.complete&&image.naturalWidth){ctx.drawImage(image,-90,-153,180,180);}
       else {ctx.fillStyle='#f4eedf';ctx.beginPath();ctx.arc(0,-45,30,0,Math.PI*2);ctx.fill();ctx.fillStyle='#2b2a26';ctx.font='14px system-ui';ctx.textAlign='center';ctx.fillText(animal.species,0,-40);}
     }
