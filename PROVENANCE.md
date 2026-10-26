@@ -36,3 +36,10 @@ Pre-event sources are under `microverse/app-art/`; destinations are `src/motion/
 | sprite-edges.js | bf7718948dfc4b18cecad38b3ddf092debe404f4e6e94b14c525ef2a8347bc1b |
 
 Retained: mesh/IK approach, leg extraction, artistic movement parameters and edge cleanup. New refinements: input validation, scale-relative IK tolerance, stricter tool arguments, accessory-preserving prompt, and review/fitter modules decoupled from the original dialog. The fitter adapts the bounded proposal strategy from pre-event `import-rig.js`. New tests, synthetic canvas fixtures, a local-only developer server and UI-boundary documentation accompany the migration. No image assets were copied; the existing generated dog was used locally for browser QA only.
+
+### Living forest view
+
+- `src/scene/terrain.js` adapts pre-event `microverse/app-art/terrain.js`, original SHA-256 `a5174cb3cc8469b2efe73283e44c045dcf34442e25030bcb7c285c04dfa9a9f4`. Added coordinate validation and complete path checks.
+- Prepared sprite-cut settings and scene interaction patterns were reviewed from pre-event `species.js`, `game-world.js` and `camera-pipeline.js`. The new view/controller/import modules and HTML/CSS are separately assembled around the migrated APIs; the monolithic renderer/dialog is not copied wholesale.
+- Public art comprises `maps/v2/spring.png` and the dog, fox, wolf, deer, rabbit standing PNGs plus `tabby-character-preview.png` from the pre-event prototype. Copies are unchanged binaries. Original paths and hashes are recorded in `public/art-manifest.json`; the map's destination drops its `v2/` segment. These are existing generated assets, not new hackathon art or live Meta results. Event reuse eligibility must be disclosed/checked separately from access to the files. No raw photo or stock test-photo collection was copied.
+- New engineering work: view-independent scene commands, terrain-safe movement/predation, deterministic open-cell spawn recovery, actual-model cards and event projection, local review import, responsive view, browser build/preview support, tests and documentation. The original local prototype remains unchanged.

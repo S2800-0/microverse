@@ -170,11 +170,13 @@ export class World {
   walkable: (x: number, y: number) => boolean;
   private open: Uint8Array;
   private excluded = new Set<SpeciesId>(); // removed species don't wander back in
+  private canTraverse: (x0: number, y0: number, x1: number, y1: number) => boolean;
 
-  constructor(params: Params, seed: number, interventions: Intervention[] = [], walkable?: (x: number, y: number) => boolean) {
+  constructor(params: Params, seed: number, interventions: Intervention[] = [], walkable?: (x: number, y: number) => boolean, canTraverse?: (x0: number, y0: number, x1: number, y1: number) => boolean) {
     this.params = params;
     this.ORDER = Object.keys(params.species) as SpeciesId[];
     this.walkable = walkable ?? (() => true);
+    this.canTraverse = canTraverse ?? (() => true);
     this.seed = seed;
     this.interventions = interventions;
     this.r = rng(seed);
@@ -183,6 +185,7 @@ export class World {
     const { width, height } = params;
     this.open = new Uint8Array(width * height);
     for (let i = 0; i < this.open.length; i++) this.open[i] = this.walkable((i % width) + 0.5, Math.floor(i / width) + 0.5) ? 1 : 0;
+    if (!this.open.some(Boolean)) throw new Error('The terrain has no open ground.');
     // food only grows on open ground (no grass in the creek or under the trees)
     this.grass = new Float32Array(width * height);
     for (let i = 0; i < this.grass.length; i++) this.grass[i] = this.open[i] ? 0.5 + this.r() * 0.5 : 0;
@@ -205,6 +208,15 @@ export class World {
     // Birth/arrival offsets can cross the map edge before the next movement tick.
     x = Math.max(0, Math.min(this.params.width - 0.01, x));
     y = Math.max(0, Math.min(this.params.height - 0.01, y));
+    if (!this.walkable(x, y)) {
+      let nearest = -1, distance = Infinity;
+      for (let i = 0; i < this.open.length; i++) if (this.open[i]) {
+        const cx = i % this.params.width + .5, cy = Math.floor(i / this.params.width) + .5;
+        const d = (cx-x)**2 + (cy-y)**2;
+        if (d < distance) { nearest = i; distance = d; }
+      }
+      x = nearest % this.params.width + .5; y = Math.floor(nearest / this.params.width) + .5;
+    }
     const a: Animal = { id: this.nextId++, species: s, x, y, energy, age: 0, alive: true, parent, distanceThisWeek: 0, sex: this.r() < 0.5 ? "f" : "m" };
     this.animals.push(a);
     return a;
@@ -223,7 +235,7 @@ export class World {
     for (let f = 1; f > 0.1; f /= 2) {
       const nx = Math.min(width - 0.01, Math.max(0, a.x + dx * f));
       const ny = Math.min(height - 0.01, Math.max(0, a.y + dy * f));
-      if (!this.walkable(nx, ny)) continue;
+      if (!this.walkable(nx, ny) || !this.canTraverse(a.x, a.y, nx, ny)) continue;
       a.distanceThisWeek += Math.hypot(nx - a.x, ny - a.y);
       a.x = nx; a.y = ny;
       return;
@@ -380,7 +392,7 @@ export class World {
           const d = Math.hypot(target.x - a.x, target.y - a.y);
           const step = Math.min(d, sp.speed);
           this.clampMove(a, ((target.x - a.x) / (d || 1)) * step, ((target.y - a.y) / (d || 1)) * step);
-          if (d <= sp.speed) {
+          if (d <= sp.speed && Math.hypot(target.x-a.x, target.y-a.y) < .1 && this.canTraverse(a.x,a.y,target.x,target.y)) {
             const pr = sp.prey![target.species]!;
             const ref = p.species[target.species].refuge;
             const findable = ref ? Math.min(1, pop[target.species] / ref) : 1;
