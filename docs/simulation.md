@@ -11,7 +11,8 @@ The initial regression suite checks deterministic events/state, seed variation, 
 - No snapshot/restore of RNG state or custom imported creatures yet.
 - Shared RNG draws can shift between interventions; paired seed comparisons need further refinement.
 - Inputs are trusted internal fixtures; API-facing schema/range validation is not present.
-- Companion species are named in the type union but do not yet have registered runtime profiles. Do not instantiate them until their feature is imported.
-- The prototype marks spawning private in TypeScript even though a later companion adapter called it from JavaScript. That boundary needs an explicit public API in the companion PR.
+- Use `sceneParams()` for registered companion profiles, with an empty scene by default or `{ populated: true }` for the original forest. These roles are explicit sandbox assumptions with supplied food, not wild penguin/pet ecology.
+- `World.addCreature({ species, x, y, sex? })` validates additions before mutation, emits an arrival event and enforces an 80-living-creature import cap. This cap applies to user imports; births/immigration retain the engine rules.
+- Scene profiles are deep-cloned so changes do not leak between worlds. The shared RNG still prevents full causal coupling guarantees.
 - Terrain constraints and long-term population calibration need dedicated checks before a classroom-ready release.
 - No art, browser UI, Meta calls or paid image bridge is included in this PR.

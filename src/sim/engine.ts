@@ -262,6 +262,22 @@ export class World {
   }
 
   count(s: SpeciesId) { let n = 0; for (const a of this.animals) if (a.alive && a.species === s) n++; return n; }
+  // Explicit user addition; internal births/immigration keep their own rules.
+  addCreature({ species, x, y, sex }: { species: SpeciesId; x: number; y: number; sex?: "f" | "m" }): Animal {
+    if (!Object.hasOwn(this.params.species, species)) throw new Error('Unsupported ecological role.');
+    if (sex !== undefined && sex !== 'f' && sex !== 'm') throw new Error('Choose female or male.');
+    if (!Number.isFinite(x) || !Number.isFinite(y) || x < 0 || y < 0 ||
+        x >= this.params.width || y >= this.params.height || !this.walkable(x, y)) {
+      throw new Error('Choose open ground inside the map.');
+    }
+    if (this.animals.filter(a => a.alive).length >= 80) throw new Error('The scene has reached its 80-creature import limit.');
+    const sp = this.params.species[species];
+    const animal = this.spawn(species, x, y, sp.energyStart, 0);
+    animal.age = sp.matureAge + 10;
+    if (sex) animal.sex = sex;
+    this.events.push({ t: this.week, type: 'arrive', id: animal.id, species });
+    return animal;
+  }
   counts(): Record<SpeciesId, number> {
     const c = Object.fromEntries(this.ORDER.map(s => [s, 0])) as Record<SpeciesId, number>;
     for (const a of this.animals) if (a.alive) c[a.species]++;

@@ -13,3 +13,5 @@ Each item is a separate feature branch and PR; dependent work follows review/mer
 9. **Photo-inspired place map**: fixed topology, reviewed visual skin, explicit limits on measured versus generated content; only after the main journey works.
 
 The first PR proves engine behavior, not the complete product or ecological validity. Broad parameter calibration and real Meta integration are separate acceptance work. Public assets and uploaded photographs do not migrate automatically.
+
+The [indirect contributions plan](indirect-contributions.md) adds reusable examples, an experiment format, a question evaluation set and a teacher pilot to the existing feature milestones. It does not add separate products to the migration queue.
