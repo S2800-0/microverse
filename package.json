@@ -5,6 +5,7 @@
   "type": "module",
   "engines": { "node": ">=24" },
   "scripts": {
+    "preview:motion": "node scripts/preview.mjs",
     "test": "node --test",
     "check": "node scripts/check-syntax.mjs"
   }
