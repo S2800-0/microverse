@@ -86,6 +86,23 @@ test('multiple seeds retain finite living agents and bounded resource biomass', 
   }
 });
 
+test('newborn offsets stay inside the map when parents breed at a corner', () => {
+  const p = empty(); p.initial = { rabbit: 2 };
+  Object.assign(p.species.rabbit, {
+    matureAge: 1, breedWeeks: [0, 51], breedChance: 1,
+    breedEnergy: 1, birthCost: 0.1, carrying: undefined,
+    speed: 0, litter: [4, 4],
+  });
+  const w = new World(p, 7);
+  w.animals.forEach((a, i) => Object.assign(a, { x: 0, y: 0, age: 2, sex: i ? 'm' : 'f' }));
+  w.step();
+  assert(w.events.some(e => e.type === 'birth'));
+  for (const animal of w.animals) {
+    assert(animal.x >= 0 && animal.x < p.width);
+    assert(animal.y >= 0 && animal.y < p.height);
+  }
+});
+
 test('life stories only contain events involving the selected animal', () => {
   const w = new World(params(), 7, [{ atWeek: 2, kind: 'remove', species: 'wolf' }]);
   const id = w.animals.find(a => a.species === 'wolf').id;
