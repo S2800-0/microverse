@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.*
+!.env.example
+.DS_Store
+coverage/
+.next/
+dist/
+runtime/
+uploads/
+*.log
+*.pem
+*.key
+.aws/
