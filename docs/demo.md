@@ -8,6 +8,8 @@
 4. Connect the investigation to plants near a home/school and the outdoor evidence one would need. Show the optional reference/both-forests control or a supported related question, without turning the demo into a feature tour.
 5. End on **Save discovery card** and reproducible model-only rerun. The complete experiment file may retain personal pictures/notes; the embedded model-only rerun strips them. The optional reviewed place-photo feature can be shown separately if time permits, with its fixed-map/proxy limits.
 
+**Show Meta's role explicitly (25% of judging).** The default guide makes no AI call, and its explanation is a local evidence guide, so say so. Add one short, attributable Meta segment: a creature illustration/cutout made with Muse Image and SAM (labelled live or saved, whichever it is), or an enabled Spark evidence selection. Then show the deterministic comparison and replay as the technical depth. Never imply the local explanation came from Spark or that a saved result was generated live.
+
 Keep the 15–20 minute [teacher activity](classroom.md) as the actual lesson. The place segment is an optional model-critique prompt, not a measured improvement to that lesson. Microphone input and neural speech are optional accessibility/usability features; typing and captions remain available. A static/offline-capable sample path is a fallback with explicit source labels, not a concealed live-model claim.
 
 ## Verified integration checks · October 27, 2026
