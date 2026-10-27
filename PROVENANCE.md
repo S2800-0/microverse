@@ -55,3 +55,7 @@ New server adapters, cost ledger, local API and browser mask composition were as
 ### Investigations and classroom activity
 
 New `src/investigation/`, Spark server adapters, typed intervention/replay-v2 support, question/evidence UI and printable teacher activity were assembled October 27, 2026. They build on the migrated engine/forest/replay, without adding art or copying private prototype chats. Twenty question fixtures and classroom examples are synthetic; no learner/teacher participant data or findings are included. API integration verification comprises a tiny Meta Spark response and one accepted 70%-rain/26-week proposal; failed diagnostic attempts were rejected without model execution. Live image/SAM, Baseten and evidence-selection success are not claimed. Usage details/limitations are documented in `docs/investigation.md`; credentials, billing receipts and local ledgers remain ignored. No teacher sessions or educational efficacy outcomes have been observed.
+
+### Optional narration
+
+New `src/scene/narration.js` and `narration-view.js` were assembled October 27, 2026 around the existing model/evidence APIs. They generate bounded captions from recorded numbers/events and optionally use explicitly local English browser voices. No generated voice asset, paid inference, new image, animal recording or private learner text is added. Speech availability and perceptual quality depend on the target device and are not established by transport fixtures. The accompanying photo-pilot protocol describes pending live tests, not completed generation results.

@@ -30,6 +30,8 @@ The [Meta creature bridge guide](docs/meta-creature.md) describes `npm run previ
 
 Choose **Ask “what if?”** for six prepared questions or a supported manual change. The [investigation guide](docs/investigation.md) documents the optional Spark proposal/evidence adapters, exact change approval, funding settings, live verification and limits. Meta Spark has passed one live custom-proposal check; Baseten is configured separately and has not been tested live. Open `/teacher.html` for the printable activity and observation sheet.
 
+**Narration: On** adds model-derived captions in the forest and comparisons, plus optional local device speech where available. It starts off and makes no AI calls. See [narration and voice limits](docs/narration.md). The [first photo pilot](docs/image-pilot.md) specifies a staged dog/cat/accessory test set and a $0.10 local ceiling; it has not spent or enabled that budget.
+
 ## Provenance and event contributions
 
 Pre-event experiments exist in a separate local prototype. Imported work is recorded in [PROVENANCE.md](PROVENANCE.md), with its original path and source hash. An import date does not make old work newly developed. The final submission must identify eligible new event contributions separately and follow organizer clarification on reuse.

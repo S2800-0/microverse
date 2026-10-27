@@ -7,16 +7,19 @@ import { getMotion } from '../motion/motion-library.js';
 import { installCreatureImport } from './creature-import.js';
 import { installExperimentView } from './experiment-view.js';
 import { installQuestions } from '../investigation/questions-view.js';
+import {installNarration} from './narration-view.js';
+import {forestNarration,narrationSnapshot} from './narration.js';
 
 const el=id=>document.getElementById(id);
 const forest=createForestController();
+const narrator=installNarration();
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const assets=new Map(),actors=new Map();
 let playing=false,speed=1,accumulator=0,progress=1,last=0,clock=0,pending=null;
 let needsDraw=true;
 const cam={x:0,y:0,zoom:1,minZoom:1,width:0,height:0};
 const status=message=>{el('status').textContent=message;};
-function setPlaying(value){playing=value;el('play').textContent=value?'Pause':'Play';el('play').setAttribute('aria-pressed',String(value));}
+function setPlaying(value){playing=value;if(!value)narrator.stop();el('play').textContent=value?'Pause':'Play';el('play').setAttribute('aria-pressed',String(value));}
 
 async function loadArt(){
   let failures=0;
@@ -88,9 +91,9 @@ function updateCard(){
   if(!events.length){const li=document.createElement('li');li.textContent='No events recorded yet.';list.append(li);}
   for(const e of events){const li=document.createElement('li');li.textContent=eventText(e);list.append(li);}
 }
-function step(animate){forest.step();progress=animate?0:1;sync(animate);}
-function reset(populated){setPlaying(false);accumulator=0;progress=1;forest.reset(populated);for(const a of actors.values())a.button.remove();actors.clear();sync();status(populated?'Forest reset to seed 7.':'A fresh clearing. Add a neighbor or bring a creature.');}
-function add(input){const animal=forest.add(input);sync();status(`${nameOf(animal)} joined the forest as a ${animal.species}.`);return animal;}
+function step(animate){const before=narrationSnapshot(forest.getState());forest.step();progress=animate?0:1;sync(animate);narrator.say(forestNarration(before,forest.getState()),{automatic:animate});}
+function reset(populated){setPlaying(false);accumulator=0;progress=1;forest.reset(populated);for(const a of actors.values())a.button.remove();actors.clear();sync();narrator.context(forestNarration(null,forest.getState()));status(populated?'Forest reset to seed 7.':'A fresh clearing. Add a neighbor or bring a creature.');}
+function add(input){const before=narrationSnapshot(forest.getState()),animal=forest.add(input);sync();narrator.context(forestNarration(before,forest.getState()));status(`${nameOf(animal)} joined the forest as a ${animal.species}.`);return animal;}
 el('play').onclick=()=>setPlaying(!playing);el('step').onclick=()=>{setPlaying(false);step(false);};
 el('fast').onclick=()=>{speed=speed===1?4:1;el('fast').setAttribute('aria-pressed',String(speed===4));};
 el('reset').onclick=()=>reset(true);el('clear').onclick=()=>reset(false);
@@ -98,7 +101,7 @@ el('add').onclick=()=>{try{add({species:el('species').value});}catch(error){stat
 el('fieldnotes').onclick=()=>{const open=el('notes').hidden;forest.select(null);updateCard();el('notes').hidden=!open;};el('notes-close').onclick=()=>{el('notes').hidden=true;};
 el('card-close').onclick=()=>{forest.select(null);updateCard();};
 const importer=installCreatureImport({onAdd:add,onPause:()=>setPlaying(false)});el('bring').onclick=()=>importer.open();
-const experiments=installExperimentView({snapshot:()=>forest.toSnapshot(),eventText,onStatus:status});
+const experiments=installExperimentView({snapshot:()=>forest.toSnapshot(),eventText,onStatus:status,narrator,onReturn:()=>narrator.context(forestNarration(null,forest.getState()))});
 const questions=installQuestions({onPause:()=>setPlaying(false),onRun:(...args)=>experiments.open(...args)});
 el('investigate').onclick=()=>questions.open();
 el('open-replay').onclick=()=>{setPlaying(false);experiments.chooseReplay();};
@@ -172,4 +175,4 @@ function render(now){
   }
   requestAnimationFrame(render);
 }
-layout();cam.x=(innerWidth-cam.width)/2;cam.y=(innerHeight-cam.height)/2;clampCamera();sync();loadArt();requestAnimationFrame(render);
+layout();cam.x=(innerWidth-cam.width)/2;cam.y=(innerHeight-cam.height)/2;clampCamera();sync();narrator.context(forestNarration(null,forest.getState()));loadArt();requestAnimationFrame(render);

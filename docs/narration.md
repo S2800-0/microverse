@@ -1,0 +1,19 @@
+# Narration mode
+
+**Narration: Off/On** is available in the forest header and inside a paired experiment. It starts off on each page load. Turn it on for captions generated from the actual model state; **Read aloud** uses an available local English device voice. Turn narration off to stop speech immediately and hide captions. Uncheck Read aloud to retain captions. Read caption again repeats the visible caption.
+
+Forest captions report the week/season, rounded food-cover changes, up to two population changes and up to three event-count categories. Each names the model week interval it describes. Captions during automatic playback are sampled at most once every eight seconds, and never queued behind existing speech; some intermediate ticks/events are intentionally omitted. A single manual step replaces the current narration. Full records remain in Field notes.
+
+Experiment captions identify the intervention and elapsed week, report the current baseline/changed food differences and up to two population differences, and prompt the learner to inspect evidence and explain. They describe observations without supplying a causal explanation before the learner response. Opening/restarting/seeking an experiment replaces the context; closing returns to the paused exploring forest. Pause, hiding the page and turning narration off cancel current speech. Nothing changes simulation rules, RNG, replay or learner notes.
+
+## Voice and privacy boundary
+
+Meta's current hosted [Muse Voice Transcribe](https://dev.meta.ai/docs/models) accepts audio and returns transcripts; it does not generate speech. No Meta model or transcription request is needed for this feature. The browser [SpeechSynthesis API](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) supplies device voices. We select only voices with [localService=true](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesisVoice/localService) and an English language tag. We never fall back to a browser's remote/default voice. No local English voice means captions only, with an explicit notice. Voice availability and quality vary by OS/browser; there is no identical-voice guarantee.
+
+Meta also publishes [MMS TTS checkpoints](https://huggingface.co/facebook/mms-tts), with a separate self-hosted inference setup and CC-BY-NC 4.0 model licence. They are not a speech-generation endpoint for the existing Meta key/credits. No weights, runtime or MMS voice are included in this feature.
+
+Photos, custom animal names, free-form questions, predictions, learner explanations and facilitator notes are excluded from narration text. Only curated role labels and model numbers/events are used. Voice discovery does not auto-start playback after voices load: use Read caption again or a subsequent explicit toggle. Speech errors preserve captions. There is no microphone access, account/key, saved audio, new dependency, paid inference or persistent preference.
+
+Tests check actual model-derived text, absence of names/notes, opt-in, local voice selection, pacing/no speech queue, cancellation, stale completion callbacks, unavailable APIs and speech errors. Browser checks cover visible mode/voice controls, manual steps, paired comparison, seek/return and narrow layouts; actual voice quality still needs listening on the target demo device.
+
+Recorded browser QA: local voice Samantha was detected; on/off and captions-only controls updated correctly. A forest step reported the computed resource changes. A half-rain experiment at elapsed week 13 narrated its exact packet differences without explaining their cause; switching off and returning kept the original forest at week 1 with narration off. At 390 × 660 CSS pixels the caption and voice controls remained scrollable and the map controls accessible. This is layout/control verification, not a listening study or phone hardware certification.
