@@ -1,4 +1,6 @@
 import {createExperiment,experimentFromReplay,validateReplay,runContinuation} from './experiment.ts';
+import {createForestController} from './controller.ts';
+import {GUIDE_CHANGE,worldLabels,discoverySummary,compareFood,closerLook,intervalRecord,relatedInvestigations,guideContent,plural,populationStory,describeForPeople} from './discovery.js';
 import {ART} from './art.js';
 import {buildRig,GAITS} from '../motion/rig.js';
 import {assessRig} from '../motion/rig-analysis.js';
@@ -15,29 +17,34 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
   let experiment=null,timer=null,revision=0,startWeek=0,analysisRevision=0;
   let packet=null,selection=null,beforeResponse='',sparkService={enabled:false},explanationRevision=0,explanationRequest=null;
   const images=new Map(),rigs=new Map();
+  let initial=null,guideStep=null,visibleBranch='changed',focus=null,notice=null,pendingRelated=null;
+  const dismissed=new Set();
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const message=text=>{el('comparison-status').textContent=text;};
   const evidenceId=id=>`evidence-${id.replaceAll('.','-')}`;
   function invalidateExplanation(){explanationRevision++;explanationRequest?.abort();explanationRequest=null;selection=null;el('grounded-explanation').hidden=true;el('grounded-explanation').replaceChildren();el('explanation-status').textContent='';}
-  function fileWithNotes(){const file=experiment.toReplay(el('reflection').value);file.activity={before:beforeResponse,after:el('transfer-response').value,teacherNotes:el('teacher-notes').value};validateReplay(file);return file;}
+  function fileWithNotes(){const file=experiment.toReplay(el('reflection').value);file.activity={before:beforeResponse,after:el('transfer-response').value,teacherNotes:el('teacher-notes').value,connection:el('connection-response').value};validateReplay(file);return file;}
   function reveal(value,source){
     selection=validateEvidenceSelection(value,packet);const list=el('grounded-explanation');list.replaceChildren();
+    const groups=new Map(),headings={observation:'What the comparison shows',event:'Moments in the record',mechanism:'Connections to investigate',limit:'What this cannot tell us'};
     for(const line of explanationLines(packet,selection)){
+      if(!groups.has(line.kind)){const section=document.createElement('section'),heading=document.createElement('h4'),items=document.createElement('ul');heading.textContent=headings[line.kind];section.append(heading,items);list.append(section);groups.set(line.kind,items);}
       const li=document.createElement('li');li.textContent=line.text;
       if(line.ref&&!packet.mechanisms.some(m=>m.id===line.ref)){
-        const button=document.createElement('button');button.textContent=`Inspect ${line.ref}`;button.className='evidence-ref';button.onclick=()=>{el('comparison-evidence-details').open=true;document.getElementById(evidenceId(line.ref))?.scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});};li.append(' ',button);
-      }list.append(li);
+        const button=document.createElement('button');button.textContent=line.kind==='event'?'Open this record':'See measurement';button.setAttribute('aria-label',`${button.textContent}: ${line.text}`);button.className='evidence-ref';button.onclick=()=>{el('comparison-evidence-details').open=true;document.getElementById(evidenceId(line.ref))?.scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});};li.append(' ',button);
+      }groups.get(line.kind).append(li);
     }
-    const follow=document.createElement('li');follow.textContent=`Question to consider: ${selection.followUp}`;list.append(follow);list.hidden=false;
+    const follow=document.createElement('p');follow.textContent=`Question to consider: ${selection.followUp}`;list.append(follow);list.hidden=false;
     el('explanation-status').textContent=`${source}. Values and events are rendered from this run; possible model connections are not proven causes.`;
   }
   function canExplain(){if(!experiment?.getState().elapsed){el('explanation-status').textContent='Advance at least one week first.';return false;}if(!el('reflection').value.trim()){el('explanation-status').textContent='Record your own explanation first, even if it is “I am not sure yet”. Then compare it with the evidence.';return false;}return true;}
-  function pause(){clearInterval(timer);timer=null;narrator?.stop();el('comparison-play').textContent='Play experiment';}
+  function pause(){clearInterval(timer);timer=null;narrator?.stop();el('comparison-play').textContent='Watch it unfold';}
   function renderWorld(canvas,state){
     const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
     ctx.clearRect(0,0,w,h);ctx.fillStyle='#c6c79c';ctx.fillRect(0,0,w,h);
     const map=images.get('/maps/spring.png');if(map)ctx.drawImage(map,0,0,w,h);
     ctx.fillStyle=`rgba(151,114,68,${Math.max(0,.8-state.grass)*.35})`;ctx.fillRect(0,0,w,h);
+    if(el('food-layer').checked){const {width,height}=state.world.params;for(let i=0;i<state.world.grass.length;i++){if(!state.world.open[i])continue;const food=state.world.grass[i];ctx.fillStyle=`rgba(${food>.5?'73,117,48':'166,112,48'},.26)`;ctx.fillRect((i%width)/width*w,Math.floor(i/width)/height*h,w/width+1,h/height+1);}}
     for(const a of [...state.animals].sort((a,b)=>a.y-b.y)){
       const custom=state.appearances.get(a.id),art=ART[a.species],src=custom?.image||art?.image;
       const image=images.get(src),rig=rigs.get(src),x=a.x/state.world.params.width*w,y=a.y/state.world.params.height*h;
@@ -64,11 +71,11 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
         if(cut){try{const candidate=await buildRig(src,cut);if(current!==revision)return;if(assessRig(candidate).warnings.length)throw new Error();rigs.set(src,prepareJointPieces(candidate));}catch{rigFallbacks++;}}
       }catch{unavailable++;}
     }));
-    if(current===revision&&dialog.open){render();message(unavailable?`${unavailable} image(s) unavailable. Model records remain intact.`:rigFallbacks?`${rigFallbacks} illustration(s) use whole-image display.`:'Ready. Advance both worlds together, then inspect the evidence.');}
+    if(current===revision&&dialog.open){render();message(unavailable?`${unavailable} image(s) unavailable. Model records remain intact.`:rigFallbacks?`${rigFallbacks} illustration(s) use whole-image display.`:'Ready. Watch this forest change, then explore what you notice.');}
   }
   function render(){
     if(!experiment)return;const s=experiment.getState(),a=s.baseline,b=s.changed;packet=buildEvidence(experiment);
-    el('comparison-week').textContent=`${s.elapsed} ${s.elapsed===1?'week':'weeks'}`;el('comparison-seek').value=s.elapsed;
+    el('comparison-week').textContent=String(s.elapsed);el('comparison-seek').value=s.elapsed;
     el('evidence-caption').textContent=`Elapsed week ${s.elapsed} · forest week ${a.week} · changed minus baseline`;
     for(const [prefix,state]of [['baseline',a],['changed',b]]){
       renderWorld(el(`${prefix}-world`),state);
@@ -87,13 +94,31 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     const end=s.elapsed===156;el('comparison-step').disabled=end;el('comparison-season').disabled=end;
     if(end)pause();
     el('explain-spark').disabled=!sparkService.enabled||!s.elapsed;
+    const labels=worldLabels(s.scenario),summary=discoverySummary(packet);
+    el('baseline-label').textContent=labels.baseline;el('changed-label').textContent=labels.changed;
+    el('evidence-baseline-label').textContent=labels.baseline;el('evidence-changed-label').textContent=labels.changed;
+    el('baseline-summary').textContent=`${a.animals.length} animals · week ${s.elapsed}`;el('changed-summary').textContent=`${b.animals.length} animals · week ${s.elapsed}`;
+    el('discovery-headline').textContent=summary.headline;el('discovery-detail').textContent=summary.detail;
+    el('comparison-context').textContent=`${labels.changed} compared with ${labels.baseline.toLowerCase()}`;el('rabbit-story').textContent=populationStory(s,'rabbit');
+    el('why-copy').textContent=summary.why;el('why-caution').textContent=summary.caution;
+    el('why-chain').textContent=s.scenario.kind==='rain'?'Rain → plant food → animals that eat plants → animals that hunt them':'Food, hunters and new arrivals connect the populations.';
+    const foodRoot=el('food-comparison');foodRoot.replaceChildren();
+    for(const [key,label]of [['grass','Grass food'],['browse','Shrub food']]){const section=document.createElement('section');section.className='food-pair';const heading=document.createElement('h4');heading.textContent=label;section.append(heading);for(const [branch,state]of [['baseline',a],['changed',b]]){const row=document.createElement('div');row.className='food-bar';const text=document.createElement('span');text.textContent=labels[branch];const meter=document.createElement('meter');meter.min=0;meter.max=1;meter.value=state[key];meter.setAttribute('aria-label',`${label}, ${labels[branch]}: ${Math.round(state[key]*100)} out of 100 on the model scale`);row.append(text,meter);section.append(row);}const caption=document.createElement('strong');caption.textContent=compareFood(a[key],b[key]).replace(' here',` · ${labels.changed}`);section.append(caption);foodRoot.append(section);}
+    const animals=el('animal-comparison');animals.replaceChildren();
+    for(const species of ['rabbit','deer','fox','wolf']){const row=document.createElement('div');row.className='animal-row';const name=document.createElement('span'),value=document.createElement('span');name.textContent=plural(species);const difference=b.counts[species]-a.counts[species];value.textContent=difference?`${Math.abs(difference)} ${difference>0?'more':'fewer'}`:'Same number';value.title=`${labels.baseline}: ${a.counts[species]}; ${labels.changed}: ${b.counts[species]}`;row.append(name,value);animals.append(row);}
+    const split=el('comparison-layout').value==='split';el('experiment-worlds').classList.toggle('single-world',!split);el('baseline-panel').hidden=!split&&visibleBranch!=='baseline';el('changed-panel').hidden=!split&&visibleBranch!=='changed';el('comparison-switch').hidden=split;el('comparison-switch').textContent=`View ${labels[visibleBranch==='changed'?'baseline':'changed'].toLowerCase()}`;
+    notice=s.elapsed?(s.scenario.kind==='rain'&&Math.abs(a.grass-b.grass)>.005?{key:'food',kind:'food'}:null):null;
+    const recent=closerLook(b,startWeek,initial.world.events.length);if(recent&&s.elapsed>1)notice={key:`event-${recent.id}`,kind:'event',...recent};
+    el('notice').hidden=!notice||dismissed.has(notice.key);if(notice)el('notice-copy').textContent=notice.kind==='food'?'The meadow’s food has changed. Want to look closer?':notice.event.type==='birth'?`A new ${notice.event.species} was born in this forest. Want to meet them?`:notice.event.type==='arrive'?`A ${notice.event.species} arrived from outside. Want to meet them?`:`A ${notice.event.species} ${notice.event.cause==='removed'?'was removed from':'died in'} this forest. Explore the record?`;
+    renderGuide();if(focus)renderCloseup();
   }
   function seek(week,automatic=false){try{invalidateExplanation();experiment.seek(week);render();narrator?.say(comparisonNarration(packet),{automatic:automatic&&week!==156});}catch(error){pause();message(error.message);}}
-  function show(next,prediction,reflection,activity={}){
-    pause();analysisRevision++;experiment=next;
-    invalidateExplanation();beforeResponse=activity.before||'';el('transfer-response').value=activity.after||'';el('teacher-notes').value=activity.teacherNotes||'';
+  function show(next,prediction,reflection,activity={},guided=null){
+    pause();analysisRevision++;experiment=next;initial=next.toReplay().initial;guideStep=guided;visibleBranch='changed';focus=null;notice=null;dismissed.clear();pendingRelated=null;el('related-form').hidden=true;el('closeup').hidden=true;el('comparison-layout').value='single';el('why-panel').hidden=true;el('why-toggle').setAttribute('aria-expanded','false');el('food-layer').checked=false;el('guide-status').textContent='';
+    invalidateExplanation();beforeResponse=activity.before||'';el('transfer-response').value=activity.after||'';el('teacher-notes').value=activity.teacherNotes||'';el('connection-response').value=activity.connection||'';
     el('continuation-results').textContent='';el('run-continuations').disabled=false;
     const file=next.toReplay();
+    el('comparison-title').textContent=file.question?file.question.length>120?file.question.slice(0,117)+'…':file.question:`What happens ${file.scenario.kind==='rain'?'with ':''}${worldLabels(file.scenario).changed.toLowerCase()}?`;
     startWeek=file.initial.world.week;
     el('saved-prediction').textContent=prediction?`Your prediction: ${prediction}`:'No prediction recorded. You can still inspect and explain the evidence.';
     el('reflection').value=reflection;
@@ -101,12 +126,33 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     const place=file.initial.place;el('comparison-place').hidden=!place;
     el('comparison-place').textContent=place?`Place-inspired starting food chosen at forest week ${place.atWeek}: grass ${Number((place.start.grass*100).toFixed(1))}%, shrubs ${Number((place.start.browse*100).toFixed(1))}%. Reviewed image shares are context, not measured biomass or a reconstruction of the real site. The place photo is not saved in this replay.`:'';
     el('changed-label').textContent=`Changed · ${changeLabel(file.scenario)}`;
-    if(!dialog.open)dialog.showModal();render();narrator?.context(comparisonNarration(packet));message('Preparing illustrations locally…');prepareArt(file.initial);
+    renderRelated();if(!dialog.open)dialog.showModal();render();narrator?.context(comparisonNarration(packet));message('Preparing illustrations locally…');prepareArt(file.initial);
     readSparkService().then(s=>{if(dialog.open){sparkService=s;el('explain-spark').disabled=!s.enabled||!experiment?.getState().elapsed;}});
   }
+  function renderGuide(){el('learner-explanation').hidden=guideStep!==null&&guideStep<3;el('connection-reflection').hidden=guideStep!==null&&guideStep<4;el('related-section').hidden=guideStep!==null&&guideStep<4;const panel=el('guide-panel');panel.hidden=guideStep===null;dialog.classList.toggle('guided',guideStep!==null);el('closeup-continue').hidden=guideStep!==2;el('discovery-next').hidden=![1,3].includes(guideStep);el('discovery-next').textContent=guideStep===1?'Look closer at the meadow':'Explain what I noticed';if(guideStep===null)return;const guide=guideContent(guideStep);el('guide-progress').textContent=`GUIDED INVESTIGATION · ${guideStep+1} OF 5`;el('guide-title').textContent=guide.title;el('guide-copy').textContent=guide.text;el('guide-next').textContent=guide.action;}
+  function renderCloseup(){if(!focus||!experiment)return;const state=experiment.getState().changed,canvas=el('closeup-world'),source=el('changed-world'),ctx=canvas.getContext('2d');let x=source.width/2,y=source.height/2;
+    if(focus.kind==='food'){let index=-1,difference=-1;const base=experiment.getState().baseline.world;for(let i=0;i<state.world.grass.length;i++){const delta=Math.abs(state.world.grass[i]-base.grass[i]);if(state.world.open[i]&&delta>difference){index=i;difference=delta;}}if(index>=0){x=(index%state.world.params.width+.5)/state.world.params.width*source.width;y=(Math.floor(index/state.world.params.width)+.5)/state.world.params.height*source.height;}
+      el('closeup-title').textContent='Follow the grass food.';el('closeup-copy').textContent='This highlighted model area has a grass-food difference between the two conditions. The coloured layer shows simulated food; the painting itself is illustrative.';el('closeup-rule').textContent='Model connection: rainfall affects regrowth, and rabbits gain energy by eating grass. This view shows the current week, not a photograph or past-event animation.';
+    }else{const e=focus.event,animal=state.world.animals.find(a=>a.id===e.id);if(animal){x=animal.x/state.world.params.width*source.width;y=animal.y/state.world.params.height*source.height;}
+      el('closeup-title').textContent=e.type==='death'?`The story of ${e.species} #${e.id}.`:`Meet ${e.species} #${e.id}.`;el('closeup-copy').textContent=`In week ${e.t}, this ${e.species} ${e.type==='birth'?'was born':e.type==='arrive'?'arrived':e.cause==='removed'?'was removed':`died (${e.cause==='eaten'?'caught by a predator':e.cause})`}. This is a recorded model event.`;el('closeup-rule').textContent=`${populationStory(experiment.getState(),e.species)} ${animal?'The close-up shows the current location, not a reconstruction of the past event.':'The individual’s location is no longer retained, so this is the current forest view.'} Counts alone do not establish why the forests differ.`;
+      if(!animal){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(source,0,0,canvas.width,canvas.height);return;}
+    }
+    const sw=source.width*.42,sh=sw*canvas.height/canvas.width,sx=Math.max(0,Math.min(source.width-sw,x-sw/2)),sy=Math.max(0,Math.min(source.height-sh,y-sh/2));ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(source,sx,sy,sw,sh,0,0,canvas.width,canvas.height);ctx.strokeStyle='#f5e3a0';ctx.lineWidth=3;ctx.beginPath();ctx.arc((x-sx)/sw*canvas.width,(y-sy)/sh*canvas.height,22,0,Math.PI*2);ctx.stroke();
+  }
+  function openLook(value){pause();visibleBranch='changed';focus=value;el('closeup').hidden=false;if(value.kind==='food'){el('food-layer').checked=true;render();}else render();el('closeup-title').focus();el('closeup').scrollIntoView({block:'nearest',behavior:reduced.matches?'instant':'smooth'});}
+  function renderRelated(){const root=el('related-questions');root.replaceChildren();for(const item of relatedInvestigations(experiment.getState().scenario)){const button=document.createElement('button');button.textContent=item.question;button.onclick=()=>{pause();pendingRelated=item;el('related-description').textContent=describeForPeople(item.change);el('related-form').hidden=false;el('related-prediction').value='';el('related-prediction').focus();};root.append(button);}}
+  el('related-form').onsubmit=event=>{event.preventDefault();if(!pendingRelated)return;const item=pendingRelated,prediction=el('related-prediction').value;show(createExperiment(initial,item.change,prediction,item.question),prediction,'');dialog.scrollTop=0;};
+  el('related-cancel').onclick=()=>{pendingRelated=null;el('related-form').hidden=true;};
+  el('comparison-layout').onchange=()=>render();el('comparison-switch').onclick=()=>{visibleBranch=visibleBranch==='changed'?'baseline':'changed';render();};el('food-layer').onchange=()=>render();
+  el('why-toggle').onclick=()=>{const open=el('why-panel').hidden;el('why-panel').hidden=!open;el('why-toggle').setAttribute('aria-expanded',String(open));};
+  el('notice-look').onclick=()=>{if(notice)openLook(notice);};el('notice-dismiss').onclick=()=>{if(notice)dismissed.add(notice.key);el('notice').hidden=true;};el('closeup-close').onclick=()=>{focus=null;el('closeup').hidden=true;};
+  el('guide-next').onclick=()=>{pause();if(guideStep===0){guideStep=1;seek(1);}else if(guideStep===1){guideStep=2;openLook({kind:'food'});el('why-panel').hidden=false;el('why-toggle').setAttribute('aria-expanded','true');renderGuide();narrator?.say(guideContent(2).text);}else if(guideStep===2){guideStep=3;focus=null;el('closeup').hidden=true;seek(13);}else if(guideStep===3){if(!el('reflection').value.trim()){el('guide-status').textContent='Write what you think happened below. “I am not sure yet” is a useful starting point.';el('reflection').focus();return;}el('guide-status').textContent='';reveal(defaultSelection(packet),'Local evidence guide');guideStep=4;renderGuide();el('connection-response').focus();}else{guideStep=null;renderGuide();el('related-questions').scrollIntoView({block:'nearest'});}if([1,3].includes(guideStep)){el('discovery-headline').focus();el('discovery-headline').scrollIntoView({block:'start'});}else if(guideStep===0){el('guide-title').focus();}};
+  el('guide-skip').onclick=()=>{guideStep=null;renderGuide();};
+  el('closeup-continue').onclick=()=>el('guide-next').click();
+  el('discovery-next').onclick=()=>{if(guideStep===1)el('guide-next').click();else el('reflection').focus();};
   el('comparison-play').onclick=()=>{
     if(timer){pause();return;}if(experiment.getState().elapsed===156)seek(0);
-    el('comparison-play').textContent='Pause experiment';timer=setInterval(()=>{if(!document.hidden)seek(Math.min(156,experiment.getState().elapsed+1),true);},reduced.matches?1200:650);
+    el('comparison-play').textContent='Pause';timer=setInterval(()=>{if(!document.hidden)seek(Math.min(156,experiment.getState().elapsed+1),true);},reduced.matches?1200:650);
   };
   el('comparison-step').onclick=()=>{pause();seek(Math.min(156,experiment.getState().elapsed+1));};
   el('comparison-season').onclick=()=>{pause();seek(Math.min(156,experiment.getState().elapsed+13));};
@@ -115,7 +161,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
   el('comparison-seek').onchange=()=>seek(Number(el('comparison-seek').value));
   el('comparison-close').onclick=()=>dialog.close();
   dialog.addEventListener('close',()=>{pause();revision++;analysisRevision++;invalidateExplanation();experiment=null;images.clear();rigs.clear();el('replay-file').value='';onReturn();});
-  el('explain-local').onclick=()=>{pause();if(canExplain())reveal(defaultSelection(packet),'Local evidence guide · no AI call');};
+  el('explain-local').onclick=()=>{pause();if(canExplain()){reveal(defaultSelection(packet),'Local evidence guide · no AI call');if(guideStep===3){guideStep=4;renderGuide();el('connection-response').focus();}}};
   el('explain-spark').onclick=async()=>{
     pause();if(!canExplain()||!sparkService.enabled)return;
     const current=++explanationRevision;explanationRequest=new AbortController();el('explain-spark').disabled=true;
@@ -165,5 +211,6 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     finally{el('replay-file').value='';}
   };
   return {open(scenario,prediction,question='',activity={}){show(createExperiment(snapshot(),scenario,prediction,question),prediction,'',activity);},
+    openGuide(prediction=''){show(createExperiment(createForestController().toSnapshot(),GUIDE_CHANGE,prediction,'What changes first when rainfall is halved?'),prediction,'',{},0);},
     chooseReplay(){el('replay-file').click();}};
 }

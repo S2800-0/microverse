@@ -1,5 +1,5 @@
 import { createForestController } from './controller.ts';
-import { ART } from './art.js';
+import { ART, DOE_FROM_BUCK, variantKey, sizeJitter } from './art.js';
 import { buildRig, GAITS } from '../motion/rig.js';
 import { assessRig } from '../motion/rig-analysis.js';
 import { prepareJointPieces, drawPuppet } from '../motion/puppet-motion.js';
@@ -7,6 +7,8 @@ import { getMotion } from '../motion/motion-library.js';
 import { installCreatureImport } from './creature-import.js';
 import { installExperimentView } from './experiment-view.js';
 import { installQuestions } from '../investigation/questions-view.js';
+import {CREATURE_FACTS} from './creature-facts.js';
+import {installCollection} from './collection-view.js';
 import {installNarration} from './narration-view.js';
 import {forestNarration,narrationSnapshot} from './narration.js';
 import {installPlaceReview} from '../place/view.js';
@@ -33,9 +35,18 @@ async function loadArt(){
       assets.set(species,{image,rig});
     }catch{failures++;}
   }));
+  try{
+    const c=document.createElement('canvas'),img=new Image();img.src=DOE_FROM_BUCK.from;await img.decode();c.width=img.naturalWidth;c.height=img.naturalHeight;
+    const g=c.getContext('2d');g.drawImage(img,0,0);g.globalCompositeOperation='destination-out';
+    for(const poly of DOE_FROM_BUCK.erase){g.beginPath();poly.forEach(([x,y],i)=>g[i?'lineTo':'moveTo'](x*c.width,y*c.height));g.closePath();g.fill();}
+    const url=URL.createObjectURL(await new Promise(res=>c.toBlob(res)));
+    const image=new Image();image.src=url;await image.decode();let rig=null;
+    try{const candidate=await buildRig(url,DOE_FROM_BUCK.cut);if(!assessRig(candidate).warnings.length)rig=prepareJointPieces(candidate);}catch{}
+    assets.set('doe',{image,rig});
+  }catch{/* bucks stand in for does if the derived sprite cannot be made */}
   el('loading').hidden=true;
   needsDraw=true;
-  status(failures?`${failures} image(s) unavailable; model creatures still work. Click a creature to inspect its record.`:'Ready. Click a creature, or bring someone into the clearing.');
+  status(failures?`${failures} image(s) unavailable; model creatures still work. Click a creature to inspect its record.`:'Meet a creature, follow a connection, ask a question.');
 }
 function nameOf(a){return forest.getState().appearances.get(a.id)?.name||a.name||`${ART[a.species]?.label||a.species} ${a.id}`;}
 function actorFor(animal){
@@ -63,7 +74,7 @@ function sync(animate=false){
   el('calendar').textContent=`${state.season[0].toUpperCase()+state.season.slice(1)} · year ${Math.floor(state.week/52)+1}`;
   el('week').textContent=`Week ${state.week}`;
   el('counts').textContent=Object.entries(state.counts).filter(([,n])=>n).map(([s,n])=>`${n} ${s}`).join(' · ')||'No creatures yet.';
-  el('resources').textContent=`Grass cover ${Math.round(state.grass*100)}% · browse cover ${Math.round(state.browse*100)}% (model indices)`;
+  el('resources').textContent=`Grass food ${Math.round(state.grass*100)} / 100 · shrub food ${Math.round(state.browse*100)} / 100 on the model scale.`;
   el('place-summary').hidden=!state.place;
   if(state.place)el('place-summary').textContent=`Place-inspired start at model week ${state.place.atWeek}. Reviewed photo grass share ${Number((state.place.reviewed.grass*100).toFixed(1))}%; chosen food indices: grass ${Number((state.place.start.grass*100).toFixed(1))}%, shrubs ${Number((state.place.start.browse*100).toFixed(1))}%. Image shares are not ground area or measured food supply. Map layout and animal roles stay curated.`;
   el('resource-tint').style.opacity=String(Math.max(0,.8-state.grass)*.35);
@@ -72,12 +83,13 @@ function sync(animate=false){
   updateCard();
 }
 function eventText(e){
+  const label=(id,species='Animal')=>{const state=forest.getState();return state.appearances.get(id)?.name||state.world.animals.find(a=>a.id===id)?.name||`${species[0].toUpperCase()+species.slice(1)} ${id}`;};
   const prefix=`Week ${e.t}: `;
-  if(e.type==='birth')return `${prefix}${e.species} ${e.id} was born (parent ${e.parent}).`;
-  if(e.type==='death')return `${prefix}${e.species} ${e.id} ${e.cause==='eaten'?'was caught':e.cause==='removed'?'was removed':`died: ${e.cause}`}.`;
-  if(e.type==='kill')return `${prefix}animal ${e.id} caught ${e.preySpecies} ${e.prey}.`;
-  if(e.type==='arrive')return `${prefix}${e.species} ${e.id} arrived.`;
-  if(e.type==='disturb')return `${prefix}companion ${e.id} startled animal ${e.other}.`;
+  if(e.type==='birth')return `${prefix}${label(e.id,e.species)} was born.`;
+  if(e.type==='death')return `${prefix}${label(e.id,e.species)} ${e.cause==='eaten'?'was caught':e.cause==='removed'?'was removed':`died: ${e.cause}`}.`;
+  if(e.type==='kill')return `${prefix}${label(e.id)} caught ${label(e.prey,e.preySpecies)}.`;
+  if(e.type==='arrive')return `${prefix}${label(e.id,e.species)} arrived.`;
+  if(e.type==='disturb')return `${prefix}${label(e.id)} startled ${label(e.other)}.`;
   return `${prefix}${e.detail}.`;
 }
 function updateCard(){
@@ -87,15 +99,17 @@ function updateCard(){
   const src=custom?.image||art?.image;
   el('portrait').hidden=!src;if(src)el('portrait').src=src;
   el('creature-name').textContent=nameOf(a);
-  el('creature-kind').textContent=`${art?.label||a.species} · ${['dog','cat','penguin'].includes(a.species)?'cared-for companion rules':'curated model role'}${custom?.source?' · Meta artwork':''}`;
+  el('creature-kind').textContent=`${art?.label||a.species} · ${['dog','cat','penguin'].includes(a.species)?'Cared-for companion':'Forest resident'}${custom?.source?' · Meta artwork':''}`;
   el('creature-facts').textContent=`In this model: ${a.sex==='f'?'female':'male'}, ${a.age} weeks old, ${Math.max(0,Math.round(a.energy/state.world.params.species[a.species].energyMax*100))}% energy. ${a.alive?'Living in the forest.':'No longer alive.'} Species artwork is illustrative.`;
+  const needs={rabbit:'In this forest, rabbits eat grass. Foxes and wolves can hunt them.',deer:'In this forest, deer eat shrub food. Wolves can hunt them.',fox:'In this forest, foxes hunt rabbits.',wolf:'In this forest, wolves hunt deer and rabbits.'};el('creature-needs').textContent=needs[a.species]||CREATURE_FACTS[a.species]?.text||'This visitor receives care and food from outside the forest.';
+  const fact=CREATURE_FACTS[a.species];el('creature-fact-source').hidden=!fact;if(fact){el('creature-fact-source').textContent=fact.source;el('creature-fact-source').href=fact.url;}
   const list=el('life-events');list.replaceChildren();
   const events=state.world.events.filter(e=>e.id===a.id||e.parent===a.id||e.by===a.id||e.prey===a.id||e.other===a.id).slice(-10);
   if(!events.length){const li=document.createElement('li');li.textContent='No events recorded yet.';list.append(li);}
   for(const e of events){const li=document.createElement('li');li.textContent=eventText(e);list.append(li);}
 }
 function step(animate){const before=narrationSnapshot(forest.getState());forest.step();progress=animate?0:1;sync(animate);narrator.say(forestNarration(before,forest.getState()),{automatic:animate});}
-function reset(populated){setPlaying(false);accumulator=0;progress=1;forest.reset(populated);for(const a of actors.values())a.button.remove();actors.clear();sync();narrator.context(forestNarration(null,forest.getState()));status(populated?'Forest reset to seed 7.':'A fresh clearing. Add a neighbor or bring a creature.');}
+function reset(populated){setPlaying(false);accumulator=0;progress=1;forest.reset(populated);for(const a of actors.values())a.button.remove();actors.clear();sync();narrator.context(forestNarration(null,forest.getState()));status(populated?'A fresh forest. Your saved creatures are still in My creatures.':'A fresh clearing. Add a neighbor or bring a creature.');}
 function add(input){const before=narrationSnapshot(forest.getState()),animal=forest.add(input);sync();narrator.context(forestNarration(before,forest.getState()));status(`${nameOf(animal)} joined the forest as a ${animal.species}.`);return animal;}
 el('play').onclick=()=>setPlaying(!playing);el('step').onclick=()=>{setPlaying(false);step(false);};
 el('fast').onclick=()=>{speed=speed===1?4:1;el('fast').setAttribute('aria-pressed',String(speed===4));};
@@ -105,9 +119,17 @@ el('fieldnotes').onclick=()=>{const open=el('notes').hidden;forest.select(null);
 el('card-close').onclick=()=>{forest.select(null);updateCard();};
 const importer=installCreatureImport({onAdd:add,onPause:()=>setPlaying(false)});el('bring').onclick=()=>importer.open();
 const placeReview=installPlaceReview({onPause:()=>setPlaying(false),getState:()=>forest.getState(),onApply:record=>{forest.applyPlaceStart(record);sync();narrator.context(forestNarration(null,forest.getState()));status('Reviewed place start applied. Your creatures and map layout are retained. Field notes records the chosen food inputs.');}});el('place-photo').onclick=()=>placeReview.open();
+function showEcosystem(){document.body.dataset.space='ecosystem';el('creatures-space').hidden=true;el('tab-ecosystem').setAttribute('aria-current','page');el('tab-creatures').removeAttribute('aria-current');layout();}
 const experiments=installExperimentView({snapshot:()=>forest.toSnapshot(),eventText,onStatus:status,narrator,onReturn:()=>narrator.context(forestNarration(null,forest.getState()))});
 const questions=installQuestions({onPause:()=>setPlaying(false),onRecord:()=>narrator.stop(),onRun:(...args)=>experiments.open(...args)});
 el('investigate').onclick=()=>questions.open();
+function openGuide(){setPlaying(false);el('welcome').hidden=true;el('guide-intro').showModal();}
+el('start-guide').onclick=openGuide;el('guide-again').onclick=openGuide;el('dismiss-welcome').onclick=()=>{el('welcome').hidden=true;status('Choose a creature to meet, or ask a question to start an investigation.');};
+el('guide-intro-close').onclick=()=>el('guide-intro').close();
+for(const button of document.querySelectorAll('[data-prediction]'))button.onclick=()=>{el('guide-prediction').value=button.dataset.prediction;for(const other of document.querySelectorAll('[data-prediction]'))other.setAttribute('aria-pressed',String(other===button));};
+el('begin-guide').onclick=()=>{el('guide-intro').close();experiments.openGuide(el('guide-prediction').value);};
+const collection=installCollection({importer,onPause:()=>{setPlaying(false);narrator.stop();},onEcosystem:showEcosystem,onGuide:openGuide,onVisit:async item=>{el('welcome').hidden=true;let rig;try{if(item.rigConfig){const candidate=await buildRig(item.image,item.rigConfig);if(!assessRig(candidate).warnings.length)rig=prepareJointPieces(candidate);}}catch{}add({...item,rig});status(`${item.name} joined as a cared-for companion. Your saved creature stays in My creatures.`);}});
+el('tab-creatures').onclick=()=>collection.open();el('tab-ecosystem').onclick=showEcosystem;
 el('open-replay').onclick=()=>{setPlaying(false);experiments.chooseReplay();};
 for(const button of document.querySelectorAll('[data-experiment]'))button.onclick=()=>{
   setPlaying(false);pending=button.dataset.experiment;
@@ -151,7 +173,7 @@ addEventListener('resize',layout);document.addEventListener('visibilitychange',(
 new ResizeObserver(()=>document.documentElement.style.setProperty('--footer-height',`${document.querySelector('.bottom').offsetHeight+24}px`)).observe(document.querySelector('.bottom'));
 function render(now){
   const dt=last?Math.max(0,Math.min((now-last)/1000,.05)):0;last=now;
-  if(document.hidden||(!playing&&!needsDraw)){requestAnimationFrame(render);return;}
+  if(document.hidden||document.body.dataset.space==='creatures'||(!playing&&!needsDraw)){requestAnimationFrame(render);return;}
   if(playing&&!document.hidden){clock+=dt*speed;accumulator+=dt*speed/1.2;progress=Math.min(1,progress+dt*speed/1.2);while(accumulator>=1){accumulator--;step(true);}}
   const state=forest.getState();
   needsDraw=false;
@@ -162,11 +184,12 @@ function render(now){
     const moved=Math.hypot(x-actor.x,(y-actor.y)*1.7);
     if(Math.abs(x-actor.x)>.001)actor.dir=x<actor.x?-1:1;
     actor.x=x;actor.y=y;
-    const size=Math.max(38,Math.min(105,cam.width*.045))*(art?.size||1);
+    const vkey=variantKey(animal),vart=vkey==='doe'?DOE_FROM_BUCK:ART[vkey]||art;
+    const size=Math.max(38,Math.min(105,cam.width*.045))*(vart?.size||1)*sizeJitter(animal.id);
     actor.button.style.left=`${x}%`;actor.button.style.top=`${y/state.world.params.height*100}%`;
     actor.button.style.setProperty('--size',`${size}px`);actor.button.style.zIndex=String(Math.round(y*10));
     const ctx=actor.canvas.getContext('2d');ctx.clearRect(0,0,180,180);ctx.save();ctx.translate(90,153);ctx.scale(actor.dir,1);
-    const loaded=assets.get(animal.species),rig=custom?.rig||(!custom?.image&&loaded?.rig);
+    const loaded=assets.get(vkey)||assets.get(animal.species),rig=custom?.rig||(!custom?.image&&loaded?.rig);
     if(rig){const preset=getMotion(art?.motion==='cat'?'cat':'dog');if(playing)actor.phase+=moved*cam.width/100*preset.duty/preset.stride;
       drawPuppet(ctx,rig,{size:180,phase:actor.phase,moving:playing&&moved>.001&&!reduced.matches,preset,phases:GAITS.walk.phase,clock:reduced.matches?0:clock});
     }else{
@@ -179,4 +202,7 @@ function render(now){
   }
   requestAnimationFrame(render);
 }
-layout();cam.x=(innerWidth-cam.width)/2;cam.y=(innerHeight-cam.height)/2;clampCamera();sync();narrator.context(forestNarration(null,forest.getState()));loadArt();requestAnimationFrame(render);
+layout();cam.x=(innerWidth-cam.width)/2;cam.y=(innerHeight-cam.height)/2;
+// narrow screens show a slice of the map: start centred on where the animals are
+{const live=forest.getState().animals.filter(x=>x.alive!==false);if(live.length&&cam.width>el('viewport').clientWidth)cam.x=el('viewport').clientWidth/2-live.reduce((t,x)=>t+x.x,0)/live.length/100*cam.width*cam.zoom;}
+clampCamera();sync();narrator.context(forestNarration(null,forest.getState()));loadArt();requestAnimationFrame(render);
