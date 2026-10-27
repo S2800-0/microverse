@@ -136,7 +136,7 @@ export const SCENE_PARAMS: Params = {
   ...DEFAULT_PARAMS,
   width: 100,
   height: 56,
-  initial: { rabbit: 34, deer: 12, fox: 5, wolf: 3 },
+  initial: { rabbit: 24, deer: 7, fox: 4, wolf: 2 },
   immigration: {
     rabbit: { below: 8, chance: 0.3, group: [2, 3] },
     deer: { below: 4, chance: 0.08, group: [1, 2] },

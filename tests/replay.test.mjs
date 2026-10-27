@@ -86,9 +86,9 @@ test('reviewed fitter config and image bytes survive a replay without serializin
   const source={provider:'Meta',imageModel:'muse-image-1.0',maskModel:'sam-3.1',promptVersion:'watercolor-side-profile-1'};
   const c=createForestController();c.add({species:'dog',name:'Maple',image,rigConfig:config,source,rig:{canvas:'not portable'}});
   const e=createExperiment(json(c.toSnapshot()),'drought');const file=e.toReplay();
-  assert.deepEqual(file.initial.appearances[0],{id:55,name:'Maple',image,rigConfig:config,source});
+  assert.deepEqual(file.initial.appearances[0],{id:38,name:'Maple',image,rigConfig:config,source});
   const restored=experimentFromReplay(json(file));
-  assert.deepEqual(restored.getState().changed.appearances.get(55),{name:'Maple',image,rigConfig:config,source});
+  assert.deepEqual(restored.getState().changed.appearances.get(38),{name:'Maple',image,rigConfig:config,source});
 });
 test('future-randomness replicates are reproducible without replacing the initial creatures or food',()=>{
   const c=createForestController();c.add({species:'dog',name:'Maple'});c.step(8);const initial=c.toSnapshot();

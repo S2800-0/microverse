@@ -18,7 +18,7 @@ test('forest captions summarize actual deltas and events without personal creatu
   const text=forestNarration(before,forest.getState());
   assert(text.includes('1 more dog'));assert(text.includes('1 arrival'));assert(!text.includes('PRIVATE NAME'));
   assert(!text.includes('because'));assert.equal(before.counts.dog,0);
-  assert(forestNarration(null,forest.getState()).includes('55 creatures'));
+  assert(forestNarration(null,forest.getState()).includes('38 creatures'));
 });
 test('comparison captions render exact packet differences and avoid causal explanations or learner notes',()=>{
   const e=createExperiment(createForestController().toSnapshot(),{kind:'rain',rain:.5,durationWeeks:52},'PRIVATE PREDICTION','PRIVATE QUESTION');
