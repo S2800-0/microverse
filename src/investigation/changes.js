@@ -46,7 +46,8 @@ export const PROPOSAL_SCHEMA={type:'object',additionalProperties:false,propertie
 },required:['status','message','change']};
 export function validateProposal(value){
   if(!value||typeof value!=='object'||Object.keys(value).some(k=>!['status','message','change'].includes(k))||!['proposal','clarify','unsupported'].includes(value.status)||typeof value.message!=='string'||!value.message.trim()||value.message.length>500)throw new Error('Spark returned an invalid proposal. No change was applied.');
-  if(value.status!=='proposal'){if(value.change!==null)throw new Error('A clarification cannot change the model.');return structuredClone(value);}
+  // A clarification or refusal never runs a change. If the provider attached a guess, drop it and keep the question for the learner.
+  if(value.status!=='proposal')return {status:value.status,message:value.message,change:null};
   const c=value.change;
   if(!c||Object.keys(c).length!==4||!['kind','rain','durationWeeks','species'].every(k=>Object.hasOwn(c,k)))throw new Error('Invalid proposed parameters.');
   let change;

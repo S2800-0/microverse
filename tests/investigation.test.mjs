@@ -30,7 +30,7 @@ test('validated changes reject extra commands, invalid ranges, combined changes 
     {kind:'remove',species:'dog'},{kind:'remove',species:'wolf',code:'alert(1)'},[{kind:'remove',species:'wolf'}]])assert.throws(()=>normalizeChange(value));
   assert.deepEqual(validateProposal(proposal()).change,{kind:'rain',rain:.7,durationWeeks:26});
   for(const change of [{...proposal().change,species:'wolf'},{...proposal().change,code:'run'},{kind:'remove',rain:null,durationWeeks:null,species:'penguin'}])assert.throws(()=>validateProposal({...proposal(),change}));
-  assert.throws(()=>validateProposal({status:'clarify',message:'Choose one',change:proposal().change}));
+  assert.equal(validateProposal({status:'clarify',message:'Choose one',change:proposal().change}).change,null);
 });
 test('parameterized rainfall expires on schedule and replay v2 resumes exactly',()=>{
   const timed=createExperiment(world().toSnapshot(),{kind:'rain',rain:.7,durationWeeks:26});
@@ -130,4 +130,13 @@ test('Spark HTTP route enforces local origin, session, consent and body bounds b
     assert.equal((await send(headers,{...body,question:'x'.repeat(2000)})).status,413);assert.equal(calls,0);
     const response=await send(headers);assert.equal(response.status,200);assert.equal((await response.json()).value.change.rain,.7);assert.equal(calls,1);
   }finally{await new Promise(resolve=>server.close(resolve));}
+});
+
+test('a clarification keeps its question but can never carry or run a change',()=>{
+  const guess={kind:'rain',rain:.1,durationWeeks:52,species:null};
+  const result=validateProposal({status:'clarify',message:'How dry is barely? Choose a rainfall amount.',change:guess});
+  assert.deepEqual(result,{status:'clarify',message:'How dry is barely? Choose a rainfall amount.',change:null});
+  assert.equal(validateProposal({status:'unsupported',message:'Temperature is not modelled.',change:guess}).change,null);
+  assert.throws(()=>validateProposal({status:'clarify',message:'',change:null}),/invalid proposal/);
+  assert.throws(()=>validateProposal({status:'clarify',message:'x',change:null,extra:1}),/invalid proposal/);
 });
