@@ -34,6 +34,8 @@ Choose **Ask “what if?”** for six prepared questions or a supported manual c
 
 **Narration: On** adds model-derived captions. Read aloud separately opts into local Kokoro Heart neural speech, with no hosted inference charge or device-voice fallback. **Speak a question** adds review-before-send Meta dictation and an editable transcript; it never runs an experiment automatically. See [voice setup, costs and verified limits](docs/narration.md).
 
+The [resource-use guide](docs/resource-use.md) records where inference is optional, existing reuse limits, and environmental claims we cannot yet support. The teacher guide includes an optional discussion connecting the experiment to a familiar place and examining the tool’s own resource use.
+
 ## Provenance and event contributions
 
 Pre-event experiments exist in a separate local prototype. Imported work is recorded in [PROVENANCE.md](PROVENANCE.md), with its original path and source hash. An import date does not make old work newly developed. The final submission must identify eligible new event contributions separately and follow organizer clarification on reuse.

@@ -21,3 +21,11 @@ The before question assumes algae → insect larvae → fish; the transfer quest
 **Actual sessions: zero.** A general science/biology teacher, workshop facilitator or learner can test the workflow; a specialist ecology teacher is not necessary for the first usability session. The owner arranges recruitment and appropriate permission. No outreach is sent automatically. First record where a participant needs help and whether a teacher would use the activity. If no participant is available, submit the implemented activity and protocol with outcomes labelled untested.
 
 These deliver the lesson/export/protocol parts of the [indirect contributions plan](indirect-contributions.md). Learning transfer, classroom adoption and conservation benefits remain hypotheses. The [investigation guide](investigation.md) records live-provider verification separately from offline tests and educational evidence.
+
+## Optional everyday-life and resource reflection
+
+After collecting the existing transfer response, allow an additional 3–5 minutes for the extension in `/teacher.html#resource-reflection`. The comparison dialog also shows the two short discussion prompts under **Finish the classroom activity**. These are optional oral discussions; no new response field or replay data is collected. A facilitator may record observations in the existing optional notes field with participant permission.
+
+Ask what a familiar plant or animal depends on and what outdoor observations would be needed before helping it. Then examine the learning tool itself: which features helped, which could use saved results or ordinary controls, and what evidence would be needed to assess its environmental trade-offs? Collect the transfer response first to avoid coaching that assessment. Do not score these discussions using the food-chain rubric, require an environmental pledge, or ask learners to justify accessibility needs.
+
+The extension is not evidence that attitudes or behaviour changed. The [resource-use guide](resource-use.md) distinguishes implemented safeguards from unmeasured environmental outcomes.
