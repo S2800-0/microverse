@@ -4,14 +4,33 @@ import {buildRig,GAITS} from '../motion/rig.js';
 import {assessRig} from '../motion/rig-analysis.js';
 import {prepareJointPieces,drawPuppet} from '../motion/puppet-motion.js';
 import {getMotion} from '../motion/motion-library.js';
+import {describeChange,changeLabel} from '../investigation/changes.js';
+import {buildEvidence,defaultSelection,validateEvidenceSelection,explanationLines,worksheetHtml,modelOnlyReplay} from '../investigation/evidence.js';
+import {readSparkService,askSpark} from '../investigation/client.js';
 
 // The comparison view owns its canvases/timer; it never advances the exploring forest.
 export function installExperimentView({snapshot,eventText,onStatus=()=>{}}){
   const el=id=>document.getElementById(id),dialog=el('comparison-dialog');
   let experiment=null,timer=null,revision=0,startWeek=0,analysisRevision=0;
+  let packet=null,selection=null,beforeResponse='',sparkService={enabled:false},explanationRevision=0,explanationRequest=null;
   const images=new Map(),rigs=new Map();
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const message=text=>{el('comparison-status').textContent=text;};
+  const evidenceId=id=>`evidence-${id.replaceAll('.','-')}`;
+  function invalidateExplanation(){explanationRevision++;explanationRequest?.abort();explanationRequest=null;selection=null;el('grounded-explanation').hidden=true;el('grounded-explanation').replaceChildren();el('explanation-status').textContent='';}
+  function fileWithNotes(){const file=experiment.toReplay(el('reflection').value);file.activity={before:beforeResponse,after:el('transfer-response').value,teacherNotes:el('teacher-notes').value};validateReplay(file);return file;}
+  function reveal(value,source){
+    selection=validateEvidenceSelection(value,packet);const list=el('grounded-explanation');list.replaceChildren();
+    for(const line of explanationLines(packet,selection)){
+      const li=document.createElement('li');li.textContent=line.text;
+      if(line.ref&&!packet.mechanisms.some(m=>m.id===line.ref)){
+        const button=document.createElement('button');button.textContent=`Inspect ${line.ref}`;button.className='evidence-ref';button.onclick=()=>{el('comparison-evidence-details').open=true;document.getElementById(evidenceId(line.ref))?.scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});};li.append(' ',button);
+      }list.append(li);
+    }
+    const follow=document.createElement('li');follow.textContent=`Question to consider: ${selection.followUp}`;list.append(follow);list.hidden=false;
+    el('explanation-status').textContent=`${source}. Values and events are rendered from this run; possible model connections are not proven causes.`;
+  }
+  function canExplain(){if(!experiment?.getState().elapsed){el('explanation-status').textContent='Advance at least one week first.';return false;}if(!el('reflection').value.trim()){el('explanation-status').textContent='Record your own explanation first, even if it is “I am not sure yet”. Then compare it with the evidence.';return false;}return true;}
   function pause(){clearInterval(timer);timer=null;el('comparison-play').textContent='Play experiment';}
   function renderWorld(canvas,state){
     const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
@@ -47,40 +66,40 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{}}){
     if(current===revision&&dialog.open){render();message(unavailable?`${unavailable} image(s) unavailable. Model records remain intact.`:rigFallbacks?`${rigFallbacks} illustration(s) use whole-image display.`:'Ready. Advance both worlds together, then inspect the evidence.');}
   }
   function render(){
-    if(!experiment)return;const s=experiment.getState(),a=s.baseline,b=s.changed;
+    if(!experiment)return;const s=experiment.getState(),a=s.baseline,b=s.changed;packet=buildEvidence(experiment);
     el('comparison-week').textContent=`${s.elapsed} ${s.elapsed===1?'week':'weeks'}`;el('comparison-seek').value=s.elapsed;
     el('evidence-caption').textContent=`Elapsed week ${s.elapsed} · forest week ${a.week} · changed minus baseline`;
     for(const [prefix,state]of [['baseline',a],['changed',b]]){
       renderWorld(el(`${prefix}-world`),state);
       el(`${prefix}-summary`).textContent=`Forest week ${state.week} · ${state.animals.length} creatures · grass ${Math.round(state.grass*100)}% · browse ${Math.round(state.browse*100)}%`;
       const list=el(`${prefix}-events`);list.replaceChildren();
-      const recorded=state.world.events.filter(e=>e.t>=startWeek);
-      const recent=recorded.slice(-10),events=[...recorded.filter(e=>e.type==='intervention'&&!recent.includes(e)),...recent].reverse();
+      const events=packet.events.filter(e=>e.branch===prefix).reverse();
       if(!events.length){const li=document.createElement('li');li.textContent='No events since this experiment began.';list.append(li);}
-      for(const e of events){const li=document.createElement('li');li.textContent=eventText(e);list.append(li);}
+      for(const e of events){const li=document.createElement('li');li.id=evidenceId(e.id);li.textContent=`${e.id} · Week ${e.week}: ${e.text}`;list.append(li);}
     }
     const rows=el('comparison-evidence');rows.replaceChildren();
-    const measures=[['Grass cover (%)',a.grass*100,b.grass*100],['Browse cover (%)',a.browse*100,b.browse*100],
-      ...Object.keys(a.counts).map(k=>[ART[k]?.label||k,a.counts[k],b.counts[k]])];
-    for(const [label,before,after]of measures){const tr=document.createElement('tr');for(const [i,value]of [label,before,after,after-before].entries()){
-      const cell=document.createElement(i===0?'th':'td');if(!i)cell.scope='row';cell.textContent=typeof value==='number'?`${i===3&&value>0?'+':''}${Number(value.toFixed(1))}`:value;tr.append(cell);
+    for(const o of packet.observations){const tr=document.createElement('tr');tr.id=evidenceId(o.id);for(const [i,value]of [o.label,o.baseline,o.changed,o.difference].entries()){
+      const cell=document.createElement(i===0?'th':'td');if(!i)cell.scope='row';cell.textContent=typeof value==='number'?`${i===3&&value>0?'+':''}${value}`:value;tr.append(cell);
     }rows.append(tr);}
     const identities=[...a.appearances].map(([id,v])=>`${v.name} (#${id}): baseline ${a.animals.some(x=>x.id===id)?'alive':'absent'}, changed ${b.animals.some(x=>x.id===id)?'alive':'absent'}`);
     el('comparison-identity').textContent=identities.join(' · ');
     const end=s.elapsed===156;el('comparison-step').disabled=end;el('comparison-season').disabled=end;
     if(end)pause();
+    el('explain-spark').disabled=!sparkService.enabled||!s.elapsed;
   }
-  function seek(week){try{experiment.seek(week);render();}catch(error){pause();message(error.message);}}
-  function show(next,prediction,reflection){
+  function seek(week){try{invalidateExplanation();experiment.seek(week);render();}catch(error){pause();message(error.message);}}
+  function show(next,prediction,reflection,activity={}){
     pause();analysisRevision++;experiment=next;
+    invalidateExplanation();beforeResponse=activity.before||'';el('transfer-response').value=activity.after||'';el('teacher-notes').value=activity.teacherNotes||'';
     el('continuation-results').textContent='';el('run-continuations').disabled=false;
     const file=next.toReplay();
     startWeek=file.initial.world.week;
     el('saved-prediction').textContent=prediction?`Your prediction: ${prediction}`:'No prediction recorded. You can still inspect and explain the evidence.';
     el('reflection').value=reflection;
-    el('comparison-description').textContent=file.scenario==='drought'?'Rainfall changes to 40% for three model years. All other starting conditions are copied.':'Wolves are removed on the first experiment tick and cannot immigrate back.';
-    el('changed-label').textContent=file.scenario==='drought'?'Changed · less rain':'Changed · wolves removed';
+    el('comparison-description').textContent=`${file.question?file.question+' ':''}${describeChange(file.scenario)}`;
+    el('changed-label').textContent=`Changed · ${changeLabel(file.scenario)}`;
     if(!dialog.open)dialog.showModal();render();message('Preparing illustrations locally…');prepareArt(file.initial);
+    readSparkService().then(s=>{if(dialog.open){sparkService=s;el('explain-spark').disabled=!s.enabled||!experiment?.getState().elapsed;}});
   }
   el('comparison-play').onclick=()=>{
     if(timer){pause();return;}if(experiment.getState().elapsed===156)seek(0);
@@ -92,7 +111,22 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{}}){
   el('comparison-seek').oninput=()=>pause();
   el('comparison-seek').onchange=()=>seek(Number(el('comparison-seek').value));
   el('comparison-close').onclick=()=>dialog.close();
-  dialog.addEventListener('close',()=>{pause();revision++;analysisRevision++;experiment=null;images.clear();rigs.clear();el('replay-file').value='';});
+  dialog.addEventListener('close',()=>{pause();revision++;analysisRevision++;invalidateExplanation();experiment=null;images.clear();rigs.clear();el('replay-file').value='';});
+  el('explain-local').onclick=()=>{pause();if(canExplain())reveal(defaultSelection(packet),'Local evidence guide · no AI call');};
+  el('explain-spark').onclick=async()=>{
+    pause();if(!canExplain()||!sparkService.enabled)return;
+    const current=++explanationRevision;explanationRequest=new AbortController();el('explain-spark').disabled=true;
+    el('explanation-status').textContent='Sending only the question and model record locally; the provider receives compact evidence, not photos or learner responses.';
+    try{const file=fileWithNotes();const result=await askSpark(sparkService,{operation:'explain',question:file.question||changeLabel(file.scenario),replay:modelOnlyReplay(file)},explanationRequest.signal);
+      if(current!==explanationRevision||!dialog.open)return;reveal(result.value,`${result.provider} selected evidence`);
+    }catch(error){if(current===explanationRevision)el('explanation-status').textContent=error.message;}
+    finally{if(current===explanationRevision){explanationRequest=null;el('explain-spark').disabled=!sparkService.enabled;}}
+  };
+  el('download-worksheet').onclick=()=>{
+    try{const file=fileWithNotes(),html=worksheetHtml(file,packet,{...file.activity,selection:selection||defaultSelection(packet)}),url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
+      const a=document.createElement('a');a.href=url;a.download='microverse-investigation.html';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);message('Worksheet saved with learner notes and a model-only replay link. No pictures are included.');
+    }catch(error){message(error.message);}
+  };
   el('run-continuations').onclick=async()=>{
     pause();const current=++analysisRevision,file=experiment.toReplay(),results=[];
     el('run-continuations').disabled=true;
@@ -111,8 +145,8 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{}}){
     finally{if(current===analysisRevision)el('run-continuations').disabled=false;}
   };
   el('download-replay').onclick=()=>{
-    try{const file=experiment.toReplay(el('reflection').value),url=URL.createObjectURL(new Blob([JSON.stringify(file)],{type:'application/json'}));
-      const a=document.createElement('a');a.href=url;a.download=`microverse-${file.scenario}-week-${file.elapsed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    try{const file=fileWithNotes(),url=URL.createObjectURL(new Blob([JSON.stringify(file)],{type:'application/json'}));
+      const a=document.createElement('a');a.href=url;a.download=`microverse-experiment-week-${file.elapsed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
       message('Replay saved locally, including your creature images and notes.');
     }catch(error){message(error.message);}
   };
@@ -123,10 +157,10 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{}}){
       if(file.size>16_000_000)throw new Error('Choose a replay under 16 MB.');
       const input=JSON.parse(await file.text());validateReplay(input);
       if(current!==revision)return;
-      show(experimentFromReplay(input),input.prediction,input.reflection);
+      show(experimentFromReplay(input),input.prediction,input.reflection,input.activity||{});
     }catch(error){if(current===revision){const text=`Replay could not be opened: ${error.message}`;message(text);if(!dialog.open)onStatus(text);}}
     finally{el('replay-file').value='';}
   };
-  return {open(scenario,prediction){show(createExperiment(snapshot(),scenario,prediction),prediction,'');},
+  return {open(scenario,prediction,question='',activity={}){show(createExperiment(snapshot(),scenario,prediction,question),prediction,'',activity);},
     chooseReplay(){el('replay-file').click();}};
 }

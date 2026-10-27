@@ -2,7 +2,7 @@
 
 Choose **Less rain** or **Remove wolves**, optionally record a prediction, then **Compare two worlds**. Both branches start at the exact current forest week, including imported creatures. The baseline keeps existing interventions; the changed branch adds the selected intervention. The exploring forest remains paused and unchanged. Advance a week/season, play, seek to an elapsed week or restart. The comparison stops at 156 elapsed weeks.
 
-**Inspect the evidence** shows counts, food indices, changed-minus-baseline differences and recent event records. Intervention records stay visible even when they leave the most recent ten events. Names/IDs indicate whether each added creature is still present. The reflection field comes before the evidence disclosure to support a learner's own explanation; no AI-written causal explanation is enabled yet.
+**Inspect the evidence** shows counts, food indices, changed-minus-baseline differences and recent event records. Intervention records stay visible even when they leave the most recent ten events. Names/IDs indicate whether each added creature is still present. After recording a reflection, the local evidence guide renders exact values and referenced events. Optional Spark selects existing evidence IDs; the application renders the facts and labels mechanisms as possible model connections. See [investigations](investigation.md).
 
 ## Snapshot and replay contract
 
@@ -12,7 +12,9 @@ Choose **Less rain** or **Remove wolves**, optionally record a prediction, then 
 
 The scene also records reset mode, retained selection, custom names, processed PNG bytes and accepted rig-cut configuration. Canvas meshes are browser objects and are rebuilt locally from the source and cuts; they are not serialized. The comparison renders these rigs in a static pose per model tick. Exact numerical model replay is the guarantee; pixel-identical browser animation is not. Missing illustration/rig rendering gets an explicit whole-image or unavailable-image notice.
 
-Replay version 1 contains the complete initial scene, scenario, elapsed duration, prediction and reflection. Opening a file recomputes its baseline/changed worlds from that initial snapshot. It does not trust saved output labels or alter the exploring forest. **Field notes → Open a saved experiment** opens a replay without creating a new scenario first.
+New exports use replay **version 2**: complete initial scene, typed rainfall/removal change, elapsed duration, prediction, reflection, optional question and optional classroom responses/facilitator notes. Rainfall is 0–150% for 1–156 weeks; removal targets one entire native species and disables immigration. Legacy version-1 `drought` and `remove-wolves` files remain readable. Opening either format recomputes its baseline/changed worlds from that initial snapshot. It does not trust saved output labels or alter the exploring forest. **Field notes → Open a saved experiment** opens a replay without creating a new scenario first.
+
+The printable HTML worksheet contains recorded numbers and learner/facilitator responses. Its embedded download supplies a model-only replay with illustrations, custom names and learner notes removed. The full replay remains a separate export that can retain personal creature images. Worksheets hold back the explanation guide until a reflection has been recorded. Exported HTML escapes user text and loads no remote resources.
 
 ## Randomness and interpretation
 
@@ -35,5 +37,6 @@ Keep exported files private if they contain private photos or notes. They are no
 - Deterministic random-continuation runs without changing the source state.
 - Browser: saved dog named Maple → reviewed rig → exploring week 1 → drought comparison → elapsed week 13 → export → reopen → restart/advance with identical counts/resources, image/identity and notes.
 - Responsive 390 × 660 CSS-pixel iframe: wolf-removal comparison, synchronized advance, scrollable stacked worlds/evidence and continuation controls. This is layout QA, not phone hardware/performance certification.
+- Investigation flow: prepared half-rainfall question, prediction and synthetic before-response → elapsed week 13 → learner-first evidence guide → linked table/event references → synthetic transfer response/facilitator note → downloaded worksheet. Its embedded model-only replay was parsed and restored to identical recorded grass/elapsed values with no pictures or notes. No participant session was implied. Narrow-screen question/comparison controls and lower export controls were inspected.
 
-UI layout remains replaceable. Meta inference, teacher usability sessions, a printable worksheet and ecology calibration remain separate work.
+UI layout remains replaceable. Teacher usability sessions, broader live-provider checks and ecology calibration remain outstanding.

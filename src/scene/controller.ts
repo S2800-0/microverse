@@ -4,6 +4,7 @@ import { sceneParams } from '../sim/scene-ecology.ts';
 import { buildTerrain, MEADOW_V2_TERRAIN } from './terrain.js';
 import { TERRAIN_VERSION, validateSceneSnapshot } from './snapshot.ts';
 import type { SceneSnapshot,AssetSource } from './snapshot.ts';
+import { interventionFor } from '../investigation/changes.js';
 
 export function createForestController({ seed = 7, populated = true } = {}) {
   const terrain = buildTerrain(MEADOW_V2_TERRAIN);
@@ -38,11 +39,7 @@ export function createForestController({ seed = 7, populated = true } = {}) {
     appearances.set(animal.id,{name:cleanName,image,rig,rigConfig,source});selectedId=animal.id;
     return animal;
   }
-  function schedule(kind: 'drought' | 'remove-wolves') {
-    if (kind === 'drought') world.interventions.push({kind:'drought',rain:.4,atWeek:world.week,untilWeek:world.week+156});
-    else if (kind === 'remove-wolves') world.interventions.push({kind:'remove',species:'wolf',atWeek:world.week});
-    else throw new Error('Unsupported experiment.');
-  }
+  function schedule(change:unknown) { world.interventions.push(interventionFor(change,world.week)); }
   function toSnapshot():SceneSnapshot {
     // Expired selected creatures can have left the retained animal array.
     return JSON.parse(JSON.stringify({version:1,terrain:TERRAIN_VERSION,populated,
