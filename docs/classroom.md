@@ -14,7 +14,7 @@ Relevant existing classroom practice: [Harvard ecoXPT](https://ecolearn.gse.harv
 
 ## Implemented activity and pilot status
 
-Open `/teacher.html` in the local preview (or the static build) for the printable lesson, observation sheet, 0–2 exploratory rubric and boundaries. The forest's **Ask “what if?”** dialog collects a prediction and optional before-use response. The comparison collects an explanation before revealing the evidence guide. **Finish the classroom activity** collects the transfer response and facilitator notes; **Save printable worksheet** exports these plus exact results and a model-only rerun link. The complete activity works without an API key. The UI remains a draft to revise after observation.
+Open `/teacher.html` in the local preview (or the static build) for the printable lesson, observation sheet, 0–2 exploratory rubric and boundaries. The forest's **Ask “what if?”** dialog collects a prediction and optional before-use response. The comparison collects an explanation before revealing the evidence guide. **Teacher activity and notes** collects the transfer response and facilitator notes; **Save discovery card** exports these plus exact results and a model-only rerun link. The complete activity works without an API key. The UI remains a draft to revise after observation.
 
 The before question assumes algae → insect larvae → fish; the transfer question assumes grass → grasshoppers → small birds. Both ask for an indirect effect after reduced producer growth. These are constructed, roughly comparable prompts, not a validated assessment instrument. Keep scoring consistent; distinguish missing responses from score zero. Do not teach the chain before collecting the first response or claim causation from a small uncontrolled trial.
 
@@ -24,8 +24,14 @@ These deliver the lesson/export/protocol parts of the [indirect contributions pl
 
 ## Optional everyday-life and resource reflection
 
-After collecting the existing transfer response, allow an additional 3–5 minutes for the extension in `/teacher.html#resource-reflection`. The comparison dialog also shows the two short discussion prompts under **Finish the classroom activity**. These are optional oral discussions; no new response field or replay data is collected. A facilitator may record observations in the existing optional notes field with participant permission.
+After collecting the existing transfer response, allow an additional 3–5 minutes for the extension in `/teacher.html#resource-reflection`. The comparison dialog also shows the two short discussion prompts under **Teacher activity and notes**. These are optional oral discussions; no new response field or replay data is collected. A facilitator may record observations in the existing optional notes field with participant permission.
 
 Ask what a familiar plant or animal depends on and what outdoor observations would be needed before helping it. Then examine the learning tool itself: which features helped, which could use saved results or ordinary controls, and what evidence would be needed to assess its environmental trade-offs? Collect the transfer response first to avoid coaching that assessment. Do not score these discussions using the food-chain rubric, require an environmental pledge, or ask learners to justify accessibility needs.
 
 The extension is not evidence that attitudes or behaviour changed. The [resource-use guide](resource-use.md) distinguishes implemented safeguards from unmeasured environmental outcomes.
+
+## Guided entry and curriculum correspondence
+
+The replayable **Guided investigation** is a short instructional example with a fresh seed-7 forest, distinct from the longer learner-led lesson. **Explore the records and connections** follows a learner explanation. **See measurements and event records** retains exact evidence; one forest is shown by default with an optional reference/both-forests view. The everyday connection is an optional saved response, stripped from model-only/provider reruns.
+
+An [initial developer curriculum correspondence check](curriculum-review.md) maps selected teaching goals to inspected rules and actual runs, including mixed population outcomes. It does not substitute for teacher usability or participant learning evidence. The [experience guide](guided-discovery.md) records persistence, facts/fiction boundaries, invitation behaviour and verification limits.
