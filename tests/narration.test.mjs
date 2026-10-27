@@ -20,11 +20,11 @@ test('forest captions summarize actual deltas and events without personal creatu
   assert(!text.includes('because'));assert.equal(before.counts.dog,0);
   assert(forestNarration(null,forest.getState()).includes('55 creatures'));
 });
-test('comparison captions render exact packet differences and avoid causal explanations or learner notes',()=>{
+test('comparison captions explain the recorded direction without raw resource percentages or learner notes',()=>{
   const e=createExperiment(createForestController().toSnapshot(),{kind:'rain',rain:.5,durationWeeks:52},'PRIVATE PREDICTION','PRIVATE QUESTION');
   assert(comparisonNarration(buildEvidence(e)).includes('Both worlds start from the same forest'));
   e.seek(13);const packet=buildEvidence(e),text=comparisonNarration(packet),grass=packet.observations.find(v=>v.id==='grass');
-  assert(text.includes(`${Math.abs(grass.difference)} percentage points lower`));assert(text.includes('not proof of a cause'));assert(!text.includes('PRIVATE'));
+  assert(text.includes('Grass food is lower'));assert(!text.includes('percentage points'));assert(!text.includes(String(Math.abs(grass.difference))));assert(text.includes('not proof of a cause'));assert(!text.includes('PRIVATE'));
 });
 test('narration leaves the model, event log and random continuation unchanged',()=>{
   const a=createForestController(),b=createForestController();
