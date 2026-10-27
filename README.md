@@ -2,7 +2,7 @@
 
 An illustrated ecosystem playground: bring a creature to life, predict what an environmental change will do, and compare repeatable model experiments.
 
-This public repository is being assembled one feature at a time. The living forest supports complete snapshots, paired experiments and downloadable replay with creature images and learner notes. An optional Meta creature bridge is implemented and tested offline, disabled by default pending confirmed funding and live validation. The intended classroom activity is a short **predict → experiment → inspect → explain** lesson about indirect ecological effects.
+This public repository is being assembled one feature at a time. The living forest supports complete snapshots, paired experiments and downloadable replay with creature images and learner notes. Prepared ecology questions, manual changes, a traceable evidence guide and a printable classroom activity work without AI calls. Optional Meta creature and Spark bridges are disabled by default. The classroom activity follows **predict → experiment → inspect → explain** to explore indirect ecological effects; teacher/learner usability sessions remain pending.
 
 ## Development
 
@@ -26,7 +26,9 @@ The [living forest guide](docs/forest.md) documents the current interaction, bro
 
 The [replay guide](docs/replay.md) describes the complete snapshot format, reproducibility checks, local file handling and limits of the ten random-continuation runs. Choose **Less rain** or **Remove wolves** in the forest; reopen saved files from **Field notes → Open a saved experiment**.
 
-The [Meta creature bridge guide](docs/meta-creature.md) describes `npm run preview:meta`, local cutting, accessory-preserving prompts, cost reservations and the live checks still outstanding. No generation happens with default configuration. Baseten/Muse Spark Open custom experiments remain separate upcoming work.
+The [Meta creature bridge guide](docs/meta-creature.md) describes `npm run preview:meta`, local cutting, accessory-preserving prompts, cost reservations and the live image checks still outstanding. No generation happens with default configuration.
+
+Choose **Ask “what if?”** for six prepared questions or a supported manual change. The [investigation guide](docs/investigation.md) documents the optional Spark proposal/evidence adapters, exact change approval, funding settings, live verification and limits. Meta Spark has passed one live custom-proposal check; Baseten is configured separately and has not been tested live. Open `/teacher.html` for the printable activity and observation sheet.
 
 ## Provenance and event contributions
 

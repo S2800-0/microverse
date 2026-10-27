@@ -1,0 +1,73 @@
+import {normalizeChange,changeLabel} from './changes.js';
+const round=n=>Number(n.toFixed(2));
+export function eventSentence(e){
+  if(e.type==='intervention')return e.kind==='remove'?`A species-removal intervention was recorded.`:`A rainfall intervention was recorded.`;
+  if(e.type==='birth')return `${e.species} #${e.id} was born; parent #${e.parent}.`;
+  if(e.type==='death')return `${e.species} #${e.id} died (${e.cause}).`;
+  if(e.type==='kill')return `Animal #${e.id} caught ${e.preySpecies} #${e.prey}.`;
+  if(e.type==='arrive')return `${e.species} #${e.id} arrived.`;
+  return `Companion #${e.id} disturbed animal #${e.other}.`;
+}
+export function buildEvidence(experiment){
+  const s=experiment.getState(),startWeek=s.startWeek;
+  const a=s.baseline,b=s.changed,observations=[];
+  for(const [id,label,baseline,changed,unit]of [
+    ['grass','Grass cover',a.grass*100,b.grass*100,'percentage points'],['browse','Browse cover',a.browse*100,b.browse*100,'percentage points'],
+    ...Object.keys(a.counts).map(k=>[`population.${k}`,`${k} population`,a.counts[k],b.counts[k],'animals']),
+  ])observations.push({id,label,baseline:round(baseline),changed:round(changed),difference:round(changed-baseline),unit});
+  const events=[];
+  for(const [branch,state]of [['baseline',a],['changed',b]]){
+    const all=state.world.events.map((e,index)=>({e,index})).filter(({e})=>e.t>=startWeek);
+    const selected=[...all.filter(({e})=>e.type==='intervention'),...all.filter(({e})=>e.type!=='disturb').slice(-5)];
+    for(const {e,index}of [...new Map(selected.map(v=>[v.index,v])).values()].slice(-10))events.push({id:`event.${branch}.${index}`,branch,week:e.t,text:eventSentence(e)});
+  }
+  const change=normalizeChange(s.scenario);
+  const mechanisms=[
+    {id:'rain-growth',text:'Model rule: rainfall scales grass and browse regrowth. Below-normal rainfall also dries standing grass.'},
+    {id:'rabbit-food',text:'Model rule: rabbits gain energy by grazing grass. Low energy can prevent breeding or cause starvation.'},
+    {id:'deer-food',text:'Model rule: deer gain energy by browsing shrubs. Food, energy and population caps affect breeding.'},
+    {id:'predation',text:'Model rule: foxes can hunt rabbits; wolves can hunt deer and rabbits. Encounters and hunts are stochastic.'},
+    {id:'immigration',text:'Model rule: scarce native species can arrive from outside; a removal disables that species’ immigration.'},
+  ];
+  return {version:1,seed:s.seed,startWeek,endWeek:a.week,elapsed:s.elapsed,change,observations,events,mechanisms};
+}
+export function defaultSelection(packet){
+  const observations=packet.change.kind==='rain'?['grass','browse','population.rabbit','population.deer']:
+    [`population.${packet.change.species}`,'population.rabbit','population.deer','grass'];
+  return {observationIds:[...new Set(observations)],eventIds:packet.events.filter(e=>e.branch==='changed').slice(0,3).map(e=>e.id),
+    mechanismIds:packet.change.kind==='rain'?['rain-growth','rabbit-food','deer-food']:['predation','immigration'],
+    followUp:'Which recorded change supports your explanation, and what would you test next?'};
+}
+export function validateEvidenceSelection(value,packet){
+  if(!value||typeof value!=='object'||Object.keys(value).some(k=>!['observationIds','eventIds','mechanismIds','followUp'].includes(k)))throw new Error('Invalid evidence selection.');
+  for(const [key,source,max]of [['observationIds',packet.observations,6],['eventIds',packet.events,6],['mechanismIds',packet.mechanisms,4]]){
+    if(!Array.isArray(value[key])||value[key].length>max||new Set(value[key]).size!==value[key].length||value[key].some(id=>!source.some(s=>s.id===id)))throw new Error('The explanation cited evidence that is not in this run.');
+  }
+  if(!value.observationIds.length||typeof value.followUp!=='string'||value.followUp.length>240)throw new Error('Invalid explanation prompt.');
+  return structuredClone(value);
+}
+export function evidenceSelectionSchema(packet){
+  const ids=(source,max)=>({type:'array',items:{type:'string',enum:source.map(v=>v.id)},maxItems:max});
+  return {type:'object',additionalProperties:false,properties:{observationIds:ids(packet.observations,6),eventIds:ids(packet.events,6),mechanismIds:ids(packet.mechanisms,4),followUp:{type:'string'}},required:['observationIds','eventIds','mechanismIds','followUp']};
+}
+export function explanationLines(packet,selection=defaultSelection(packet)){
+  validateEvidenceSelection(selection,packet);
+  const lines=[];
+  for(const id of selection.observationIds){const o=packet.observations.find(x=>x.id===id);lines.push({ref:id,kind:'observation',text:`${o.label}: baseline ${o.baseline}, changed ${o.changed}; difference ${o.difference>0?'+':''}${o.difference} ${o.unit}.`});}
+  for(const id of selection.eventIds){const e=packet.events.find(x=>x.id===id);lines.push({ref:id,kind:'event',text:`${e.branch}, week ${e.week}: ${e.text}`});}
+  for(const id of selection.mechanismIds){const m=packet.mechanisms.find(x=>x.id===id);lines.push({ref:id,kind:'mechanism',text:`Possible connection to investigate — ${m.text}`});}
+  lines.push({ref:null,kind:'limit',text:'These observations and model rules suggest possible explanations. A single paired run does not isolate every stochastic cause or predict a real ecosystem.'});
+  return lines;
+}
+export function modelOnlyReplay(file){
+  const copy=structuredClone(file);copy.initial.appearances=[];copy.initial.selectedId=null;
+  for(const animal of copy.initial.world.animals)delete animal.name;
+  copy.prediction='';copy.reflection='';copy.question='';delete copy.activity;return copy;
+}
+const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export function worksheetHtml(file,packet,{before='',after='',teacherNotes='',selection=defaultSelection(packet)}={}){
+  const modelRecord=encodeURIComponent(JSON.stringify(modelOnlyReplay(file)));
+  const rows=packet.observations.map(o=>`<tr><th>${escape(o.label)}</th><td>${o.baseline}</td><td>${o.changed}</td><td>${o.difference}</td></tr>`).join('');
+  const lines=file.reflection.trim()?explanationLines(packet,selection).map(l=>`<li>${escape(l.text)} ${l.ref?`[${escape(l.ref)}]`:''}</li>`).join(''):'<li>Record a learner explanation first, then compare it with the evidence guide in the application.</li>';
+  return `<!doctype html><html lang="en"><meta charset="utf-8"><title>Microverse investigation record</title><style>body{font:16px/1.5 system-ui;max-width:850px;margin:32px auto;padding:20px;color:#222}table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #aaa;padding:6px;text-align:left}p{white-space:pre-wrap}@media print{.rerun{display:none}body{margin:0;padding:0;font-size:11pt}}</style><h1>Microverse investigation record</h1><p>Question: ${escape(file.question||changeLabel(file.scenario))}</p><p>Seed ${packet.seed}; forest weeks ${packet.startWeek}–${packet.endWeek}; elapsed ${packet.elapsed} weeks. Simplified model outcomes.</p><h2>Prediction</h2><p>${escape(file.prediction)}</p><h2>Change</h2><p>${escape(changeLabel(file.scenario))}</p><h2>Recorded evidence</h2><table><tr><th>Measure</th><th>Baseline</th><th>Changed</th><th>Difference</th></tr>${rows}</table><h2>Learner explanation</h2><p>${escape(file.reflection)}</p><h2>Evidence and possible model connections</h2><ul>${lines}</ul><h2>Before-use reasoning</h2><p>${escape(before)}</p><h2>Transfer question response</h2><p>${escape(after)}</p><h2>Facilitator notes</h2><p>${escape(teacherNotes)}</p><p class="rerun"><a download="microverse-model-only-replay.json" href="data:application/json;charset=utf-8,${modelRecord}">Download model-only rerun data</a> (no pictures, creature names or learner notes). Open it through Field notes → Open a saved experiment in this model version.</p><p>Use the ten-continuation check to inspect variability. This activity has not yet been evaluated with teachers or learners; it does not establish learning gains or real-world ecological predictions.</p></html>`;
+}

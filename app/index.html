@@ -7,8 +7,25 @@
 <div class="camera-controls paper"><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-in" aria-label="Zoom in">+</button><button id="reset-view">Fit map</button></div>
 <aside id="notes" class="notes paper" hidden><button id="notes-close" aria-label="Close field notes">×</button><h2>From the model</h2><p id="counts"></p><p id="resources"></p><ol id="events"></ol><button id="open-replay">Open a saved experiment</button><small>Simplified model rules. Companion animals receive care and food off-map. These are model outcomes, not measurements of a real forest.</small></aside>
 <aside id="creature-card" class="creature-card paper" hidden aria-label="Creature details"><button id="card-close" aria-label="Close creature details">×</button><img id="portrait" alt=""><h2 id="creature-name"></h2><p id="creature-kind"></p><p id="creature-facts"></p><p class="stamp">From the simulation record</p><ol id="life-events"></ol></aside>
-<footer class="bottom"><div class="collection paper"><label>Field collection<select id="species"><option value="rabbit">Rabbit</option><option value="deer">Deer</option><option value="fox">Fox</option><option value="wolf">Wolf</option><option value="dog">Dog companion</option><option value="cat">Cat companion</option></select></label><button id="add">Add neighbor</button><button id="bring" class="primary">Bring a creature ↗</button></div><div class="experiments paper"><span>Change one thing</span><button data-experiment="drought">Less rain</button><button data-experiment="remove-wolves">Remove wolves</button><button id="reset">Reset forest</button><button id="clear">Empty clearing</button></div><p id="status" role="status" aria-live="polite">Explore a creature. Make a prediction. Watch a season.</p></footer>
+<footer class="bottom"><div class="collection paper"><label>Field collection<select id="species"><option value="rabbit">Rabbit</option><option value="deer">Deer</option><option value="fox">Fox</option><option value="wolf">Wolf</option><option value="dog">Dog companion</option><option value="cat">Cat companion</option></select></label><button id="add">Add neighbor</button><button id="bring" class="primary">Bring a creature ↗</button></div><div class="experiments paper"><button id="investigate" class="primary">Ask “what if?”</button><button data-experiment="drought">Less rain</button><button data-experiment="remove-wolves">Remove wolves</button><button id="reset">Reset forest</button><button id="clear">Empty clearing</button></div><p id="status" role="status" aria-live="polite">Explore a creature. Make a prediction. Watch a season.</p></footer>
 </main>
+<dialog id="questions-dialog" aria-labelledby="questions-title">
+  <button id="questions-close" class="close" aria-label="Close investigation questions">×</button><h2 id="questions-title">One question. One change.</h2>
+  <p>Choose a prepared investigation or describe your own. Every proposal shows the exact change before you run it.</p>
+  <div id="prepared-questions" class="prepared-questions" aria-label="Prepared ecology questions"></div>
+  <label class="note-field">Your ecology question<textarea id="ecology-question" maxlength="800" rows="2" placeholder="What if…?"></textarea></label>
+  <button id="preview-question">Preview question locally</button><button id="question-spark" disabled>Ask Spark for a proposal</button><p id="question-provider" class="small-note">Prepared questions require no AI calls.</p>
+  <details><summary>Specify a supported change yourself · no AI</summary>
+    <label class="note-field">Change<select id="manual-kind"><option value="rain">Rainfall</option><option value="remove">Remove one native species</option></select></label>
+    <div id="manual-rain-fields" class="import-fields"><label>Rainfall (% of normal)<input id="manual-rain" type="number" min="0" max="150" step="1" value="40"></label><label>Duration (weeks)<input id="manual-weeks" type="number" min="1" max="156" step="1" value="52"></label></div>
+    <label id="manual-species-fields" class="note-field" hidden>Remove all members of<select id="manual-species"><option value="rabbit">Rabbit</option><option value="deer">Deer</option><option value="fox">Fox</option><option value="wolf">Wolf</option></select></label>
+    <button id="preview-manual">Preview my specified change</button>
+  </details>
+  <p id="question-proposal" class="proposal-box"></p>
+  <label class="note-field">Predict: what changes first, and why?<textarea id="question-prediction" maxlength="1000" rows="2"></textarea></label>
+  <details><summary>15–20 minute classroom activity</summary><p>1. Predict (3 min). 2. Compare one change (5 min). 3. Inspect and explain (5 min). 4. Try a transfer question and discuss model limits (3–5 min).</p><p><a href="/teacher.html" target="_blank" rel="noopener">Open the printable teacher/pilot guide</a></p><label class="note-field">Optional before-use response: assume algae feed insect larvae, which feed fish. How could reduced algae growth indirectly affect fish?<textarea id="before-response" maxlength="1000" rows="2"></textarea></label></details>
+  <button id="run-question" class="primary" disabled>Run this exact change in two worlds</button><p id="question-status" role="status" aria-live="polite"></p>
+</dialog>
 <dialog id="experiment-dialog"><h2 id="experiment-title"></h2><p id="experiment-description"></p><p>Two worlds will start from this exact forest, including your creatures. Your exploring forest stays paused.</p><label class="note-field">Predict: what will change first, and why?<textarea id="prediction" maxlength="1000" rows="3" placeholder="I think… because…"></textarea></label><button id="run-experiment" class="primary">Compare two worlds</button><button id="cancel-experiment">Cancel</button></dialog>
 <dialog id="comparison-dialog" aria-labelledby="comparison-title">
   <button id="comparison-close" class="close" aria-label="Close comparison">×</button>
@@ -25,14 +42,16 @@
   </div>
   <p id="comparison-identity"></p>
   <label class="note-field">Explain: what changed, and which evidence supports it?<textarea id="reflection" maxlength="1000" rows="2" placeholder="I noticed… The record shows…"></textarea></label>
-  <details>
+  <button id="explain-local">Show evidence explanation · no AI</button><button id="explain-spark" disabled>Ask Spark to select evidence</button><p id="explanation-status" role="status"></p><ol id="grounded-explanation" hidden></ol>
+  <details id="comparison-evidence-details">
     <summary>Inspect the evidence</summary>
     <div class="comparison-table"><table><caption id="evidence-caption"></caption><thead><tr><th scope="col">Model measure</th><th scope="col">Baseline</th><th scope="col">Changed</th><th scope="col">Difference</th></tr></thead><tbody id="comparison-evidence"></tbody></table></div>
     <div class="paired-worlds evidence-logs"><section><h4>Baseline · recent events</h4><ol id="baseline-events"></ol></section><section><h4>Changed · recent events</h4><ol id="changed-events"></ol></section></div>
     <button id="run-continuations">Try 10 random continuations</button><p id="continuation-results" role="status" aria-live="polite"></p>
   </details>
+  <details><summary>Finish the classroom activity</summary><label class="note-field">Transfer: assume grass feeds grasshoppers, which feed small birds. How could reduced grass growth indirectly affect the birds?<textarea id="transfer-response" maxlength="1000" rows="2"></textarea></label><label class="note-field">Facilitator notes (optional)<textarea id="teacher-notes" maxlength="1000" rows="2" placeholder="Time/help needed, confusing steps, whether you would use this activity…"></textarea></label><p>Participation and feedback are optional. Keep learner identities out of public reports. The teacher guide includes a blank pilot observation sheet.</p></details>
   <p class="model-limit">Both worlds share a complete starting state. Their random sequences can diverge after the change. This is one run of simplified rules, not a forecast of a real ecosystem.</p>
-  <div class="replay-files"><button id="download-replay">Save replay + notes</button><label class="replay-import">Open replay<input id="replay-file" type="file" accept="application/json,.json"></label></div>
+  <div class="replay-files"><button id="download-replay">Save replay + notes</button><button id="download-worksheet">Save printable worksheet</button><label class="replay-import">Open replay<input id="replay-file" type="file" accept="application/json,.json"></label></div>
   <small>The file includes any imported creature images and your notes. Saving downloads it locally; nothing is uploaded.</small><p id="comparison-status" role="status" aria-live="polite"></p>
 </dialog>
 <dialog id="import-dialog">

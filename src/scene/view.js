@@ -6,6 +6,7 @@ import { prepareJointPieces, drawPuppet } from '../motion/puppet-motion.js';
 import { getMotion } from '../motion/motion-library.js';
 import { installCreatureImport } from './creature-import.js';
 import { installExperimentView } from './experiment-view.js';
+import { installQuestions } from '../investigation/questions-view.js';
 
 const el=id=>document.getElementById(id);
 const forest=createForestController();
@@ -98,6 +99,8 @@ el('fieldnotes').onclick=()=>{const open=el('notes').hidden;forest.select(null);
 el('card-close').onclick=()=>{forest.select(null);updateCard();};
 const importer=installCreatureImport({onAdd:add,onPause:()=>setPlaying(false)});el('bring').onclick=()=>importer.open();
 const experiments=installExperimentView({snapshot:()=>forest.toSnapshot(),eventText,onStatus:status});
+const questions=installQuestions({onPause:()=>setPlaying(false),onRun:(...args)=>experiments.open(...args)});
+el('investigate').onclick=()=>questions.open();
 el('open-replay').onclick=()=>{setPlaying(false);experiments.chooseReplay();};
 for(const button of document.querySelectorAll('[data-experiment]'))button.onclick=()=>{
   setPlaying(false);pending=button.dataset.experiment;

@@ -51,7 +51,7 @@ test('rewinding, replaying and exporting reproduce the same final state',()=>{
 });
 test('replay rejects invalid versions, durations, intervention kinds and notes',()=>{
   const file=createExperiment(createForestController().toSnapshot(),'drought').toReplay();
-  for(const mutate of [r=>r.version=2,r=>r.elapsed=157,r=>r.scenario='poison',r=>r.prediction='x'.repeat(1001),r=>r.initial.terrain='other']){
+  for(const mutate of [r=>r.version=3,r=>r.elapsed=157,r=>r.scenario='poison',r=>r.prediction='x'.repeat(1001),r=>r.initial.terrain='other']){
     const r=json(file);mutate(r);assert.throws(()=>experimentFromReplay(r));
   }
 });

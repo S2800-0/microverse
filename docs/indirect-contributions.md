@@ -44,3 +44,10 @@ Nature centres and museum workshops could reuse the short guided activity. Game/
 - Before submission: publish one concise evidence report linking only completed outputs and observed findings.
 
 Documentation/examples are part of each feature's definition of done. Package publishing, extra biomes and institutional integrations remain outside the initial build. This keeps the indirect contributions useful without displacing the main demo.
+
+## Delivery status · October 27, 2026
+
+- Delivered in the investigation/classroom slice: 15–20 minute lesson, two constructed reasoning prompts and exploratory rubric, facilitator observation sheet, learner-first explanation, printable response/evidence record, private full replay and stripped model-only rerun.
+- Delivered question fixture: [20 synthetic labelled examples](../examples/questions/README.md), exercised for local routing. Intended custom-provider answers are separate labels, not a completed model benchmark. One live Meta parameterized-rainfall proposal was validated.
+- Existing engine, motion and replay modules retain their tests and guides. Separate package publishing, a standalone JSON Schema/examples bundle and external developer usability checks are not claimed as completed outputs.
+- Participant sessions: **zero**. Teacher adoption, reasoning gains and transferable learning remain untested. No conservation decision, institutional partnership or deployment is claimed. The first real participant observation should determine the next UI revision.
