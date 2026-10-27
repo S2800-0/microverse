@@ -16,7 +16,7 @@ const forest=createForestController();
 const narrator=installNarration();
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const assets=new Map(),actors=new Map();
-let playing=false,speed=1,accumulator=0,progress=1,last=0,clock=0,pending=null;
+let playing=false,speed=1,accumulator=0,progress=1,last=0,clock=0;
 let needsDraw=true;
 const cam={x:0,y:0,zoom:1,minZoom:1,width:0,height:0};
 const status=message=>{el('status').textContent=message;};
@@ -99,7 +99,14 @@ function reset(populated){setPlaying(false);accumulator=0;progress=1;forest.rese
 function add(input){const before=narrationSnapshot(forest.getState()),animal=forest.add(input);sync();narrator.context(forestNarration(before,forest.getState()));status(`${nameOf(animal)} joined the forest as a ${animal.species}.`);return animal;}
 el('play').onclick=()=>setPlaying(!playing);el('step').onclick=()=>{setPlaying(false);step(false);};
 el('fast').onclick=()=>{speed=speed===1?4:1;el('fast').setAttribute('aria-pressed',String(speed===4));};
-el('reset').onclick=()=>reset(true);el('clear').onclick=()=>reset(false);
+const popovers=[['menu','menu-panel'],['add-toggle','add-panel']].map(([button,panel])=>({button:el(button),panel:el(panel)}));
+function closePopovers(except){for(const p of popovers)if(p.panel!==except){p.panel.hidden=true;p.button.setAttribute('aria-expanded','false');}}
+for(const p of popovers)p.button.onclick=()=>{const open=p.panel.hidden;closePopovers(p.panel);p.panel.hidden=!open;p.button.setAttribute('aria-expanded',String(open));};
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('.popover,#menu,#add-toggle'))closePopovers();});
+document.addEventListener('click',e=>{if(e.target.closest('.popover button, .popover select')&&!e.target.closest('select'))closePopovers();});
+const confirmed=text=>!forest.getState().animals.length||confirm(text);
+el('reset').onclick=()=>{if(confirmed('Reset to the starting forest? Creatures you added will be removed.'))reset(true);};
+el('clear').onclick=()=>{if(confirmed('Remove every creature from the clearing?'))reset(false);};
 el('add').onclick=()=>{try{add({species:el('species').value});}catch(error){status(error.message);}};
 el('fieldnotes').onclick=()=>{const open=el('notes').hidden;forest.select(null);updateCard();el('notes').hidden=!open;};el('notes-close').onclick=()=>{el('notes').hidden=true;};
 el('card-close').onclick=()=>{forest.select(null);updateCard();};
@@ -109,17 +116,6 @@ const experiments=installExperimentView({snapshot:()=>forest.toSnapshot(),eventT
 const questions=installQuestions({onPause:()=>setPlaying(false),onRecord:()=>narrator.stop(),onRun:(...args)=>experiments.open(...args)});
 el('investigate').onclick=()=>questions.open();
 el('open-replay').onclick=()=>{setPlaying(false);experiments.chooseReplay();};
-for(const button of document.querySelectorAll('[data-experiment]'))button.onclick=()=>{
-  setPlaying(false);pending=button.dataset.experiment;
-  el('experiment-title').textContent=pending==='drought'?'What if there were less rain?':'What if the wolves disappeared?';
-  el('experiment-description').textContent=pending==='drought'?'Rainfall will change from the model baseline to 40% for 156 weeks (three model years).':'All wolves will be removed on the next tick, and wolf immigration will be disabled.';
-  el('experiment-dialog').showModal();
-};
-el('cancel-experiment').onclick=()=>el('experiment-dialog').close();
-el('run-experiment').onclick=()=>{
-  try{experiments.open(pending,el('prediction').value);el('experiment-dialog').close();status('Your forest is paused. Compare both experiment worlds and inspect their records.');}
-  catch(error){el('experiment-description').textContent=error.message;}
-};
 
 function layout(){
   needsDraw=true;
@@ -143,7 +139,7 @@ el('viewport').onpointermove=e=>{if(!drag)return;cam.x+=e.clientX-drag.x;cam.y+=
 el('viewport').onpointerup=el('viewport').onpointercancel=()=>{drag=null;};
 addEventListener('keydown',e=>{
   if(e.target.closest('input,select,textarea,dialog'))return;
-  if(e.key==='Escape'){forest.select(null);updateCard();el('notes').hidden=true;}
+  if(e.key==='Escape'){closePopovers();forest.select(null);updateCard();el('notes').hidden=true;}
   const directions={ArrowLeft:[25,0],ArrowRight:[-25,0],ArrowUp:[0,25],ArrowDown:[0,-25]};
   if(directions[e.key]){e.preventDefault();cam.x+=directions[e.key][0];cam.y+=directions[e.key][1];clampCamera();}
 });

@@ -5,18 +5,18 @@ import {installSpeechInput} from '../voice/speech-input.js';
 export function installQuestions({onPause,onRun,onRecord=()=>{}}){
   const el=id=>document.getElementById(id),dialog=el('questions-dialog');
   let proposal=null,service={enabled:false,reason:'Checking the local reasoning bridge…'},token=0,request=null;
+  const presets=el('prepared-questions');
   const status=text=>{el('question-status').textContent=text;};
   const speech=installSpeechInput({dialog,onBeforeRecord:onRecord,onUse:text=>{el('ecology-question').value=text;el('ecology-question').dispatchEvent(new Event('input'));status('Transcript filled in. Review the words, then preview the question locally.');}});
-  function invalidate(){token++;request?.abort();request=null;proposal=null;el('run-question').disabled=true;el('question-proposal').textContent='';}
+  function invalidate(){token++;request?.abort();request=null;proposal=null;el('run-question').disabled=true;el('question-proposal').textContent='';for(const b of presets.children)b.setAttribute('aria-pressed','false');}
   function show(value,source){
     proposal=value.status==='proposal'?normalizeChange(value.change):null;
     el('run-question').disabled=!proposal;
-    el('question-proposal').textContent=proposal?`${source}. Exact change: ${describeChange(proposal)}`:value.message;
+    el('question-proposal').textContent=proposal?`Exact change: ${describeChange(proposal)}`:value.message;
     el('question-spark').disabled=!service.enabled||value.status!=='needs-ai';
     status(value.message);
   }
-  const presets=el('prepared-questions');
-  for(const p of PRESET_QUESTIONS){const button=document.createElement('button');button.textContent=p.question;button.onclick=()=>{invalidate();el('ecology-question').value=p.question;show(resolveQuestion(p.question),'Prepared question · no AI');};presets.append(button);}
+  for(const p of PRESET_QUESTIONS){const button=document.createElement('button');button.textContent=p.question;button.onclick=()=>{invalidate();for(const b of presets.children)b.setAttribute('aria-pressed',String(b===button));el('ecology-question').value=p.question;show(resolveQuestion(p.question),'Prepared question · no AI');};presets.append(button);}
   el('ecology-question').oninput=()=>{invalidate();el('question-spark').disabled=true;status('Preview this wording, or specify a change with the controls.');};
   el('preview-question').onclick=()=>{invalidate();try{show(resolveQuestion(el('ecology-question').value),'Prepared question · no AI');}catch(error){status(error.message);}};
   el('question-spark').onclick=async()=>{
@@ -37,8 +37,8 @@ export function installQuestions({onPause,onRun,onRecord=()=>{}}){
     try{onRun(proposal,el('question-prediction').value,el('ecology-question').value,{before:el('before-response').value});dialog.close();}catch(error){status(error.message);}
   };
   el('questions-close').onclick=()=>dialog.close();dialog.addEventListener('close',invalidate);
-  return {open(){onPause();invalidate();dialog.showModal();status('Prepared questions work locally. Choose one or preview your own wording.');
+  return {open(){onPause();invalidate();dialog.showModal();status('');
     speech.open();
-    readSparkService().then(s=>{if(dialog.open){service=s;el('question-provider').textContent=`${s.provider}. ${s.reason} Ask Spark sends this question only; no creature photos or notes.`;}});
+    readSparkService().then(s=>{if(dialog.open){service=s;el('question-provider').textContent=`${s.provider}. ${s.reason} Spark sees only your question, never photos or notes.`;}});
   }};
 }
