@@ -1,5 +1,5 @@
 import { createForestController } from './controller.ts';
-import { ART, DOE_FROM_BUCK, variantKey, sizeJitter } from './art.js';
+import { ART, DOE_FROM_BUCK, variantKey, sizeJitter, makeDoeUrl } from './art.js';
 import { buildRig, GAITS } from '../motion/rig.js';
 import { assessRig } from '../motion/rig-analysis.js';
 import { prepareJointPieces, drawPuppet } from '../motion/puppet-motion.js';
@@ -36,11 +36,7 @@ async function loadArt(){
     }catch{failures++;}
   }));
   try{
-    const c=document.createElement('canvas'),img=new Image();img.src=DOE_FROM_BUCK.from;await img.decode();c.width=img.naturalWidth;c.height=img.naturalHeight;
-    const g=c.getContext('2d');g.drawImage(img,0,0);g.globalCompositeOperation='destination-out';
-    for(const poly of DOE_FROM_BUCK.erase){g.beginPath();poly.forEach(([x,y],i)=>g[i?'lineTo':'moveTo'](x*c.width,y*c.height));g.closePath();g.fill();}
-    const url=URL.createObjectURL(await new Promise(res=>c.toBlob(res)));
-    const image=new Image();image.src=url;await image.decode();let rig=null;
+    const url=await makeDoeUrl(),image=new Image();image.src=url;await image.decode();let rig=null;
     try{const candidate=await buildRig(url,DOE_FROM_BUCK.cut);if(!assessRig(candidate).warnings.length)rig=prepareJointPieces(candidate);}catch{}
     assets.set('doe',{image,rig});
   }catch{/* bucks stand in for does if the derived sprite cannot be made */}

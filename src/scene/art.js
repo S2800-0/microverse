@@ -19,3 +19,11 @@ export function variantKey(animal){
 }
 // Stable +-8% size variation per animal so a herd doesn't look cloned.
 export function sizeJitter(id){let h=0;for(const ch of String(id))h=(h*31+ch.charCodeAt(0))>>>0;return .92+(h%17)/100;}
+// Builds the doe drawing (the buck with the antlers erased) as an object URL.
+export async function makeDoeUrl(){
+  const img=new Image();img.src=DOE_FROM_BUCK.from;await img.decode();
+  const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;
+  const g=c.getContext('2d');g.drawImage(img,0,0);g.globalCompositeOperation='destination-out';
+  for(const poly of DOE_FROM_BUCK.erase){g.beginPath();poly.forEach(([x,y],i)=>g[i?'lineTo':'moveTo'](x*c.width,y*c.height));g.closePath();g.fill();}
+  return URL.createObjectURL(await new Promise(res=>c.toBlob(res)));
+}
