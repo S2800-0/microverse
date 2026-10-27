@@ -98,6 +98,8 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     el('saved-prediction').textContent=prediction?`Your prediction: ${prediction}`:'No prediction recorded. You can still inspect and explain the evidence.';
     el('reflection').value=reflection;
     el('comparison-description').textContent=`${file.question?file.question+' ':''}${describeChange(file.scenario)}`;
+    const place=file.initial.place;el('comparison-place').hidden=!place;
+    el('comparison-place').textContent=place?`Place-inspired starting food chosen at forest week ${place.atWeek}: grass ${Number((place.start.grass*100).toFixed(1))}%, shrubs ${Number((place.start.browse*100).toFixed(1))}%. Reviewed image shares are context, not measured biomass or a reconstruction of the real site. The place photo is not saved in this replay.`:'';
     el('changed-label').textContent=`Changed · ${changeLabel(file.scenario)}`;
     if(!dialog.open)dialog.showModal();render();narrator?.context(comparisonNarration(packet));message('Preparing illustrations locally…');prepareArt(file.initial);
     readSparkService().then(s=>{if(dialog.open){sparkService=s;el('explain-spark').disabled=!s.enabled||!experiment?.getState().elapsed;}});

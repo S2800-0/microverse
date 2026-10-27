@@ -36,6 +36,8 @@ Choose **Ask “what if?”** for six prepared questions or a supported manual c
 
 The [resource-use guide](docs/resource-use.md) records where inference is optional, existing reuse limits, and environmental claims we cannot yet support. The teacher guide includes an optional discussion connecting the experiment to a familiar place and examining the tool’s own resource use.
 
+Choose **Place photo** to inspect reviewed SAM image shares and explicitly choose starting food while retaining your creatures and fixed map. A labelled recorded example needs no inference. See [place measurements and limits](docs/places.md) and the [short demo/evidence checklist](docs/demo.md).
+
 ## Provenance and event contributions
 
 Pre-event experiments exist in a separate local prototype. Imported work is recorded in [PROVENANCE.md](PROVENANCE.md), with its original path and source hash. An import date does not make old work newly developed. The final submission must identify eligible new event contributions separately and follow organizer clarification on reuse.
