@@ -7,9 +7,10 @@ import {getMotion} from '../motion/motion-library.js';
 import {describeChange,changeLabel} from '../investigation/changes.js';
 import {buildEvidence,defaultSelection,validateEvidenceSelection,explanationLines,worksheetHtml,modelOnlyReplay} from '../investigation/evidence.js';
 import {readSparkService,askSpark} from '../investigation/client.js';
+import {comparisonNarration} from './narration.js';
 
 // The comparison view owns its canvases/timer; it never advances the exploring forest.
-export function installExperimentView({snapshot,eventText,onStatus=()=>{}}){
+export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrator,onReturn=()=>{}}){
   const el=id=>document.getElementById(id),dialog=el('comparison-dialog');
   let experiment=null,timer=null,revision=0,startWeek=0,analysisRevision=0;
   let packet=null,selection=null,beforeResponse='',sparkService={enabled:false},explanationRevision=0,explanationRequest=null;
@@ -31,7 +32,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{}}){
     el('explanation-status').textContent=`${source}. Values and events are rendered from this run; possible model connections are not proven causes.`;
   }
   function canExplain(){if(!experiment?.getState().elapsed){el('explanation-status').textContent='Advance at least one week first.';return false;}if(!el('reflection').value.trim()){el('explanation-status').textContent='Record your own explanation first, even if it is “I am not sure yet”. Then compare it with the evidence.';return false;}return true;}
-  function pause(){clearInterval(timer);timer=null;el('comparison-play').textContent='Play experiment';}
+  function pause(){clearInterval(timer);timer=null;narrator?.stop();el('comparison-play').textContent='Play experiment';}
   function renderWorld(canvas,state){
     const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
     ctx.clearRect(0,0,w,h);ctx.fillStyle='#c6c79c';ctx.fillRect(0,0,w,h);
@@ -87,7 +88,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{}}){
     if(end)pause();
     el('explain-spark').disabled=!sparkService.enabled||!s.elapsed;
   }
-  function seek(week){try{invalidateExplanation();experiment.seek(week);render();}catch(error){pause();message(error.message);}}
+  function seek(week,automatic=false){try{invalidateExplanation();experiment.seek(week);render();narrator?.say(comparisonNarration(packet),{automatic:automatic&&week!==156});}catch(error){pause();message(error.message);}}
   function show(next,prediction,reflection,activity={}){
     pause();analysisRevision++;experiment=next;
     invalidateExplanation();beforeResponse=activity.before||'';el('transfer-response').value=activity.after||'';el('teacher-notes').value=activity.teacherNotes||'';
@@ -98,12 +99,12 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{}}){
     el('reflection').value=reflection;
     el('comparison-description').textContent=`${file.question?file.question+' ':''}${describeChange(file.scenario)}`;
     el('changed-label').textContent=`Changed · ${changeLabel(file.scenario)}`;
-    if(!dialog.open)dialog.showModal();render();message('Preparing illustrations locally…');prepareArt(file.initial);
+    if(!dialog.open)dialog.showModal();render();narrator?.context(comparisonNarration(packet));message('Preparing illustrations locally…');prepareArt(file.initial);
     readSparkService().then(s=>{if(dialog.open){sparkService=s;el('explain-spark').disabled=!s.enabled||!experiment?.getState().elapsed;}});
   }
   el('comparison-play').onclick=()=>{
     if(timer){pause();return;}if(experiment.getState().elapsed===156)seek(0);
-    el('comparison-play').textContent='Pause experiment';timer=setInterval(()=>{if(!document.hidden)seek(Math.min(156,experiment.getState().elapsed+1));},reduced.matches?1200:650);
+    el('comparison-play').textContent='Pause experiment';timer=setInterval(()=>{if(!document.hidden)seek(Math.min(156,experiment.getState().elapsed+1),true);},reduced.matches?1200:650);
   };
   el('comparison-step').onclick=()=>{pause();seek(Math.min(156,experiment.getState().elapsed+1));};
   el('comparison-season').onclick=()=>{pause();seek(Math.min(156,experiment.getState().elapsed+13));};
@@ -111,7 +112,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{}}){
   el('comparison-seek').oninput=()=>pause();
   el('comparison-seek').onchange=()=>seek(Number(el('comparison-seek').value));
   el('comparison-close').onclick=()=>dialog.close();
-  dialog.addEventListener('close',()=>{pause();revision++;analysisRevision++;invalidateExplanation();experiment=null;images.clear();rigs.clear();el('replay-file').value='';});
+  dialog.addEventListener('close',()=>{pause();revision++;analysisRevision++;invalidateExplanation();experiment=null;images.clear();rigs.clear();el('replay-file').value='';onReturn();});
   el('explain-local').onclick=()=>{pause();if(canExplain())reveal(defaultSelection(packet),'Local evidence guide · no AI call');};
   el('explain-spark').onclick=async()=>{
     pause();if(!canExplain()||!sparkService.enabled)return;
