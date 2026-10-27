@@ -4,6 +4,7 @@ import { suggestRig } from '../motion/rig-analysis.js';
 import { drawPuppet } from '../motion/puppet-motion.js';
 import { getMotion } from '../motion/motion-library.js';
 import { GAITS } from '../motion/rig.js';
+import {readCreatureService,generateCreature} from '../creature/client.js';
 
 export function validatePhotoFile(file) {
   if(!file||!['image/png','image/jpeg','image/webp'].includes(file.type))throw new Error('Choose a JPEG, PNG or WebP image.');
@@ -13,15 +14,23 @@ export function validatePhotoFile(file) {
 export function installCreatureImport({ onAdd, onPause }) {
   const el=id=>document.getElementById(id), dialog=el('import-dialog');
   const source=el('import-source'), motion=el('import-motion');
-  let image=null, token=0, raf=0, phase=0, last=0;
+  let image=null,original=null,processedPreview=null,assetSource=null,token=0,raf=0,phase=0,last=0;
+  let service={enabled:false,reason:'Checking the local image bridge…'},generating=false,requestController=null,providerNote='';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const review=createRigReview({fit:fitQuadruped,onChange(state){
     el('import-status').textContent=state.reason||'Choose an image to prepare.';
-    el('import-accept').disabled=state.status!=='review';
-    el('import-fallback').disabled=['empty','preparing'].includes(state.status);
-    el('import-add').disabled=!state.approved;
+    updateControls(state);
   }});
-  function invalidate(){token++;image=null;review.reset();source.getContext('2d').clearRect(0,0,320,320);}
+  function updateControls(state=review.getState()){
+    el('import-accept').disabled=generating||state.status!=='review';
+    el('import-fallback').disabled=generating||['empty','preparing'].includes(state.status);
+    el('import-add').disabled=generating||!state.approved;
+    el('import-paint').disabled=generating||state.status==='preparing'||!original||!service.enabled||!el('import-consent').checked;
+    el('import-save').disabled=generating||!image;
+    el('import-appearance').disabled=generating;el('import-consent').disabled=generating;
+    el('import-provider-status').textContent=generating?'Preparing one illustration and one cutout. Closing the dialog does not cancel a request already sent.':providerNote||service.reason;
+  }
+  function invalidate(){token++;requestController?.abort();requestController=null;generating=false;image=null;original=null;processedPreview=null;assetSource=null;providerNote='';el('import-consent').checked=false;review.reset();source.getContext('2d').clearRect(0,0,320,320);}
   async function load(src) {
     invalidate();const current=token;
     el('import-status').textContent='Preparing your image locally…';
@@ -33,7 +42,7 @@ export function installCreatureImport({ onAdd, onPause }) {
       const ctx=c.getContext('2d'), scale=Math.min(640/img.naturalWidth,640/img.naturalHeight);
       ctx.drawImage(img,(640-img.naturalWidth*scale)/2,(640-img.naturalHeight*scale)/2,img.naturalWidth*scale,img.naturalHeight*scale);
       // Re-encoding keeps processing bytes free of source EXIF/GPS metadata.
-      image=c.toDataURL('image/png');source.getContext('2d').drawImage(c,0,0,320,320);
+      image=c.toDataURL('image/png');original=image;processedPreview=c;source.getContext('2d').drawImage(c,0,0,320,320);
       let config={knee:.7,hindMaxX:.55};
       try {config=suggestRig(ctx.getImageData(0,0,640,640)).config;} catch { /* Opaque poses still have an explicit fallback. */ }
       await review.prepare({source:image,profile:el('import-species').value,config});
@@ -50,20 +59,48 @@ export function installCreatureImport({ onAdd, onPause }) {
     const ctx=motion.getContext('2d');ctx.clearRect(0,0,320,320);
     const state=review.getState();
     if(state.candidate){ctx.save();ctx.translate(160,285);drawPuppet(ctx,state.candidate.rig,{size:290,phase,moving:!reduced.matches,preset:getMotion(el('import-species').value),phases:GAITS.walk.phase,clock:reduced.matches?0:phase});ctx.restore();}
-    else if(image)ctx.drawImage(source,0,0);
+    else if(processedPreview)ctx.drawImage(processedPreview,0,0,320,320);
     raf=requestAnimationFrame(frame);
   }
-  function close(){token++;cancelAnimationFrame(raf);raf=0;last=0;image=null;review.reset();el('import-file').value='';source.getContext('2d').clearRect(0,0,320,320);motion.getContext('2d').clearRect(0,0,320,320);}
+  function close(){invalidate();cancelAnimationFrame(raf);raf=0;last=0;el('import-file').value='';motion.getContext('2d').clearRect(0,0,320,320);}
   el('import-file').onchange=()=>{const f=el('import-file').files[0];if(f)readFile(f);};
   el('sample-dog').onclick=()=>{el('import-species').value='dog';load('/animals/dog-standing.png');};
   el('sample-cat').onclick=()=>{el('import-species').value='cat';load('/animals/tabby-character-preview.png');};
-  el('import-species').onchange=()=>{if(image){const src=image;load(src);}else review.reset();};
+  el('import-species').onchange=()=>{if(original){const src=original;load(src);}else review.reset();};
+  el('import-consent').onchange=()=>updateControls();
+  el('import-paint').onclick=async()=>{
+    if(generating||!original||!service.enabled||!el('import-consent').checked)return;
+    const current=++token,profile=el('import-species').value,sourceImage=original;
+    generating=true;assetSource=null;providerNote='';review.reset();requestController=new AbortController();updateControls();
+    el('import-status').textContent='Making one watercolor creature. No automatic retries.';
+    try{
+      const result=await generateCreature({image:sourceImage,profile,appearance:el('import-appearance').value,consent:true},service,requestController.signal);
+      if(current!==token||!dialog.open)return;
+      image=result.image;assetSource=result.source;generating=false;
+      const c=document.createElement('canvas');c.width=c.height=640;
+      const img=new Image();img.src=image;await img.decode();if(current!==token||!dialog.open)return;
+      const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(img,0,0);processedPreview=c;
+      let config={knee:.7,hindMaxX:.55};try{config=suggestRig(ctx.getImageData(0,0,640,640)).config;}catch{/* Keep the explicit local fallback. */}
+      await review.prepare({source:image,profile,config});
+      if(current===token)providerNote=result.cached?'Reused the cached illustration and mask. No new provider calls.':'Meta illustration and cutout ready. Compare markings/accessories with the source, then review movement.';
+    }catch(error){
+      if(current!==token||!dialog.open)return;
+      generating=false;image=sourceImage;processedPreview=source;assetSource=null;
+      await review.prepare({source:image,profile,config:{knee:.7,hindMaxX:.55}});
+      if(current===token)el('import-status').textContent=`${error.message} You can still review or use the original image locally.`;
+    }finally{if(current===token){requestController=null;generating=false;updateControls();}}
+  };
+  el('import-save').onclick=()=>{
+    if(!image)return;const a=document.createElement('a');a.href=image;a.download=`microverse-${el('import-species').value}-cutout.png`;a.click();
+  };
   el('import-accept').onclick=()=>review.accept();el('import-fallback').onclick=()=>review.useFallback();
   el('import-add').onclick=()=>{
     const state=review.getState();if(!state.approved||!image)return;
-    try{onAdd({species:el('import-species').value,name:el('import-name').value,image,rig:state.candidate?.rig,rigConfig:state.candidate?.config});dialog.close();}
+    try{onAdd({species:el('import-species').value,name:el('import-name').value,image,rig:state.candidate?.rig,rigConfig:state.candidate?.config,source:assetSource||undefined});dialog.close();}
     catch(error){el('import-status').textContent=error.message;}
   };
   el('import-close').onclick=()=>dialog.close();dialog.addEventListener('close',close);
-  return {open(){onPause();dialog.showModal();review.reset();if(!raf)raf=requestAnimationFrame(frame);}};
+  return {open(){onPause();dialog.showModal();review.reset();if(!raf)raf=requestAnimationFrame(frame);
+    readCreatureService().then(value=>{if(dialog.open){service=value;updateControls();}});
+  }};
 }

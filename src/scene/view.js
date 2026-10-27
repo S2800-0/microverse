@@ -80,7 +80,7 @@ function updateCard(){
   const src=custom?.image||art?.image;
   el('portrait').hidden=!src;if(src)el('portrait').src=src;
   el('creature-name').textContent=nameOf(a);
-  el('creature-kind').textContent=`${art?.label||a.species} · ${['dog','cat','penguin'].includes(a.species)?'cared-for companion rules':'curated model role'}`;
+  el('creature-kind').textContent=`${art?.label||a.species} · ${['dog','cat','penguin'].includes(a.species)?'cared-for companion rules':'curated model role'}${custom?.source?' · Meta artwork':''}`;
   el('creature-facts').textContent=`In this model: ${a.sex==='f'?'female':'male'}, ${a.age} weeks old, ${Math.max(0,Math.round(a.energy/state.world.params.species[a.species].energyMax*100))}% energy. ${a.alive?'Living in the forest.':'No longer alive.'} Species artwork is illustrative.`;
   const list=el('life-events');list.replaceChildren();
   const events=state.world.events.filter(e=>e.id===a.id||e.parent===a.id||e.by===a.id||e.prey===a.id||e.other===a.id).slice(-10);

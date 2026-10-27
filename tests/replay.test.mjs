@@ -83,11 +83,12 @@ test('reviewed fitter config and image bytes survive a replay without serializin
   header.writeUInt32BE(640,16);header.writeUInt32BE(640,20);
   const image=`data:image/png;base64,${header.toString('base64')}`;
   const config={knee:.7,hindMaxX:.52,minX:0,splitX:[],gait:'walk',groundOnly:true};
-  const c=createForestController();c.add({species:'dog',name:'Maple',image,rigConfig:config,rig:{canvas:'not portable'}});
+  const source={provider:'Meta',imageModel:'muse-image-1.0',maskModel:'sam-3.1',promptVersion:'watercolor-side-profile-1'};
+  const c=createForestController();c.add({species:'dog',name:'Maple',image,rigConfig:config,source,rig:{canvas:'not portable'}});
   const e=createExperiment(json(c.toSnapshot()),'drought');const file=e.toReplay();
-  assert.deepEqual(file.initial.appearances[0],{id:55,name:'Maple',image,rigConfig:config});
+  assert.deepEqual(file.initial.appearances[0],{id:55,name:'Maple',image,rigConfig:config,source});
   const restored=experimentFromReplay(json(file));
-  assert.deepEqual(restored.getState().changed.appearances.get(55),{name:'Maple',image,rigConfig:config});
+  assert.deepEqual(restored.getState().changed.appearances.get(55),{name:'Maple',image,rigConfig:config,source});
 });
 test('future-randomness replicates are reproducible without replacing the initial creatures or food',()=>{
   const c=createForestController();c.add({species:'dog',name:'Maple'});c.step(8);const initial=c.toSnapshot();

@@ -2,13 +2,14 @@
 
 An illustrated ecosystem playground: bring a creature to life, predict what an environmental change will do, and compare repeatable model experiments.
 
-This public repository is being assembled one feature at a time. The living forest now supports complete snapshots, paired experiments and downloadable replay with creature images and learner notes. Meta inference remains upcoming. The intended classroom activity is a short **predict → experiment → inspect → explain** lesson about indirect ecological effects.
+This public repository is being assembled one feature at a time. The living forest supports complete snapshots, paired experiments and downloadable replay with creature images and learner notes. An optional Meta creature bridge is implemented and tested offline, disabled by default pending confirmed funding and live validation. The intended classroom activity is a short **predict → experiment → inspect → explain** lesson about indirect ecological effects.
 
 ## Development
 
-Use Node.js 24 or newer. No runtime dependencies are required for the initial simulation module.
+Use Node.js 24 or newer. The browser/simulation has no package runtime dependencies; the optional local server uses the pinned official SAM parser.
 
 ```sh
+npm ci --ignore-scripts
 npm test
 npm run check
 npm run preview
@@ -24,6 +25,8 @@ Run `npm run preview:motion` for the local [motion workbench](docs/motion.md). T
 The [living forest guide](docs/forest.md) documents the current interaction, browser checks, asset provenance and remaining limits. The UI draft is intentionally changeable.
 
 The [replay guide](docs/replay.md) describes the complete snapshot format, reproducibility checks, local file handling and limits of the ten random-continuation runs. Choose **Less rain** or **Remove wolves** in the forest; reopen saved files from **Field notes → Open a saved experiment**.
+
+The [Meta creature bridge guide](docs/meta-creature.md) describes `npm run preview:meta`, local cutting, accessory-preserving prompts, cost reservations and the live checks still outstanding. No generation happens with default configuration. Baseten/Muse Spark Open custom experiments remain separate upcoming work.
 
 ## Provenance and event contributions
 
