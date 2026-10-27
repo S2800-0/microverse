@@ -1,4 +1,5 @@
 import { createForestController } from './controller.ts';
+import { createCreatureLibrary } from './creature-library.js';
 import { ART, DOE_FROM_BUCK, variantKey, sizeJitter, makeDoeUrl } from './art.js';
 import { buildRig, GAITS } from '../motion/rig.js';
 import { assessRig } from '../motion/rig-analysis.js';
@@ -119,11 +120,20 @@ function showEcosystem(){document.body.dataset.space='ecosystem';el('creatures-s
 const experiments=installExperimentView({snapshot:()=>forest.toSnapshot(),eventText,onStatus:status,narrator,onReturn:()=>narrator.context(forestNarration(null,forest.getState()))});
 const questions=installQuestions({onPause:()=>setPlaying(false),onRecord:()=>narrator.stop(),onRun:(...args)=>experiments.open(...args)});
 el('investigate').onclick=()=>questions.open();
-function openGuide(){setPlaying(false);el('welcome').hidden=true;el('guide-intro').showModal();}
+function libraryStorage(){try{return localStorage;}catch{return {getItem(){throw new Error();},setItem(){throw new Error();}};}}
+function openGuide(){
+  setPlaying(false);el('welcome').hidden=true;
+  // saved creatures can be invited into the guided forest as a visitor
+  const items=createCreatureLibrary(libraryStorage()).list(),select=el('guide-visitor');
+  select.replaceChildren(new Option('No visitor',''));
+  for(const item of items)select.append(new Option(`${item.name} (${item.species})`,item.id));
+  el('guide-visitor-field').hidden=el('guide-visitor-note').hidden=!items.length;
+  el('guide-intro').showModal();
+}
 el('start-guide').onclick=openGuide;el('guide-again').onclick=openGuide;el('dismiss-welcome').onclick=()=>{el('welcome').hidden=true;status('Choose a creature to meet, or ask a question to start an investigation.');};
 el('guide-intro-close').onclick=()=>el('guide-intro').close();
 for(const button of document.querySelectorAll('[data-prediction]'))button.onclick=()=>{el('guide-prediction').value=button.dataset.prediction;for(const other of document.querySelectorAll('[data-prediction]'))other.setAttribute('aria-pressed',String(other===button));};
-el('begin-guide').onclick=()=>{el('guide-intro').close();experiments.openGuide(el('guide-prediction').value);};
+el('begin-guide').onclick=()=>{el('guide-intro').close();experiments.openGuide(el('guide-prediction').value,createCreatureLibrary(libraryStorage()).list().find(i=>i.id===el('guide-visitor').value)||null);};
 const collection=installCollection({importer,onPause:()=>{setPlaying(false);narrator.stop();},onEcosystem:showEcosystem,onGuide:openGuide,onVisit:async item=>{el('welcome').hidden=true;let rig;try{if(item.rigConfig){const candidate=await buildRig(item.image,item.rigConfig);if(!assessRig(candidate).warnings.length)rig=prepareJointPieces(candidate);}}catch{}add({...item,rig});status(`${item.name} joined as a cared-for companion. Your saved creature stays in My creatures.`);}});
 el('tab-creatures').onclick=()=>collection.open();el('tab-ecosystem').onclick=showEcosystem;
 el('open-replay').onclick=()=>{setPlaying(false);experiments.chooseReplay();};

@@ -212,6 +212,11 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     finally{el('replay-file').value='';}
   };
   return {open(scenario,prediction,question='',activity={}){show(createExperiment(snapshot(),scenario,prediction,question),prediction,'',activity);},
-    openGuide(prediction=''){show(createExperiment(createForestController().toSnapshot(),GUIDE_CHANGE,prediction,'What changes first when rainfall is halved?'),prediction,'',{},0);},
+    openGuide(prediction='',visitor=null){
+      // a fresh seed-7 forest; an invited companion enters the shared starting state, so both branches are identical except rainfall
+      const forest=createForestController();
+      if(visitor)forest.add({species:visitor.species,name:visitor.name,image:visitor.image,rigConfig:visitor.rigConfig,source:visitor.source});
+      show(createExperiment(forest.toSnapshot(),GUIDE_CHANGE,prediction,'What changes first when rainfall is halved?'),prediction,'',{},0);
+    },
     chooseReplay(){el('replay-file').click();}};
 }

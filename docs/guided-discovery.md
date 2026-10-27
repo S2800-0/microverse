@@ -31,3 +31,7 @@ Automated checks cover factual summaries, post-start event boundaries, populatio
 Browser developer QA checks the guide, close-up, learner-first explanation, reference/split controls, related-question handover, prepared sample review/save, collection reload/reset, visit and sourced fact display. A 390 × 660 iframe checks CSS layout and scrollability; this does not test phone hardware, microphone permission or touchscreen performance. No paid inference is needed for this slice.
 
 These are developer checks. Teacher/learner sessions and educational outcomes remain untested. See the [initial curriculum correspondence check](curriculum-review.md) for narrow supported goals and omissions.
+
+## Inviting a saved creature
+
+The guide intro can invite a saved dog or cat into the shared starting forest, so both branches contain the same companion. This is optional and off by default. Observed in developer QA (seed 7, one saved dog, week 13): the forests differed more than in the no-visitor run (rabbits 10 fewer, foxes 2 more, wolves 6 fewer, versus rabbits 3 fewer and nothing else). Adding an animal changes the model's random draws, so paired forests can diverge for reasons beyond the rainfall change. This is one run, not a measurement. The no-visitor run stays the recommended first comparison.
