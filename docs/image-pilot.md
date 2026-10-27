@@ -1,6 +1,6 @@
 # First live photo pilot
 
-Status: protocol ready; no live image/SAM result has passed yet. The existing synthetic cutout/parser tests are not a photo-quality result.
+Status: a four-photo live pilot completed October 27, 2026. All four illustration/SAM requests returned valid payloads, but the pug's first mask excluded its harness. A deliberate SAM-only retest on the saved illustration, explicitly including the turquoise harness, retained it. The corrected target is covered by a regression and passed through the production adapter. No images were regenerated or automatically retried. Private source/output files remain outside Git and the static build.
 
 ## Small staged set
 
@@ -29,3 +29,16 @@ At prices checked October 27, 2026, one image ($0.01) plus one SAM image segment
 | Difficult view/coat | After first pair | Pending | Pending | Pending | Pending | Pending | 0 | Await initial findings |
 
 The owner can compare identity visually; no automated identity metric or similarity threshold has been validated. Publish only consented examples and anonymized aggregate failure notes. Decide whether to improve prompt, mask parsing/composition, rig geometry or input guidance from the observed failure rather than paying for blind retries.
+
+## Observed pilot results
+
+| Case | Illustration/cutout observation | Geometry and motion review |
+|---|---|---|
+| Beagle | Tan head, black saddle, white chest/feet and white-tipped tail retained. Generated body looks older/longer than the puppy source. | Four extracted leg pieces without warnings; walk/trot frames inspected. Saved cutout imported locally, rig explicitly accepted and creature added as a dog companion. |
+| Orange tabby | Orange stripes, pale chest/muzzle and fluffy tail retained; new standing side pose reconstructs parts absent/hidden in source. | Four leg pieces after bounded local fitter adjustment; motion frames inspected. No universal anatomy/identity claim. |
+| Dark pug with harness | First dog-only mask visibly removed the harness strap. The same saved illustration segmented as **dog wearing a turquoise harness** retained strap/buckle. | Corrected cutout produced four leg pieces without warnings; motion frame inspected. Source sitting pose became a generated standing character. |
+| Fluffy white cat | White coat, pink ears/nose and fluffy tail retained; face/eye likeness needs owner judgment. | Four leg pieces after local fitter adjustment; motion frame inspected. The image reconstructs a standing pose from a tilted/lying source. |
+
+The private browser QA page used the actual `composeCreatureCutout`, fitter and puppet modules without inference. All four produced valid four-piece geometry, which remains a readiness check, not proof of anatomy or a polished gait. Only the beagle was accepted into the forest during this check. At exploring week 1 it was copied into a half-rain experiment and remained alive in both branches at elapsed week 13. A replay download was requested in the UI, but the downloaded file was not retrieved/round-tripped in this pilot; existing automated replay checks are separate evidence. The other three imports, wider photo diversity, the owner's likeness/motion approval and full photo-specific replay round trips remain pending.
+
+Actual request counts: **4 Muse Image + 5 SAM**, estimated **$0.0525** at checked prices. The durable image ledger retains **$0.0625 reserved** against the $0.10 cap: the SAM-only retest conservatively reserved another complete job. No refund/reset was applied. These are request estimates/reservations, not a provider billing receipt or proof of the payment source.

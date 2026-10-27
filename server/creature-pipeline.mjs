@@ -19,7 +19,7 @@ export function createCreaturePipeline({enabled=false,creditsConfirmed=false,pro
         const reservation=await budget.reserve(fingerprint);
         const signal=AbortSignal.timeout(240000);
         const image=await provider.paint(input,signal),{width,height}=pngDimensions(image);
-        const mask=await provider.segment(image,input.profile,signal);validateMask(mask,width,height);
+        const mask=await provider.segment(image,input.profile,signal,input.appearance);validateMask(mask,width,height);
         const result={image,mask,provider:'Meta · Muse Image + SAM 3.1',promptVersion:PROMPT_VERSION,reservation,cached:false};
         const bytes=JSON.stringify(result).length;
         if(bytes<=16_000_000){while(cacheBytes+bytes>16_000_000||cache.size>=8){const key=cache.keys().next().value;cacheBytes-=JSON.stringify(cache.get(key)).length;cache.delete(key);}cache.set(fingerprint,structuredClone(result));cacheBytes+=bytes;}

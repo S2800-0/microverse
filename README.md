@@ -28,6 +28,8 @@ The [replay guide](docs/replay.md) describes the complete snapshot format, repro
 
 The [Meta creature bridge guide](docs/meta-creature.md) describes `npm run preview:meta`, local cutting, accessory-preserving prompts, cost reservations and the live image checks still outstanding. No generation happens with default configuration.
 
+The [four-photo pilot](docs/image-pilot.md) records actual Meta outputs, a corrected harness-mask failure, geometry checks and remaining likeness/motion/replay work. Photo-derived outputs stay private; this is a small pilot, not a reliability benchmark.
+
 Choose **Ask “what if?”** for six prepared questions or a supported manual change. The [investigation guide](docs/investigation.md) documents the optional Spark proposal/evidence adapters, exact change approval, funding settings, live verification and limits. Meta Spark has passed one live custom-proposal check; Baseten is configured separately and has not been tested live. Open `/teacher.html` for the printable activity and observation sheet.
 
 **Narration: On** adds model-derived captions. Read aloud separately opts into local Kokoro Heart neural speech, with no hosted inference charge or device-voice fallback. **Speak a question** adds review-before-send Meta dictation and an editable transcript; it never runs an experiment automatically. See [voice setup, costs and verified limits](docs/narration.md).

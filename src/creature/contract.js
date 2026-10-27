@@ -1,5 +1,14 @@
 export const PROMPT_VERSION='watercolor-side-profile-1';
 export const PIPELINE_MICRO_USD=12500; // $0.01 image + $0.0025 SAM; checked 2026-10-27.
+export function segmentationTarget(profile,appearance=''){
+  // Include the worn item in the same subject: a dog-only mask can exclude its
+  // harness. These are fixed noun phrases, never arbitrary prompt instructions.
+  if(/\bharness\b/i.test(appearance)){
+    const color=['turquoise','blue','red','green','pink','yellow','black'].find(c=>new RegExp(`\\b${c}\\b`,'i').test(appearance));
+    return `${profile} wearing a ${color?color+' ':''}harness`;
+  }
+  return profile;
+}
 export function pngDimensions(src,maxSide=2048){
   if(typeof src!=='string'||src.length>12_000_000||!/^data:image\/png;base64,[A-Za-z0-9+/]+={0,2}$/.test(src))throw new Error('Expected a bounded PNG image.');
   let bytes;try{bytes=Uint8Array.from(atob(src.slice(22,66)),c=>c.charCodeAt(0));}catch{throw new Error('Invalid PNG image.');}
