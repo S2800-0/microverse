@@ -1,6 +1,6 @@
 import {parseImageStream,recordsOfKind,decodeMaskToRaster} from '@meta-sam/parser';
 import {buildSpritePrompt} from '../src/motion/motion-library.js';
-import {pngDimensions,validateMask} from '../src/creature/contract.js';
+import {pngDimensions,validateMask,segmentationTarget} from '../src/creature/contract.js';
 
 // Fixed official destination; neither the browser nor provider output supplies URLs.
 const BASE='https://api.meta.ai/v1';
@@ -48,10 +48,10 @@ export function createMetaProvider({apiKey,fetchImpl=fetch}){
       if(result?.data?.length!==1||typeof result.data[0].b64_json!=='string')throw new Error('Meta returned no single illustration.');
       const image=`data:image/png;base64,${result.data[0].b64_json}`;pngDimensions(image);return image;
     },
-    async segment(image,profile,signal){
+    async segment(image,profile,signal,appearance=''){
       const {width,height}=pngDimensions(image);
       const response=await post('/responses',{model:'sam-3.1',store:false,stream:false,
-        input:[{type:'message',role:'user',content:[{type:'input_text',text:profile},{type:'input_image',image_url:image}]}],
+        input:[{type:'message',role:'user',content:[{type:'input_text',text:segmentationTarget(profile,appearance)},{type:'input_image',image_url:image}]}],
         metadata:{mask_encoding:'one_bit'}},signal);
       return parseSamResponse(response,width,height);
     },
