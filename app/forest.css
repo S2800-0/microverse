@@ -54,3 +54,6 @@ details details{margin-top:10px}
 .paired-worlds h3{margin:8px 0 6px}
 .evidence-logs h4{margin:8px 0}
 @media(max-width:720px){.transport button{flex:1}}
+#place-dialog h3{font:600 14px system-ui;margin:18px 0 8px;color:var(--moss)}
+#place-dialog .lede{margin:0 0 4px}
+#place-preview{max-height:30svh}
