@@ -1,13 +1,14 @@
 import { validateWorldSnapshot } from '../sim/snapshot.ts';
 import type { WorldSnapshot } from '../sim/snapshot.ts';
 import { sceneParams } from '../sim/scene-ecology.ts';
+import {validatePlaceRecord} from '../place/contract.js';
 
 export const TERRAIN_VERSION='meadow-v2-1';
 export interface AssetSource {provider:'Meta';imageModel:'muse-image-1.0';maskModel:'sam-3.1';promptVersion:string}
 export interface Appearance { id:number; name:string; image?:string; rigConfig?:Record<string,unknown>;source?:AssetSource }
 export interface SceneSnapshot {
   version:1; terrain:typeof TERRAIN_VERSION; populated:boolean; selectedId:number|null;
-  world:WorldSnapshot; appearances:Appearance[];
+  world:WorldSnapshot; appearances:Appearance[];place?:Record<string,unknown>;
 }
 function invalid(): never { throw new Error('Invalid or unsupported forest snapshot.'); }
 function canonical(value:any):string {
@@ -39,6 +40,7 @@ export function validateSceneSnapshot(input:unknown):asserts input is SceneSnaps
   const s=input as any;
   if(!s||s.version!==1||s.terrain!==TERRAIN_VERSION||typeof s.populated!=='boolean')invalid();
   validateWorldSnapshot(s.world);
+  if(s.place!==undefined)validatePlaceRecord(s.place,s.world.week);
   if(s.world.params.width!==100||s.world.params.height!==56)invalid();
   // This UI exposes curated profiles plus interventions, not arbitrary executable
   // model parameters. Reject changed rules rather than presenting them as ours.
