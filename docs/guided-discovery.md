@@ -35,3 +35,14 @@ These are developer checks. Teacher/learner sessions and educational outcomes re
 ## Inviting a saved creature
 
 The guide intro can invite a saved dog or cat into the shared starting forest, so both branches contain the same companion. This is optional and off by default. Observed in developer QA (seed 7, one saved dog, week 13): the forests differed more than in the no-visitor run (rabbits 10 fewer, foxes 2 more, wolves 6 fewer, versus rabbits 3 fewer and nothing else). Adding an animal changes the model's random draws, so paired forests can diverge for reasons beyond the rainfall change. This is one run, not a measurement. The no-visitor run stays the recommended first comparison.
+
+## Ask the guide (built with mocked Spark; no live Meta call made for this feature)
+
+The investigation has an **Ask the guide** thread: the child's question appears as a bubble and the guide answers in a bubble.
+
+- **Free local guide** (default): keyword matching over this run's recorded evidence (observations, events, model rules). It answers at once and never invents anything. Unclear questions get a clarifying prompt.
+- **Ask Spark** (explicit, only when the local server has Spark enabled and a spend cap): sends the question and the recomputed evidence packet to Meta Muse Spark. Spark may only **choose** existing observation, event and model-rule IDs, one follow-up from a reviewed list, and one of its own chosen IDs to look at first. All sentences, numbers and buttons are written by code from the run, so Spark's wording never reaches the page except a short clarification. Creature names, photos and notes are not sent; the typed question is sent as written, so the interface asks learners not to type personal information.
+- **Failures** (disabled, over budget, offline, malformed output, unsupported IDs) fall back to the local guide with a note. There is no automatic retry. A reply that arrives after the forest moved on is discarded. Chips in older bubbles switch off when the week changes, since they point at that earlier moment.
+- Chips open the measurement row, the model rule, or a recorded birth/arrival/death close-up. The close-up shows a current or last recorded location, not a replay.
+- Cost: one Spark request reserves $0.025 against the local ledger. Tested with mocked transports only: provider request shape, size bound at weeks 1/13/52/156, privacy of the payload, strict validation, bad output, stale replies. **Live Meta behaviour for this operation is unverified**, including whether Meta accepts the tool schema.
+- The guide explains how the *model* produced a record. It does not claim to explain real ecosystems.

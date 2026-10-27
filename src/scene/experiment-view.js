@@ -1,5 +1,6 @@
 import {createExperiment,experimentFromReplay,validateReplay,runContinuation} from './experiment.ts';
 import {createForestController} from './controller.ts';
+import {guideLocal,guideReply} from '../investigation/guide.js';
 import {nearestAnimal,animalRecord,GUIDE_CHANGE,worldLabels,discoverySummary,compareFood,closerLook,intervalRecord,relatedInvestigations,guideContent,plural,populationStory,describeForPeople} from './discovery.js';
 import {ART,DOE_FROM_BUCK,variantKey,sizeJitter,makeDoeUrl} from './art.js';
 import {buildRig,GAITS} from '../motion/rig.js';
@@ -9,6 +10,7 @@ import {getMotion} from '../motion/motion-library.js';
 import {describeChange,changeLabel} from '../investigation/changes.js';
 import {buildEvidence,defaultSelection,validateEvidenceSelection,explanationLines,worksheetHtml,modelOnlyReplay} from '../investigation/evidence.js';
 import {readSparkService,askSpark} from '../investigation/client.js';
+import {validateGuide} from '../investigation/guide.js';
 import {comparisonNarration} from './narration.js';
 
 // The comparison view owns its canvases/timer; it never advances the exploring forest.
@@ -111,12 +113,12 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     notice=s.elapsed?(s.scenario.kind==='rain'&&Math.abs(a.grass-b.grass)>.005?{key:'food',kind:'food'}:null):null;
     const recent=closerLook(b,startWeek,initial.world.events.length);if(recent&&s.elapsed>1)notice={key:`event-${recent.id}`,kind:'event',...recent};
     el('notice').hidden=!notice||dismissed.has(notice.key)||guideStep!==null;if(notice)el('notice-copy').textContent=notice.kind==='food'?'The meadow’s food has changed. Want to look closer?':notice.event.type==='birth'?`A new ${notice.event.species} was born in this forest. Want to meet them?`:notice.event.type==='arrive'?`A ${notice.event.species} arrived from outside. Want to meet them?`:`A ${notice.event.species} ${notice.event.cause==='removed'?'was removed from':'died in'} this forest. Explore the record?`;
-    fillAnimalPick();if(asked){const stillThere=animalRecord(experiment.getState()[asked.branch],asked.id,initial.world.events.length);if(!stillThere){asked=null;el('animal-card').hidden=true;}else showAnimal(stillThere,asked.branch);}
+    fillAnimalPick();el('guide-ask-spark').disabled=!sparkService.enabled||!s.elapsed||!!pendingBubble;if(asked){const stillThere=animalRecord(experiment.getState()[asked.branch],asked.id,initial.world.events.length);if(!stillThere){asked=null;el('animal-card').hidden=true;}else showAnimal(stillThere,asked.branch);}
     renderGuide();if(focus&&focus.kind==='event'&&b.week<focus.event.t){focus=null;el('closeup').hidden=true;}if(focus)renderCloseup();
   }
-  function seek(week,automatic=false){try{invalidateExplanation();experiment.seek(week);render();narrator?.say(comparisonNarration(packet),{automatic:automatic&&week!==156});}catch(error){pause();message(error.message);}}
+  function seek(week,automatic=false){try{invalidateExplanation();guideToken++;discardPending();staleChips();experiment.seek(week);render();narrator?.say(comparisonNarration(packet),{automatic:automatic&&week!==156});}catch(error){pause();message(error.message);}}
   function show(next,prediction,reflection,activity={},guided=null){
-    pause();analysisRevision++;experiment=next;initial=next.toReplay().initial;guideStep=guided;visibleBranch='changed';focus=null;notice=null;asked=null;el('animal-card').hidden=true;dismissed.clear();pendingRelated=null;el('related-form').hidden=true;el('closeup').hidden=true;el('comparison-layout').value='single';el('why-panel').hidden=true;el('why-toggle').setAttribute('aria-expanded','false');el('food-layer').checked=false;el('guide-status').textContent='';
+    pause();analysisRevision++;experiment=next;initial=next.toReplay().initial;guideStep=guided;visibleBranch='changed';focus=null;notice=null;asked=null;el('animal-card').hidden=true;resetGuide();dismissed.clear();pendingRelated=null;el('related-form').hidden=true;el('closeup').hidden=true;el('comparison-layout').value='single';el('why-panel').hidden=true;el('why-toggle').setAttribute('aria-expanded','false');el('food-layer').checked=false;el('guide-status').textContent='';
     invalidateExplanation();beforeResponse=activity.before||'';el('transfer-response').value=activity.after||'';el('teacher-notes').value=activity.teacherNotes||'';el('connection-response').value=activity.connection||'';
     el('continuation-results').textContent='';el('run-continuations').disabled=false;
     const file=next.toReplay();
@@ -129,7 +131,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     el('comparison-place').textContent=place?`Place-inspired starting food chosen at forest week ${place.atWeek}: grass ${Number((place.start.grass*100).toFixed(1))}%, shrubs ${Number((place.start.browse*100).toFixed(1))}%. Reviewed image shares are context, not measured biomass or a reconstruction of the real site. The place photo is not saved in this replay.`:'';
     el('changed-label').textContent=`Changed · ${changeLabel(file.scenario)}`;
     renderRelated();if(!dialog.open)dialog.showModal();render();narrator?.context(comparisonNarration(packet));message('Preparing illustrations locally…');prepareArt(file.initial);
-    readSparkService().then(s=>{if(dialog.open){sparkService=s;el('explain-spark').disabled=!s.enabled||!experiment?.getState().elapsed;}});
+    readSparkService().then(s=>{if(dialog.open){sparkService=s;el('explain-spark').disabled=!s.enabled||!experiment?.getState().elapsed;el('guide-ask-spark').disabled=!s.enabled||!experiment?.getState().elapsed;}});
   }
   function renderGuide(){el('learner-explanation').hidden=guideStep!==null&&guideStep<3;el('connection-reflection').hidden=guideStep!==null&&guideStep<4;el('related-section').hidden=guideStep!==null&&guideStep<4;const panel=el('guide-panel');panel.hidden=guideStep===null;dialog.classList.toggle('guided',guideStep!==null);el('closeup-continue').hidden=guideStep!==2;el('discovery-next').hidden=![1,3].includes(guideStep);el('discovery-next').textContent=guideStep===1?'Look closer at the meadow':'Explain what I noticed';if(guideStep===null)return;const guide=guideContent(guideStep);el('guide-progress').textContent=`GUIDED INVESTIGATION · ${guideStep+1} OF 5`;el('guide-title').textContent=guide.title;el('guide-copy').textContent=guide.text;el('guide-next').textContent=guide.action;}
   function renderCloseup(){if(!focus||!experiment)return;const closeBranch=focus.branch||'changed',state=experiment.getState()[closeBranch],canvas=el('closeup-world'),source=el(`${closeBranch}-world`),ctx=canvas.getContext('2d');let x=source.width/2,y=source.height/2,foodCell=false;
@@ -141,6 +143,54 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     }
     const sw=source.width*.42,sh=sw*canvas.height/canvas.width,sx=Math.max(0,Math.min(source.width-sw,x-sw/2)),sy=Math.max(0,Math.min(source.height-sh,y-sh/2));ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(source,sx,sy,sw,sh,0,0,canvas.width,canvas.height);if(focus.kind!=='food'||foodCell){ctx.strokeStyle='#f5e3a0';ctx.lineWidth=3;ctx.beginPath();ctx.arc((x-sx)/sw*canvas.width,(y-sy)/sh*canvas.height,22,0,Math.PI*2);ctx.stroke();}
   }
+  // Ask the guide: a thread of bubbles. The local guide answers at once; Spark only on an explicit click.
+  // Every reply is rendered from this run's evidence packet, never from provider text.
+  let guideToken=0,pendingBubble=null;
+  function resetGuide(){guideToken++;pendingBubble=null;el('guide-thread').replaceChildren();}
+  // The forest moved on (or a new question started) before Spark answered: the late reply is ignored, and the bubble says so.
+  function discardPending(){if(!pendingBubble)return;pendingBubble.replaceChildren(Object.assign(document.createElement('span'),{className:'bubble-source',textContent:'Meta · Muse Spark'}),Object.assign(document.createElement('p'),{textContent:'The forest moved on before Spark answered, so that reply was skipped. Ask again if you like.'}));pendingBubble=null;el('guide-ask-spark').disabled=!sparkService.enabled||!experiment?.getState().elapsed;}
+  // Completed bubbles keep their words, but their chips point at the run as it was then: switch them off once the forest moves.
+  function staleChips(){for(const b of el('guide-thread').querySelectorAll('.bubble-chips button')){b.disabled=true;b.title='This points at an earlier moment. Ask again to refresh it.';}}
+  function bubble(kind,label){const b=document.createElement('div');b.className=`bubble ${kind}`;if(label){const l=document.createElement('span');l.className='bubble-source';l.textContent=label;b.append(l);}el('guide-thread').append(b);b.scrollIntoView({block:'nearest',behavior:reduced.matches?'instant':'smooth'});return b;}
+  function openChip(chip){
+    pause();
+    if(chip.kind==='rule'){el('why-panel').hidden=false;el('why-toggle').setAttribute('aria-expanded','true');el('why-panel').scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});return;}
+    if(chip.kind==='event'){
+      const [,branch,index]=chip.id.split('.'),event=experiment.getState()[branch]?.world.events[Number(index)];
+      if(event&&['birth','death','arrive'].includes(event.type)){openLook({kind:'event',branch,id:Number(index),event});return;}
+    }
+    el('comparison-evidence-details').open=true;document.getElementById(evidenceId(chip.id))?.scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});
+  }
+  function showReply(reply,target){
+    const b=target||bubble('guide');b.className='bubble guide';b.replaceChildren();
+    const label=document.createElement('span');label.className='bubble-source';label.textContent=`${reply.source} · week ${experiment?.getState().elapsed??0}`;b.append(label);
+    if(reply.kind!=='answer'){const p=document.createElement('p');p.textContent=reply.text;b.append(p);return;}
+    const list=document.createElement('ul');for(const line of reply.lines){const li=document.createElement('li');li.textContent=line.text;list.append(li);}b.append(list);
+    if(reply.chips.length){const row=document.createElement('div');row.className='bubble-chips';for(const chip of reply.chips){const button=document.createElement('button');button.type='button';button.textContent=chip.label;button.setAttribute('aria-label',`${chip.label}: ${chip.id}`);button.onclick=()=>openChip(chip);row.append(button);}b.append(row);}
+    if(reply.followUp){const p=document.createElement('p');p.className='bubble-follow';const ask=document.createElement('button');ask.type='button';ask.textContent=reply.followUp;ask.onclick=()=>{el('guide-question').value=reply.followUp;el('guide-question').focus();};p.append('Something to look at next: ',ask);b.append(p);}
+    b.scrollIntoView({block:'nearest',behavior:reduced.matches?'instant':'smooth'});
+  }
+  function localReply(question){
+    if(!experiment?.getState().elapsed)return guideReply({status:'clarify',message:'Watch the forest for a week or two first, then ask. The guide can only talk about what has been recorded.'},packet,'Local evidence guide');
+    return guideReply(guideLocal(question,packet),packet,'Local evidence guide');
+  }
+  function askQuestion(){const q=el('guide-question').value.trim();if(!q)return null;el('guide-question').value='';bubble('child').textContent=q;return q;}
+  el('guide-form').onsubmit=event=>{event.preventDefault();const q=askQuestion();if(!q||!packet)return;guideToken++;discardPending();showReply(localReply(q));};
+  el('guide-ask-spark').onclick=async()=>{
+    if(pendingBubble)return;
+    const q=askQuestion();if(!q||!packet||!sparkService.enabled)return;
+    if(!experiment.getState().elapsed){showReply(localReply(q));return;}
+    const current=++guideToken,target=bubble('guide','Meta · Muse Spark');target.textContent='Spark is choosing what to show…';pendingBubble=target;el('guide-ask-spark').disabled=true;
+    try{
+      const result=await askSpark(sparkService,{operation:'guide',question:q,replay:modelOnlyReplay(fileWithNotes())},new AbortController().signal);
+      if(current!==guideToken)return;
+      const validated=validateGuide(result.value,packet);
+      showReply(guideReply(validated,packet,`${result.provider||'Meta · Muse Spark'} chose this evidence`),target);
+    }catch(error){
+      if(current!==guideToken)return;
+      showReply(localReply(q),target);const note=document.createElement('p');note.className='small-note';note.textContent='Spark could not answer, so this is the free local guide. No automatic retry was made.';target.append(note);
+    }finally{if(current===guideToken){pendingBubble=null;el('guide-ask-spark').disabled=!sparkService.enabled||!experiment?.getState().elapsed;}}
+  };
   // Tap-to-ask: local and free. Shows only what the model recorded about one animal in the forest that was tapped.
   let asked=null;
   const drawnSize=a=>{const vkey=variantKey(a),art=vkey==='doe'?DOE_FROM_BUCK:ART[vkey]||ART[a.species];return 44*(art?.size||1)*sizeJitter(a.id);};
