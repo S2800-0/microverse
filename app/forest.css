@@ -48,3 +48,9 @@ details details{margin-top:10px}
 }
 .bottom{flex-direction:column;align-items:center;flex-wrap:nowrap}
 #status{flex-basis:auto;width:fit-content;padding:3px 12px}
+.prediction{margin:0 0 12px;font-style:italic}
+.transport{margin:12px 0}
+.transport label{width:auto;flex:1;min-width:220px}
+.paired-worlds h3{margin:8px 0 6px}
+.evidence-logs h4{margin:8px 0}
+@media(max-width:720px){.transport button{flex:1}}

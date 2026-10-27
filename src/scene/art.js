@@ -8,3 +8,10 @@ export const ART = {
   rabbit:{label:'Rabbit',image:'/animals/rabbit-standing.png',size:.6,motion:'rabbit'},
   penguin:{label:'Penguin visitor',image:null,size:.85,motion:'penguin'},
 };
+
+// Display-only variety: young animals draw smaller, adult females slightly smaller, plus a small stable per-animal jitter.
+export function bodyScale(animal,params){
+  const mature=params?.species?.[animal.species]?.matureAge??0;
+  const age=animal.age<mature?.45+.55*animal.age/Math.max(1,mature):1;
+  return age*(animal.sex==='f'?.92:1)*(.94+((animal.id*37)%13)/100);
+}

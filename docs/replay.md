@@ -1,6 +1,6 @@
 # Complete forest replay
 
-Choose **Less rain** or **Remove wolves**, optionally record a prediction, then **Compare two worlds**. Both branches start at the exact current forest week, including imported creatures. The baseline keeps existing interventions; the changed branch adds the selected intervention. The exploring forest remains paused and unchanged. Advance a week/season, play, seek to an elapsed week or restart. The comparison stops at 156 elapsed weeks.
+Choose **Ask “what if?”**, pick a question (for example less rain or no wolves), optionally record a prediction, then **Compare two forests**. Both branches start at the exact current forest week, including imported creatures. The baseline keeps existing interventions; the changed branch adds the selected intervention. The exploring forest remains paused and unchanged. Advance a week/season, play, seek to an elapsed week or restart. The comparison stops at 156 elapsed weeks.
 
 **Inspect the evidence** shows counts, food indices, changed-minus-baseline differences and recent event records. Intervention records stay visible even when they leave the most recent ten events. Names/IDs indicate whether each added creature is still present. After recording a reflection, the local evidence guide renders exact values and referenced events. Optional Spark selects existing evidence IDs; the application renders the facts and labels mechanisms as possible model connections. See [investigations](investigation.md).
 

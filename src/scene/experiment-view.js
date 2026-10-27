@@ -1,5 +1,5 @@
 import {createExperiment,experimentFromReplay,validateReplay,runContinuation} from './experiment.ts';
-import {ART} from './art.js';
+import {ART,bodyScale} from './art.js';
 import {buildRig,GAITS} from '../motion/rig.js';
 import {assessRig} from '../motion/rig-analysis.js';
 import {prepareJointPieces,drawPuppet} from '../motion/puppet-motion.js';
@@ -32,7 +32,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     el('explanation-status').textContent=`${source}. Values and events are rendered from this run; possible model connections are not proven causes.`;
   }
   function canExplain(){if(!experiment?.getState().elapsed){el('explanation-status').textContent='Advance at least one week first.';return false;}if(!el('reflection').value.trim()){el('explanation-status').textContent='Record your own explanation first, even if it is “I am not sure yet”. Then compare it with the evidence.';return false;}return true;}
-  function pause(){clearInterval(timer);timer=null;narrator?.stop();el('comparison-play').textContent='Play experiment';}
+  function pause(){clearInterval(timer);timer=null;narrator?.stop();el('comparison-play').textContent='Play';}
   function renderWorld(canvas,state){
     const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
     ctx.clearRect(0,0,w,h);ctx.fillStyle='#c6c79c';ctx.fillRect(0,0,w,h);
@@ -41,7 +41,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     for(const a of [...state.animals].sort((a,b)=>a.y-b.y)){
       const custom=state.appearances.get(a.id),art=ART[a.species],src=custom?.image||art?.image;
       const image=images.get(src),rig=rigs.get(src),x=a.x/state.world.params.width*w,y=a.y/state.world.params.height*h;
-      const size=44*(art?.size||1);
+      const size=44*(art?.size||1)*bodyScale(a,state.world.params);
       ctx.save();ctx.translate(x,y);
       if(rig){ctx.scale(size/180,size/180);drawPuppet(ctx,rig,{size:180,phase:a.id*.37,moving:false,preset:getMotion(art?.motion==='cat'?'cat':'dog'),phases:GAITS.walk.phase,clock:0});}
       else if(image)ctx.drawImage(image,-size/2,-size*.85,size,size);
@@ -106,7 +106,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
   }
   el('comparison-play').onclick=()=>{
     if(timer){pause();return;}if(experiment.getState().elapsed===156)seek(0);
-    el('comparison-play').textContent='Pause experiment';timer=setInterval(()=>{if(!document.hidden)seek(Math.min(156,experiment.getState().elapsed+1),true);},reduced.matches?1200:650);
+    el('comparison-play').textContent='Pause';timer=setInterval(()=>{if(!document.hidden)seek(Math.min(156,experiment.getState().elapsed+1),true);},reduced.matches?1200:650);
   };
   el('comparison-step').onclick=()=>{pause();seek(Math.min(156,experiment.getState().elapsed+1));};
   el('comparison-season').onclick=()=>{pause();seek(Math.min(156,experiment.getState().elapsed+13));};

@@ -1,5 +1,5 @@
 import { createForestController } from './controller.ts';
-import { ART } from './art.js';
+import { ART, bodyScale } from './art.js';
 import { buildRig, GAITS } from '../motion/rig.js';
 import { assessRig } from '../motion/rig-analysis.js';
 import { prepareJointPieces, drawPuppet } from '../motion/puppet-motion.js';
@@ -88,7 +88,7 @@ function updateCard(){
   el('portrait').hidden=!src;if(src)el('portrait').src=src;
   el('creature-name').textContent=nameOf(a);
   el('creature-kind').textContent=`${art?.label||a.species} · ${['dog','cat','penguin'].includes(a.species)?'cared-for companion rules':'curated model role'}${custom?.source?' · Meta artwork':''}`;
-  el('creature-facts').textContent=`In this model: ${a.sex==='f'?'female':'male'}, ${a.age} weeks old, ${Math.max(0,Math.round(a.energy/state.world.params.species[a.species].energyMax*100))}% energy. ${a.alive?'Living in the forest.':'No longer alive.'} Species artwork is illustrative.`;
+  el('creature-facts').textContent=`In this model: ${a.sex==='f'?'female':'male'}, ${a.age} weeks old, ${Math.max(0,Math.round(a.energy/state.world.params.species[a.species].energyMax*100))}% energy. ${a.alive?'Living in the forest.':'No longer alive.'} `;
   const list=el('life-events');list.replaceChildren();
   const events=state.world.events.filter(e=>e.id===a.id||e.parent===a.id||e.by===a.id||e.prey===a.id||e.other===a.id).slice(-10);
   if(!events.length){const li=document.createElement('li');li.textContent='No events recorded yet.';list.append(li);}
@@ -158,7 +158,7 @@ function render(now){
     const moved=Math.hypot(x-actor.x,(y-actor.y)*1.7);
     if(Math.abs(x-actor.x)>.001)actor.dir=x<actor.x?-1:1;
     actor.x=x;actor.y=y;
-    const size=Math.max(38,Math.min(105,cam.width*.045))*(art?.size||1);
+    const size=Math.max(38,Math.min(105,cam.width*.045))*(art?.size||1)*bodyScale(animal,state.world.params);
     actor.button.style.left=`${x}%`;actor.button.style.top=`${y/state.world.params.height*100}%`;
     actor.button.style.setProperty('--size',`${size}px`);actor.button.style.zIndex=String(Math.round(y*10));
     const ctx=actor.canvas.getContext('2d');ctx.clearRect(0,0,180,180);ctx.save();ctx.translate(90,153);ctx.scale(actor.dir,1);
