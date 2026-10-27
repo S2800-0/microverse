@@ -1,10 +1,12 @@
 import {PRESET_QUESTIONS,resolveQuestion,normalizeChange,describeChange,changeLabel} from './changes.js';
 import {readSparkService,askSpark} from './client.js';
+import {installSpeechInput} from '../voice/speech-input.js';
 
-export function installQuestions({onPause,onRun}){
+export function installQuestions({onPause,onRun,onRecord=()=>{}}){
   const el=id=>document.getElementById(id),dialog=el('questions-dialog');
   let proposal=null,service={enabled:false,reason:'Checking the local reasoning bridge…'},token=0,request=null;
   const status=text=>{el('question-status').textContent=text;};
+  const speech=installSpeechInput({dialog,onBeforeRecord:onRecord,onUse:text=>{el('ecology-question').value=text;el('ecology-question').dispatchEvent(new Event('input'));status('Transcript filled in. Review the words, then preview the question locally.');}});
   function invalidate(){token++;request?.abort();request=null;proposal=null;el('run-question').disabled=true;el('question-proposal').textContent='';}
   function show(value,source){
     proposal=value.status==='proposal'?normalizeChange(value.change):null;
@@ -36,6 +38,7 @@ export function installQuestions({onPause,onRun}){
   };
   el('questions-close').onclick=()=>dialog.close();dialog.addEventListener('close',invalidate);
   return {open(){onPause();invalidate();dialog.showModal();status('Prepared questions work locally. Choose one or preview your own wording.');
+    speech.open();
     readSparkService().then(s=>{if(dialog.open){service=s;el('question-provider').textContent=`${s.provider}. ${s.reason} Ask Spark sends this question only; no creature photos or notes.`;}});
   }};
 }
