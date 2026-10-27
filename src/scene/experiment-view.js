@@ -1,6 +1,6 @@
 import {createExperiment,experimentFromReplay,validateReplay,runContinuation} from './experiment.ts';
 import {createForestController} from './controller.ts';
-import {GUIDE_CHANGE,worldLabels,discoverySummary,compareFood,closerLook,intervalRecord,relatedInvestigations,guideContent,plural,populationStory,describeForPeople} from './discovery.js';
+import {nearestAnimal,animalRecord,GUIDE_CHANGE,worldLabels,discoverySummary,compareFood,closerLook,intervalRecord,relatedInvestigations,guideContent,plural,populationStory,describeForPeople} from './discovery.js';
 import {ART,DOE_FROM_BUCK,variantKey,sizeJitter,makeDoeUrl} from './art.js';
 import {buildRig,GAITS} from '../motion/rig.js';
 import {assessRig} from '../motion/rig-analysis.js';
@@ -111,11 +111,12 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     notice=s.elapsed?(s.scenario.kind==='rain'&&Math.abs(a.grass-b.grass)>.005?{key:'food',kind:'food'}:null):null;
     const recent=closerLook(b,startWeek,initial.world.events.length);if(recent&&s.elapsed>1)notice={key:`event-${recent.id}`,kind:'event',...recent};
     el('notice').hidden=!notice||dismissed.has(notice.key)||guideStep!==null;if(notice)el('notice-copy').textContent=notice.kind==='food'?'The meadow’s food has changed. Want to look closer?':notice.event.type==='birth'?`A new ${notice.event.species} was born in this forest. Want to meet them?`:notice.event.type==='arrive'?`A ${notice.event.species} arrived from outside. Want to meet them?`:`A ${notice.event.species} ${notice.event.cause==='removed'?'was removed from':'died in'} this forest. Explore the record?`;
+    fillAnimalPick();if(asked){const stillThere=animalRecord(experiment.getState()[asked.branch],asked.id,initial.world.events.length);if(!stillThere){asked=null;el('animal-card').hidden=true;}else showAnimal(stillThere,asked.branch);}
     renderGuide();if(focus&&focus.kind==='event'&&b.week<focus.event.t){focus=null;el('closeup').hidden=true;}if(focus)renderCloseup();
   }
   function seek(week,automatic=false){try{invalidateExplanation();experiment.seek(week);render();narrator?.say(comparisonNarration(packet),{automatic:automatic&&week!==156});}catch(error){pause();message(error.message);}}
   function show(next,prediction,reflection,activity={},guided=null){
-    pause();analysisRevision++;experiment=next;initial=next.toReplay().initial;guideStep=guided;visibleBranch='changed';focus=null;notice=null;dismissed.clear();pendingRelated=null;el('related-form').hidden=true;el('closeup').hidden=true;el('comparison-layout').value='single';el('why-panel').hidden=true;el('why-toggle').setAttribute('aria-expanded','false');el('food-layer').checked=false;el('guide-status').textContent='';
+    pause();analysisRevision++;experiment=next;initial=next.toReplay().initial;guideStep=guided;visibleBranch='changed';focus=null;notice=null;asked=null;el('animal-card').hidden=true;dismissed.clear();pendingRelated=null;el('related-form').hidden=true;el('closeup').hidden=true;el('comparison-layout').value='single';el('why-panel').hidden=true;el('why-toggle').setAttribute('aria-expanded','false');el('food-layer').checked=false;el('guide-status').textContent='';
     invalidateExplanation();beforeResponse=activity.before||'';el('transfer-response').value=activity.after||'';el('teacher-notes').value=activity.teacherNotes||'';el('connection-response').value=activity.connection||'';
     el('continuation-results').textContent='';el('run-continuations').disabled=false;
     const file=next.toReplay();
@@ -131,7 +132,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     readSparkService().then(s=>{if(dialog.open){sparkService=s;el('explain-spark').disabled=!s.enabled||!experiment?.getState().elapsed;}});
   }
   function renderGuide(){el('learner-explanation').hidden=guideStep!==null&&guideStep<3;el('connection-reflection').hidden=guideStep!==null&&guideStep<4;el('related-section').hidden=guideStep!==null&&guideStep<4;const panel=el('guide-panel');panel.hidden=guideStep===null;dialog.classList.toggle('guided',guideStep!==null);el('closeup-continue').hidden=guideStep!==2;el('discovery-next').hidden=![1,3].includes(guideStep);el('discovery-next').textContent=guideStep===1?'Look closer at the meadow':'Explain what I noticed';if(guideStep===null)return;const guide=guideContent(guideStep);el('guide-progress').textContent=`GUIDED INVESTIGATION · ${guideStep+1} OF 5`;el('guide-title').textContent=guide.title;el('guide-copy').textContent=guide.text;el('guide-next').textContent=guide.action;}
-  function renderCloseup(){if(!focus||!experiment)return;const state=experiment.getState().changed,canvas=el('closeup-world'),source=el('changed-world'),ctx=canvas.getContext('2d');let x=source.width/2,y=source.height/2,foodCell=false;
+  function renderCloseup(){if(!focus||!experiment)return;const closeBranch=focus.branch||'changed',state=experiment.getState()[closeBranch],canvas=el('closeup-world'),source=el(`${closeBranch}-world`),ctx=canvas.getContext('2d');let x=source.width/2,y=source.height/2,foodCell=false;
     if(focus.kind==='food'){let index=-1,difference=0;const base=experiment.getState().baseline.world;for(let i=0;i<state.world.grass.length;i++){const delta=Math.abs(state.world.grass[i]-base.grass[i]);if(state.world.open[i]&&delta>.005&&delta>difference){index=i;difference=delta;}}if(index>=0){foodCell=true;x=(index%state.world.params.width+.5)/state.world.params.width*source.width;y=(Math.floor(index/state.world.params.width)+.5)/state.world.params.height*source.height;}
       el('closeup-title').textContent='Follow the grass food.';el('closeup-copy').textContent=index>=0?'This highlighted model area has a grass-food difference between the two conditions. The coloured layer shows simulated food; the painting itself is illustrative.':'No area shows a clear grass-food difference yet. The coloured layer shows simulated food; the painting itself is illustrative.';el('closeup-rule').textContent='Model connection: rainfall affects regrowth, and rabbits gain energy by eating grass. This view shows the current week, not a photograph or past-event animation.';
     }else{const e=focus.event,animal=state.world.animals.find(a=>a.id===e.id);if(animal){x=animal.x/state.world.params.width*source.width;y=animal.y/state.world.params.height*source.height;}
@@ -140,7 +141,49 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     }
     const sw=source.width*.42,sh=sw*canvas.height/canvas.width,sx=Math.max(0,Math.min(source.width-sw,x-sw/2)),sy=Math.max(0,Math.min(source.height-sh,y-sh/2));ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(source,sx,sy,sw,sh,0,0,canvas.width,canvas.height);if(focus.kind!=='food'||foodCell){ctx.strokeStyle='#f5e3a0';ctx.lineWidth=3;ctx.beginPath();ctx.arc((x-sx)/sw*canvas.width,(y-sy)/sh*canvas.height,22,0,Math.PI*2);ctx.stroke();}
   }
-  function openLook(value){pause();visibleBranch='changed';focus=value;el('closeup').hidden=false;if(value.kind==='food'){el('food-layer').checked=true;render();}else render();el('closeup-title').focus();el('closeup').scrollIntoView({block:'nearest',behavior:reduced.matches?'instant':'smooth'});}
+  // Tap-to-ask: local and free. Shows only what the model recorded about one animal in the forest that was tapped.
+  let asked=null;
+  const drawnSize=a=>{const vkey=variantKey(a),art=vkey==='doe'?DOE_FROM_BUCK:ART[vkey]||ART[a.species];return 44*(art?.size||1)*sizeJitter(a.id);};
+  function openAnimal(branch,id){
+    if(!experiment)return;
+    const record=animalRecord(experiment.getState()[branch],id,initial.world.events.length);
+    if(!record){asked=null;el('animal-card').hidden=true;return;}
+    asked={branch,id};showAnimal(record,branch);
+    el('animal-card').hidden=false;el('animal-card-title').focus();
+  }
+  // Re-read the card from the displayed week, so it never keeps facts from a later or earlier moment.
+  function showAnimal(record,branch){
+    const names=worldLabels(experiment.getState().scenario),which=branch==='changed'?names.changed:names.baseline;
+    el('animal-card-title').textContent=`${record.species[0].toUpperCase()}${record.species.slice(1)} #${record.id}`;
+    el('animal-card-facts').textContent=`In this model, in the ${which.toLowerCase()} forest: ${record.sex}, ${record.age} weeks old, ${record.energy}% energy. ${record.alive?'Living in the forest.':'No longer alive.'}`;
+    el('animal-card-note').textContent=record.events.length?'The model recorded moments for this animal during this experiment.':'No birth, arrival or death was recorded for this animal during this experiment. Its history before the experiment is not shown.';
+    el('animal-card-moment').hidden=!record.events.length;
+    el('animal-card-compare').textContent=`Compare ${plural(record.species)} in both forests`;
+  }
+  for(const [branch,id] of [['baseline','baseline-world'],['changed','changed-world']]){
+    const canvas=el(id);canvas.style.cursor='pointer';
+    canvas.addEventListener('click',event=>{
+      if(!experiment)return;
+      const rect=canvas.getBoundingClientRect(),state=experiment.getState()[branch];
+      const hit=nearestAnimal(state.animals,state.world.params,(event.clientX-rect.left)/rect.width*canvas.width,(event.clientY-rect.top)/rect.height*canvas.height,canvas.width,canvas.height,drawnSize);
+      if(hit){pause();openAnimal(branch,hit.id);el('animal-pick').value=`${branch}:${hit.id}`;}
+    });
+  }
+  function fillAnimalPick(){
+    const select=el('animal-pick'),previous=select.value;select.replaceChildren(new Option('Choose…',''));
+    if(!experiment)return;
+    const split=el('comparison-layout').value==='split',names=worldLabels(experiment.getState().scenario);
+    for(const branch of split?['baseline','changed']:[visibleBranch]){
+      const target=split?Object.assign(document.createElement('optgroup'),{label:names[branch]}):select;if(split)select.append(target);
+      for(const a of [...experiment.getState()[branch].animals].filter(a=>a.alive!==false).sort((p,q)=>p.species.localeCompare(q.species)||p.id-q.id))target.append(new Option(`${a.species[0].toUpperCase()}${a.species.slice(1)} #${a.id}`,`${branch}:${a.id}`));
+    }
+    if([...select.querySelectorAll('option')].some(o=>o.value===previous))select.value=previous;
+  }
+  el('animal-pick').onchange=()=>{const [branch,id]=el('animal-pick').value.split(':');if(branch){pause();openAnimal(branch,Number(id));}};
+  el('animal-card-close').onclick=()=>{asked=null;el('animal-card').hidden=true;};
+  el('animal-card-compare').onclick=()=>{if(!asked)return;el('animal-comparison').scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});el('animal-comparison').classList.add('flash');setTimeout(()=>el('animal-comparison').classList.remove('flash'),1600);};
+  el('animal-card-moment').onclick=()=>{if(!asked)return;const record=animalRecord(experiment.getState()[asked.branch],asked.id,initial.world.events.length);const first=record?.events.at(-1);if(first)openLook({kind:'event',branch:asked.branch,...first});};
+  function openLook(value){pause();visibleBranch=value.branch||'changed';focus=value;el('closeup').hidden=false;if(value.kind==='food'){el('food-layer').checked=true;render();}else render();el('closeup-title').focus();el('closeup').scrollIntoView({block:'nearest',behavior:reduced.matches?'instant':'smooth'});}
   function renderRelated(){const root=el('related-questions');root.replaceChildren();for(const item of relatedInvestigations(experiment.getState().scenario)){const button=document.createElement('button');button.textContent=item.question;button.onclick=()=>{pause();pendingRelated=item;el('related-description').textContent=describeForPeople(item.change);el('related-form').hidden=false;el('related-prediction').value='';el('related-prediction').focus();};root.append(button);}}
   el('related-form').onsubmit=event=>{event.preventDefault();if(!pendingRelated)return;const item=pendingRelated,prediction=el('related-prediction').value;show(createExperiment(initial,item.change,prediction,item.question),prediction,'');dialog.scrollTop=0;};
   el('related-cancel').onclick=()=>{pendingRelated=null;el('related-form').hidden=true;};

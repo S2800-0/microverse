@@ -60,3 +60,23 @@ export function describeForPeople(change){
  const duration=change.durationWeeks===52?'one model year':change.durationWeeks===156?'three model years':`${change.durationWeeks} model weeks`;
  return `Rainfall will be ${amount} for ${duration}. Afterward, the earlier rainfall conditions resume. We will compare it with the same starting forest under usual rainfall.`;
 }
+
+// Tap-to-ask: which living animal is drawn at this canvas point? Uses the investigation renderer's mapping and sprite sizes;
+// where drawings overlap, the one painted on top (larger y, drawn last) wins.
+export function nearestAnimal(animals,params,px,py,w,h,sizeOf=()=>44){
+  let best=null,bestY=-Infinity;
+  for(const a of animals){
+    if(a.alive===false)continue;
+    const x=a.x/params.width*w,y=a.y/params.height*h,size=sizeOf(a);
+    if(Math.abs(px-x)>size*.45||py<y-size*.85||py>y+size*.1)continue;
+    if(y>bestY||(y===bestY&&a.id>best.id)){best=a;bestY=y;}
+  }
+  return best;
+}
+// Everything the model recorded about one animal during this experiment, with original record identities.
+export function animalRecord(state,id,firstEvent=0){
+  const a=state.world.animals.find(x=>x.id===id);if(!a)return null;
+  const max=state.world.params.species[a.species]?.energyMax||1;
+  const events=[];state.world.events.forEach((e,i)=>{if(i>=firstEvent&&e.id===id&&['birth','death','arrive'].includes(e.type))events.push({id:i,event:e});});
+  return {id:a.id,species:a.species,sex:a.sex==='f'?'female':'male',age:a.age,energy:Math.max(0,Math.round(a.energy/max*100)),alive:a.alive!==false,events};
+}

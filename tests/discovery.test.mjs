@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {createForestController} from '../src/scene/controller.ts';
 import {createExperiment,validateReplay,experimentFromReplay} from '../src/scene/experiment.ts';
 import {buildEvidence,modelOnlyReplay,worksheetHtml} from '../src/investigation/evidence.js';
-import {GUIDE_CHANGE,discoverySummary,intervalRecord,closerLook,relatedInvestigations,populationStory} from '../src/scene/discovery.js';
+import {GUIDE_CHANGE,discoverySummary,intervalRecord,closerLook,relatedInvestigations,populationStory,nearestAnimal,animalRecord} from '../src/scene/discovery.js';
 import {createCreatureLibrary,LIBRARY_KEY} from '../src/scene/creature-library.js';
 import {normalizeChange} from '../src/investigation/changes.js';
 const sample=async()=>({name:'Pip',species:'dog',image:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jE9sAAAAASUVORK5CYII='});
@@ -53,4 +53,26 @@ test('corrupt saved data fails closed rather than silently replacing the collect
 test('removing a species is described as removal rather than a natural death',()=>{
  const e=createExperiment(createForestController().toSnapshot(),{kind:'remove',species:'wolf'}),s=e.seek(1),record=intervalRecord(s.changed,'wolf',s.startWeek,s.eventStartIndex);
  assert.equal(record.removed,3);const story=populationStory(s,'wolf');assert(story.includes('were removed'));assert(!story.includes('died'));
+});
+
+test('tap-to-ask picks the animal drawn on top, respects sprite size and reports only recorded facts',()=>{
+  const params={width:100,height:100},w=1000,h=1000;
+  const animals=[{id:1,x:50,y:50,alive:true},{id:2,x:50,y:51,alive:true},{id:3,x:10,y:50,alive:false}];
+  assert.equal(nearestAnimal(animals,params,500,480,w,h,()=>44)?.id,2); // overlap: the one painted last (larger y) wins
+  assert.equal(nearestAnimal(animals,params,500,300,w,h,()=>44),null); // above a small sprite
+  assert.equal(nearestAnimal(animals,params,500,470,w,h,()=>44)?.id,1); // only the first sprite reaches this high
+  assert.equal(nearestAnimal([animals[0]],params,500,500-55,w,h,()=>70)?.id,1); // a larger sprite reaches higher
+  assert.equal(nearestAnimal(animals,params,100,500,w,h,()=>44),null); // dead animals cannot be tapped
+  assert.equal(nearestAnimal(animals,params,-500,-500,w,h),null);
+
+  const experiment=createExperiment(createForestController().toSnapshot(),GUIDE_CHANGE,'','q');
+  experiment.seek(13);
+  const state=experiment.getState().changed;
+  const rabbit=state.world.animals.find(a=>a.species==='rabbit'&&a.alive);
+  const record=animalRecord(state,rabbit.id);
+  assert.equal(record.species,'rabbit');assert.match(record.sex,/^(fe)?male$/);
+  assert(Number.isInteger(record.age)&&record.energy>=0&&record.energy<=100&&record.alive);
+  assert.equal(animalRecord(state,-1),null);
+  const born=state.world.events.findIndex(e=>e.type==='birth');
+  if(born>=0){const baby=state.world.events[born].id;assert(animalRecord(state,baby,0).events.some(e=>e.id===born));assert.equal(animalRecord(state,baby,born+1).events.length,0);}
 });
