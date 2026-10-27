@@ -46,3 +46,14 @@ The investigation has an **Ask the guide** thread: the child's question appears 
 - Chips open the measurement row, the model rule, or a recorded birth/arrival/death close-up. The close-up shows a current or last recorded location, not a replay.
 - Cost: one Spark request reserves $0.025 against the local ledger. Tested with mocked transports only: provider request shape, size bound at weeks 1/13/52/156, privacy of the payload, strict validation, bad output, stale replies. **Live Meta behaviour for this operation is unverified**, including whether Meta accepts the tool schema.
 - The guide explains how the *model* produced a record. It does not claim to explain real ecosystems.
+
+## Game-first investigation layout
+
+The investigation is now a full-screen forest, not a paper dialog over the game. The same elements and IDs were re-parented, so the logic and tests are unchanged.
+
+- **Stage:** one forest (or two for the comparison) fills the screen. Canvases keep their 836 x 471 bitmap and are sized in script (cover on wide panes, whole forest on portrait panes), so tap-to-ask still maps correctly through the canvas's bounding box.
+- **Top bar:** title and prediction, playback, view controls, and Results / Notebook toggles. On phones the secondary view controls sit behind "More".
+- **Floating over the forest:** a Results card (food bars, counts, "why"), creature and close-up cards, the guide's instruction, the speech-bubble thread and the question pill.
+- **Notebook drawer:** the learner's explanation, evidence, reflection, teacher notes, limits, related questions and saving. The guided steps that used to scroll the page now open the notebook and focus the right box.
+- **Escape** closes the notebook first, then an open close-up or creature card, and only then the investigation.
+- **Known limits:** on a portrait phone the whole forest is small; the canvas is 836 px wide so it looks soft at full-screen size; the guide has no avatar yet; the camera does not yet zoom to a mentioned target. No browser regression test covers tap coordinates, focus or phone overlap; these were checked by hand at desktop and 375 px widths.

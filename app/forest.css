@@ -62,3 +62,108 @@ body:has(#experiment-dialog[open]) .bottom{display:none}
 @media(prefers-reduced-motion:no-preference){.bubble{animation:bubble-in 300ms ease-out}@keyframes bubble-in{from{opacity:0;translate:0 12px;filter:blur(4px)}}}
 .guide-form{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}.guide-form label{flex-basis:100%;font-size:12px;color:var(--muted)}.guide-form input{flex:1;min-width:200px}
 .guide-thread{padding-right:8px}
+/* ===== game-first investigation: the forest is the screen; everything else floats or lives in the notebook ===== */
+#comparison-dialog.game{padding:0;width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border:0;border-radius:0;background:#33462c;overflow:hidden;color:var(--ink)}
+#comparison-dialog.game::backdrop{background:#1b251d}
+#comparison-dialog.game .stage{position:absolute;inset:0;overflow:hidden}
+/* forest panes fill the stage; canvases are sized in JS (cover, or contain on portrait screens) and centred */
+#comparison-dialog.game .paired-worlds{position:absolute;inset:0;display:grid;grid-auto-rows:minmax(0,1fr);gap:3px;margin:0}
+#comparison-dialog.game .paired-worlds.single-world{grid-template-columns:minmax(0,1fr)}
+#comparison-dialog.game .paired-worlds:not(.single-world){grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-aspect-ratio:1/1){#comparison-dialog.game .paired-worlds:not(.single-world){grid-template-columns:minmax(0,1fr)}}
+#comparison-dialog.game #baseline-panel,#comparison-dialog.game #changed-panel{position:relative;overflow:hidden;min-height:0;min-width:0;background:#33462c}
+#comparison-dialog.game #baseline-panel[hidden],#comparison-dialog.game #changed-panel[hidden]{display:none}
+#comparison-dialog.game canvas#baseline-world,#comparison-dialog.game canvas#changed-world{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);max-width:none;border:0;cursor:pointer;display:block}
+#comparison-dialog.game #baseline-panel h3,#comparison-dialog.game #changed-panel h3{position:absolute;left:12px;bottom:12px;z-index:3;margin:0;padding:3px 10px;border-radius:999px;background:#f4eedfee;font:13px system-ui;pointer-events:none}
+#comparison-dialog.game #baseline-summary,#comparison-dialog.game #changed-summary{position:absolute;left:12px;bottom:44px;z-index:3;margin:0;padding:2px 10px;border-radius:999px;background:#f4eedfcc;font-size:12px;pointer-events:none}
+/* top bar */
+#comparison-dialog.game .hud{position:absolute;z-index:6;top:10px;left:10px;right:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;pointer-events:none}
+#comparison-dialog.game .hud>*{pointer-events:auto}
+#comparison-dialog.game .hud .close{position:static;float:none;order:0;min-height:40px;width:40px;padding:0;border-radius:999px;background:#f4eedff2;font-size:22px;line-height:1}
+#comparison-dialog.game .hud-title{order:1;background:#f4eedff2;border-radius:14px;padding:6px 14px;max-width:min(520px,100%)}
+#comparison-dialog.game .hud-title .eyebrow{display:none}
+#comparison-dialog.game .hud-title h2{font:italic 19px/1.25 Georgia,serif;margin:0}
+#comparison-dialog.game .hud-title .prediction-note{margin:2px 0 0;font-size:12px;color:var(--muted)}
+#comparison-dialog.game .investigation-toolbar{order:2;display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;border:0}
+#comparison-dialog.game .replay-controls,#comparison-dialog.game .view-options{display:flex!important;flex-wrap:wrap;gap:6px;align-items:center;background:#f4eedff2;border-radius:999px;padding:4px 8px;margin:0}
+#comparison-dialog.game .guided .replay-controls{display:flex}
+#comparison-dialog.game .investigation-toolbar button,#comparison-dialog.game .hud-panels button{min-height:34px;padding:2px 12px;border-radius:999px;font-size:13px}
+#comparison-dialog.game .investigation-toolbar label{font-size:12px;display:flex;align-items:center;gap:6px;margin:0}
+#comparison-dialog.game .investigation-toolbar select{min-height:32px;padding:2px 8px;font-size:13px}
+#comparison-dialog.game .investigation-toolbar input[type=range]{width:110px}
+#comparison-dialog.game .hud-panels{order:3;margin-left:auto;display:flex;gap:6px;background:#f4eedff2;border-radius:999px;padding:4px 8px}
+#comparison-dialog.game .hud-panels button[aria-expanded=true]{background:#ded3b8}
+/* floating cards: results (right), creature/close-up/notice (left) */
+#comparison-dialog.game .results-card{position:absolute;z-index:5;right:12px;top:64px;width:min(340px,calc(100vw - 24px));max-height:calc(100dvh - 230px);overflow:auto;overscroll-behavior:contain;background:#f4eedff5;border:1px solid #c5bba3;border-radius:14px;padding:14px 16px;box-shadow:0 8px 28px #2b2a2633}
+#comparison-dialog.game .results-card[hidden]{display:none}
+#comparison-dialog.game .float-cards{position:absolute;z-index:5;left:12px;top:64px;width:min(360px,calc(100vw - 24px));display:flex;flex-direction:column;gap:10px;pointer-events:none;max-height:calc(100dvh - 300px);overflow:auto}
+#comparison-dialog.game .float-cards>*{pointer-events:auto;margin:0;background:#f4eedff5;border:1px solid #c5bba3;border-radius:14px;box-shadow:0 8px 28px #2b2a2633}
+#comparison-dialog.game .float-cards .notice{padding:10px 12px}
+#comparison-dialog.game .float-cards .animal-card,#comparison-dialog.game .float-cards .closeup{padding:14px 16px}
+#comparison-dialog.game .float-cards[hidden],#comparison-dialog.game .float-cards>[hidden]{display:none}
+#comparison-dialog.game .closeup canvas{width:100%;height:auto}
+/* the guide: instruction, bubbles, input along the bottom-left */
+#comparison-dialog.game .guide-dock{position:absolute;z-index:6;left:12px;bottom:12px;width:min(430px,calc(100vw - 24px));display:flex;flex-direction:column;gap:8px;pointer-events:none}
+#comparison-dialog.game .guide-dock>*{pointer-events:auto}
+#comparison-dialog.game .guide-panel{position:static;margin:0;padding:10px 14px;border-radius:14px;background:#e7edd8f5;border:1px solid #b8c39b;box-shadow:0 8px 28px #2b2a2633;display:grid;gap:6px}
+#comparison-dialog.game .guide-panel[hidden]{display:none}
+#comparison-dialog.game .guide-panel #guide-copy{display:block;font-size:13px;margin:2px 0 0}
+#comparison-dialog.game .guide-panel h3{font-size:18px;margin:1px 0}
+#comparison-dialog.game .guide-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#comparison-dialog.game .ask-guide{background:transparent;border:0;box-shadow:none;padding:0;margin:0}
+#comparison-dialog.game .ask-guide .eyebrow,#comparison-dialog.game #ask-guide-title{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+#comparison-dialog.game .guide-thread{max-height:34dvh;padding:2px 6px 2px 0}
+#comparison-dialog.game .bubble.guide{box-shadow:0 4px 18px #2b2a2630}
+#comparison-dialog.game .guide-form{background:#f4eedff5;border:1px solid #c5bba3;border-radius:999px;padding:5px 6px 5px 14px;margin-top:6px;flex-wrap:nowrap;box-shadow:0 8px 28px #2b2a2633}
+#comparison-dialog.game .guide-form label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+#comparison-dialog.game .guide-form input{border:0;background:transparent;min-width:0;padding:6px 0}
+#comparison-dialog.game .guide-form button{min-height:34px;padding:2px 12px;border-radius:999px;font-size:13px;white-space:nowrap}
+#comparison-dialog.game .guide-about{font-size:12px;background:#f4eedfd9;border-radius:10px;padding:2px 10px}
+#comparison-dialog.game .guide-about summary{cursor:pointer}
+#comparison-dialog.game .comparison-narration{background:#f4eedff5;border-radius:12px;padding:8px 12px;margin:0}
+/* legend */
+#comparison-dialog.game .world-key{position:absolute;z-index:4;right:12px;bottom:12px;display:flex;gap:10px;align-items:center;background:#f4eedfd9;border-radius:999px;padding:4px 12px;font-size:12px;margin:0}
+/* notebook drawer */
+#comparison-dialog.game .notebook{position:absolute;z-index:8;top:0;right:0;bottom:0;width:min(560px,100vw);background:#f4eedf;overflow:auto;overscroll-behavior:contain;padding:18px 22px 32px;box-shadow:-10px 0 40px #2b2a2644}
+#comparison-dialog.game .notebook[hidden]{display:none}
+#comparison-dialog.game .notebook .close{position:sticky;top:0;float:right}
+#comparison-dialog.game .notebook-title{font:italic 26px Georgia,serif;margin:4px 0 12px}
+@media(prefers-reduced-motion:no-preference){#comparison-dialog.game .notebook:not([hidden]){animation:drawer-in 300ms ease-out}@keyframes drawer-in{from{opacity:0;translate:24px 0}}#comparison-dialog.game .results-card:not([hidden]){animation:bubble-in 300ms ease-out}}
+@media(max-width:700px){
+  #comparison-dialog.game .hud-title{max-width:calc(100vw - 70px)}#comparison-dialog.game .hud-title .prediction-note{display:none}
+  #comparison-dialog.game .investigation-toolbar input[type=range]{width:80px}
+  #comparison-dialog.game .results-card{top:auto;bottom:10px;left:10px;right:10px;width:auto;max-height:44dvh}
+  #comparison-dialog.game .guide-dock{bottom:64px}
+  #comparison-dialog.game .world-key{display:none}
+}
+/* HUD in two rows: [close · title · panels] and [playback · view]; cards start below it */
+#comparison-dialog.game{--hud-h:108px}
+#comparison-dialog.game .hud{row-gap:6px}
+#comparison-dialog.game .hud-panels{order:2;margin-left:auto}
+#comparison-dialog.game .investigation-toolbar{order:3;flex-basis:100%;gap:6px}
+#comparison-dialog.game .view-options label:first-child{font-size:0}
+#comparison-dialog.game .view-options label:first-child select{font-size:13px;max-width:130px}
+#comparison-dialog.game .results-card,#comparison-dialog.game .float-cards{top:var(--hud-h)}
+#comparison-dialog.game .results-card{max-height:calc(100dvh - var(--hud-h) - 90px)}
+#comparison-dialog.game .float-cards{max-height:calc(100dvh - var(--hud-h) - 250px)}
+#comparison-dialog.game .hud-title{max-width:min(460px,calc(100% - 250px))}
+@media(max-width:700px){#comparison-dialog.game{--hud-h:150px}#comparison-dialog.game .hud-title{max-width:calc(100vw - 190px)}}
+#comparison-dialog.game .guide-panel{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+#comparison-dialog.game .guide-panel #guide-progress{font-size:10px}
+#comparison-dialog.game .guide-actions{width:100%;justify-content:space-between}
+/* phones: secondary view controls sit behind "More" so the forest keeps its room */
+#comparison-dialog.game .hud-more{display:none}
+@media(max-width:700px){
+  #comparison-dialog.game{--hud-h:118px}
+  #comparison-dialog.game .hud-more{display:inline-flex}
+  #comparison-dialog.game .hud:not(.more) #hud-view{display:none!important}
+  #comparison-dialog.game .hud-title h2{font-size:15px}
+  #comparison-dialog.game .replay-controls{border-radius:18px;padding:4px 6px}
+  #comparison-dialog.game .replay-controls button{padding:2px 8px;font-size:12px}
+  #comparison-dialog.game .replay-controls label{display:none}
+  #comparison-dialog.game .hud-panels{margin-left:0}
+  #comparison-dialog.game .guide-dock{bottom:10px}
+  #comparison-dialog.game .guide-thread{max-height:26dvh}
+  #comparison-dialog.game #baseline-summary,#comparison-dialog.game #changed-summary{display:none}
+  #comparison-dialog.game #baseline-panel h3,#comparison-dialog.game #changed-panel h3{bottom:auto;top:8px;left:auto;right:8px}
+}
