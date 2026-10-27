@@ -1,6 +1,6 @@
 import {createExperiment,experimentFromReplay,validateReplay,runContinuation} from './experiment.ts';
 import {createForestController} from './controller.ts';
-import {guideLocal,guideReply} from '../investigation/guide.js';
+import {guideLocal,guideReply,narrowGuide} from '../investigation/guide.js';
 import {nearestAnimal,animalRecord,GUIDE_CHANGE,worldLabels,discoverySummary,compareFood,closerLook,intervalRecord,relatedInvestigations,guideContent,plural,populationStory,describeForPeople} from './discovery.js';
 import {ART,DOE_FROM_BUCK,variantKey,sizeJitter,makeDoeUrl} from './art.js';
 import {buildRig,GAITS} from '../motion/rig.js';
@@ -172,7 +172,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
   }
   function localReply(question){
     if(!experiment?.getState().elapsed)return guideReply({status:'clarify',message:'Watch the forest for a week or two first, then ask. The guide can only talk about what has been recorded.'},packet,'Local evidence guide');
-    return guideReply(guideLocal(question,packet),packet,'Local evidence guide');
+    return guideReply(narrowGuide(guideLocal(question,packet),packet,question),packet,'Local evidence guide');
   }
   function askQuestion(){const q=el('guide-question').value.trim();if(!q)return null;el('guide-question').value='';bubble('child').textContent=q;return q;}
   el('guide-form').onsubmit=event=>{event.preventDefault();const q=askQuestion();if(!q||!packet)return;guideToken++;discardPending();showReply(localReply(q));};
@@ -185,7 +185,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
       const result=await askSpark(sparkService,{operation:'guide',question:q,replay:modelOnlyReplay(fileWithNotes())},new AbortController().signal);
       if(current!==guideToken)return;
       const validated=validateGuide(result.value,packet);
-      showReply(guideReply(validated,packet,`${result.provider||'Meta · Muse Spark'} chose this evidence`),target);
+      showReply(guideReply(narrowGuide(validated,packet,q),packet,`${result.provider||'Meta · Muse Spark'} chose this evidence`),target);
     }catch(error){
       if(current!==guideToken)return;
       showReply(localReply(q),target);const note=document.createElement('p');note.className='small-note';note.textContent='Spark could not answer, so this is the free local guide. No automatic retry was made.';target.append(note);

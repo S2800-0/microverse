@@ -4,7 +4,7 @@ import {createForestController} from '../src/scene/controller.ts';
 import {createExperiment} from '../src/scene/experiment.ts';
 import {GUIDE_CHANGE} from '../src/scene/discovery.js';
 import {buildEvidence} from '../src/investigation/evidence.js';
-import {FOLLOW_UPS,validateGuide,guideSchema,guideLocal,guideReply} from '../src/investigation/guide.js';
+import {FOLLOW_UPS,validateGuide,guideSchema,guideLocal,guideReply,narrowGuide} from '../src/investigation/guide.js';
 import {createSparkService} from '../server/spark-service.mjs';
 import {createSparkProvider} from '../server/spark-provider.mjs';
 
@@ -92,4 +92,25 @@ test('the guide request stays inside the size bound at every checkpoint',async()
     await createSparkProvider({provider:'meta',apiKey:'k',fetchImpl}).request('guide',{question:'x'.repeat(200),evidence:packet});
     assert(bytes>0&&bytes<=11000,`week ${weeks}: ${bytes} bytes`);
   }
+});
+
+test('answers are narrowed to at most 3 lines and 3 chips, keeping what was asked about and what Spark pointed at',()=>{
+  const packet=buildEvidence(run(13));
+  const events=packet.events.map(e=>e.id).slice(0,3);
+  // the shape of the real reply Spark returned for "Why are there fewer rabbits in the dry forest?"
+  const spark=validateGuide({status:'answer',observationIds:['grass','population.rabbit','population.fox'],eventIds:events,mechanismIds:['rain-growth','rabbit-food'],followUpId:'compare-food',lookId:'grass'},packet);
+  const narrow=narrowGuide(spark,packet,'Why are there fewer rabbits in the dry forest?');
+  const reply=guideReply(narrow,packet,'Meta · Muse Spark');
+  assert(reply.lines.length<=3&&reply.chips.length<=3,`${reply.lines.length} lines, ${reply.chips.length} chips`);
+  assert(!narrow.observationIds.includes('population.fox'),'the fox count is not about rabbits');
+  assert.equal(reply.chips[0].id,'grass');assert(narrow.observationIds.includes('population.rabbit'));assert.equal(narrow.mechanismIds.length,1,'a why question keeps one model rule');assert(['rain-growth','rabbit-food'].includes(narrow.mechanismIds[0]));
+  // never adds evidence Spark did not cite, and stays valid
+  const cited=new Set([...spark.observationIds,...spark.eventIds,...spark.mechanismIds]);
+  for(const id of [...narrow.observationIds,...narrow.eventIds,...narrow.mechanismIds])assert(cited.has(id));
+  assert.equal(validateGuide(narrow,packet).status,'answer');
+  // clarifications pass through; unrelated questions still keep something; moment questions keep moments
+  assert.deepEqual(narrowGuide({status:'clarify',message:'x'},packet,'q'),{status:'clarify',message:'x'});
+  const any=narrowGuide(spark,packet,'tell me something');assert(any.observationIds.length+any.eventIds.length>0);
+  for(const weeks of [1,13,52,156]){const p=buildEvidence(run(weeks));for(const q of ['Did anything get born?','Why are there fewer rabbits?','What about the grass?','what happened to the wolves']){
+    const n=narrowGuide(guideLocal(q,p),p,q),r=guideReply(n,p,'x');assert(r.kind==='clarify'||(r.lines.length>0&&r.lines.length<=3&&r.chips.length<=3),`${q} @${weeks}`);}}
 });

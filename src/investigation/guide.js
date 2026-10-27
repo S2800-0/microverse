@@ -64,10 +64,14 @@ const TOPICS=[
   {words:/\b(why|because|cause|causes|reason)\b/,observations:[],mechanisms:[],follow:'read-rule'},
 ];
 // Free and instant. Plain keyword matching over this run's evidence; it never invents anything.
-export function guideLocal(question,packet){
+function topicsFor(question){
   const text=String(question||'').toLowerCase();
   const observations=new Set(),mechanisms=new Set();let events=false,follow=null;
   for(const t of TOPICS){if(!t.words.test(text))continue;t.observations.forEach(id=>observations.add(id));t.mechanisms.forEach(id=>mechanisms.add(id));events||=!!t.events;follow??=t.follow;}
+  return {text,observations,mechanisms,events,follow,why:/\b(why|because|cause|causes|reason)\b/.test(text)};
+}
+export function guideLocal(question,packet){
+  const {text,observations,mechanisms,events,follow}=topicsFor(question);
   if(!observations.size&&!events)return validateGuide({status:'clarify',message:'I can look at the food, rabbits, deer, foxes, wolves or a recorded moment. Which would you like to see?'},packet);
   const known=new Set(packet.observations.map(o=>o.id));
   // Recorded moments only when they are about what was asked: the same species, or the kind of moment named.
@@ -90,4 +94,26 @@ export function guideReply(result,packet,source){
   for(const id of result.mechanismIds)chips.push({kind:'rule',id,label:'Read the model rule'});
   if(result.lookId){const i=chips.findIndex(c=>c.id===result.lookId);if(i>0)chips.unshift(...chips.splice(i,1));}
   return {source,kind:'answer',text:'',lines:lines.map(l=>({kind:l.kind,text:l.text,ref:l.ref||null})),chips,followUp:FOLLOW_UPS[result.followUpId]};
+}
+
+// A child should see a short answer: at most 3 lines (so at most 3 chips). Keep what was asked about, drop the rest.
+// Works on any validated answer, whether the local guide or Spark chose it. Never adds evidence that was not cited.
+export function narrowGuide(result,packet,question,limit=3){
+  if(result.status!=='answer')return result;
+  const topic=topicsFor(question);
+  const topicObs=result.observationIds.filter(id=>topic.observations.has(id));
+  const observations=topic.observations.size&&topicObs.length?topicObs:result.observationIds;
+  const species=[...topic.observations].filter(id=>id.startsWith('population.')).map(id=>id.split('.')[1]);
+  const relevant=e=>!species.length||species.some(sp=>packet.events.find(v=>v.id===e)?.text.includes(`${sp} #`));
+  const events=[...result.eventIds.filter(relevant),...result.eventIds.filter(e=>!relevant(e))];
+  const mechanisms=[...result.mechanismIds.filter(id=>topic.mechanisms.has(id)),...result.mechanismIds.filter(id=>!topic.mechanisms.has(id))];
+  const items=[];
+  const add=(kind,id)=>{if(id!==undefined&&!items.some(i=>i.id===id))items.push({kind,id});};
+  const look=result.lookId&&[...observations.map(id=>['o',id]),...events.map(id=>['e',id]),...mechanisms.map(id=>['m',id])].find(([,id])=>id===result.lookId);
+  if(look)add(look[0],look[1]);
+  if(topic.events){events.slice(0,2).forEach(id=>add('e',id));observations.slice(0,1).forEach(id=>add('o',id));add('m',mechanisms[0]);}
+  else{observations.slice(0,2).forEach(id=>add('o',id));if(topic.why){add('m',mechanisms[0]);add('e',events[0]);}else{add('e',events[0]);add('m',mechanisms[0]);}}
+  for(const id of observations)add('o',id);for(const id of events)add('e',id);
+  const kept=items.slice(0,limit);
+  return {...result,observationIds:kept.filter(i=>i.kind==='o').map(i=>i.id),eventIds:kept.filter(i=>i.kind==='e').map(i=>i.id),mechanismIds:kept.filter(i=>i.kind==='m').map(i=>i.id),lookId:kept.some(i=>i.id===result.lookId)?result.lookId:null};
 }
