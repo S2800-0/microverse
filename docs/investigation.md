@@ -37,7 +37,7 @@ MICROVERSE_SPARK_CAP_MICRO_USD=100000
 
 Each reasoning attempt reserves $0.025 durably in `runtime/spark-budget-PROVIDER.json` before sending. Requests are bounded to 11,000 JSON bytes, 2,048 total output tokens, a 60-second timeout and one concurrent job. Failed attempts retain reservations. Repeated successful identical requests use a 20-entry in-memory cache. There are no automatic retries or fallback calls. Restarting clears cache, not the ledger. Never delete/reset ledgers to bypass a ceiling; inspect retained records before intentionally increasing it.
 
-Reservations are conservative local estimates, not provider billing controls or proof that a card cannot be billed. Other clients/services may use the same account. The operator checks the billing dashboard. API usage responses show tokens, not which payment source was debited. Normal application flags remain off after the integration smoke tests; AWS remains paused.
+Reservations are conservative local estimates, not provider billing controls or proof that a card cannot be billed. Other clients/services may use the same account. The operator checks the billing dashboard. API usage responses show tokens, not which payment source was debited. Shipped example flags remain off. The owner-authorized local preview enables funded Spark under a $0.10 cap; the successful explanation check retains $0.025 of reservations. AWS remains paused.
 
 ## Recorded live checks · October 27, 2026
 
@@ -47,7 +47,7 @@ Reservations are conservative local estimates, not provider billing controls or 
 - Corrected low-reasoning proposal succeeded: “What would happen if rainfall were 70 percent of normal for 26 weeks?” → `{kind:"rain",rain:0.7,durationWeeks:26}`. 806 input / 500 output tokens (including 356 reasoning), estimated **$0.0031325**. No world execution occurred in this test. The diagnostic script allowed one request and reserved $0.01; previous failed records were retained separately.
 - The owner confirmed promotional coverage in Billing before inference. Account balances and billing records are kept private; API responses do not independently identify individual credit debits.
 
-No live Baseten call, live evidence-selection call, or live image/SAM generation has been verified yet. Offline fixtures exercise these adapters and validation paths; they do not prove live reliability. Integration receipts/ledgers are ignored local runtime files, not public billing records.
+A live evidence-selection check subsequently passed on a stripped beagle replay: 1,588 input and 1,040 output tokens, estimated $0.006405, with only validated IDs and a follow-up question returned. The application rendered actual values/events. Photo image/SAM checks are recorded in `image-pilot.md`; place checks and exact replay continuation are in `demo.md`. Baseten remains untested live. Broader reliability is not established by one successful request. Receipts/ledgers remain ignored local runtime files.
 
 ## Reusable evaluation and remaining work
 

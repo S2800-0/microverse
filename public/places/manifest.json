@@ -1,0 +1,18 @@
+{
+  "source": "https://commons.wikimedia.org/wiki/File:Garden_pond_in_park.jpg",
+  "title": "Garden pond in park",
+  "author": "Jon Sullivan",
+  "rights": "Public-domain dedication by author, verified on Wikimedia Commons October 27, 2026",
+  "processing": "Resized to 288x384 RGB PNG, source metadata removed. Recorded SAM 3.1 grass/tree/water analysis; not a live inference during sample playback.",
+  "originalSha256": "d15c2c3bd268b1fb24fa3960a6a8142e8cfcfef43e87b1adeaca72dcdb208078",
+  "files": [
+    {
+      "file": "garden-pond.png",
+      "sha256": "3bb1f3f6086ea58cd75c8cc095d3e4fcd477e8e2360f4bbedfd814eb5b7afbba"
+    },
+    {
+      "file": "garden-pond-analysis.json",
+      "sha256": "e7c5a41445a4f0a3646fc2c7aad352846ba7e6ca14772f4945b5cc4800403a64"
+    }
+  ]
+}

@@ -9,6 +9,7 @@ import { installExperimentView } from './experiment-view.js';
 import { installQuestions } from '../investigation/questions-view.js';
 import {installNarration} from './narration-view.js';
 import {forestNarration,narrationSnapshot} from './narration.js';
+import {installPlaceReview} from '../place/view.js';
 
 const el=id=>document.getElementById(id);
 const forest=createForestController();
@@ -63,6 +64,8 @@ function sync(animate=false){
   el('week').textContent=`Week ${state.week}`;
   el('counts').textContent=Object.entries(state.counts).filter(([,n])=>n).map(([s,n])=>`${n} ${s}`).join(' · ')||'No creatures yet.';
   el('resources').textContent=`Grass cover ${Math.round(state.grass*100)}% · browse cover ${Math.round(state.browse*100)}% (model indices)`;
+  el('place-summary').hidden=!state.place;
+  if(state.place)el('place-summary').textContent=`Place-inspired start at model week ${state.place.atWeek}. Reviewed photo grass share ${Number((state.place.reviewed.grass*100).toFixed(1))}%; chosen food indices: grass ${Number((state.place.start.grass*100).toFixed(1))}%, shrubs ${Number((state.place.start.browse*100).toFixed(1))}%. Image shares are not ground area or measured food supply. Map layout and animal roles stay curated.`;
   el('resource-tint').style.opacity=String(Math.max(0,.8-state.grass)*.35);
   const list=el('events');list.replaceChildren();
   for(const e of state.world.events.slice(-8).reverse()){const li=document.createElement('li');li.textContent=eventText(e);list.append(li);}
@@ -101,6 +104,7 @@ el('add').onclick=()=>{try{add({species:el('species').value});}catch(error){stat
 el('fieldnotes').onclick=()=>{const open=el('notes').hidden;forest.select(null);updateCard();el('notes').hidden=!open;};el('notes-close').onclick=()=>{el('notes').hidden=true;};
 el('card-close').onclick=()=>{forest.select(null);updateCard();};
 const importer=installCreatureImport({onAdd:add,onPause:()=>setPlaying(false)});el('bring').onclick=()=>importer.open();
+const placeReview=installPlaceReview({onPause:()=>setPlaying(false),getState:()=>forest.getState(),onApply:record=>{forest.applyPlaceStart(record);sync();narrator.context(forestNarration(null,forest.getState()));status('Reviewed place start applied. Your creatures and map layout are retained. Field notes records the chosen food inputs.');}});el('place-photo').onclick=()=>placeReview.open();
 const experiments=installExperimentView({snapshot:()=>forest.toSnapshot(),eventText,onStatus:status,narrator,onReturn:()=>narrator.context(forestNarration(null,forest.getState()))});
 const questions=installQuestions({onPause:()=>setPlaying(false),onRecord:()=>narrator.stop(),onRun:(...args)=>experiments.open(...args)});
 el('investigate').onclick=()=>questions.open();
