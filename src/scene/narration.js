@@ -41,10 +41,10 @@ export function comparisonNarration(packet){
 
 // Only explicitly local English voices qualify. No photos, names, questions or
 // learner responses enter the generated caption or the speech service.
-export function createNarrator({speech=null,Utterance=null,now=Date.now,onChange=()=>{}}={}){
-  let enabled=false,voiceEnabled=true,latest='',text='',speaking=false,voice=null,voiceFailed=false,last=-Infinity,generation=0;
-  const state=()=>({enabled,voiceEnabled,text,speaking,canSpeak:!!voice&&!voiceFailed,
-    voiceStatus:voiceFailed?'Voice playback failed. Captions still work.':voice?`Device voice: ${voice.name}. No Meta call.`:'No local English voice available. Captions still work.'});
+export function createNarrator({speech=null,Utterance=null,now=Date.now,onChange=()=>{},voiceInitially=true,voiceLabel='Device voice',unavailableLabel='No local English voice available. Captions still work.'}={}){
+  let enabled=false,voiceEnabled=voiceInitially,latest='',text='',speaking=false,voice=null,voiceFailed=false,last=-Infinity,generation=0;
+  const state=()=>({enabled,voiceEnabled,text,speaking,voiceFailed,canSpeak:!!voice&&!voiceFailed,
+    voiceStatus:voiceFailed?'Voice playback failed. Captions still work. Use Read caption again to retry.':voice?`${voiceLabel}: ${voice.name}. No Meta call.`:unavailableLabel});
   const notify=()=>onChange(state());
   function stop(){generation++;speaking=false;try{speech?.cancel();}catch{}notify();}
   function read(){
@@ -70,7 +70,7 @@ export function createNarrator({speech=null,Utterance=null,now=Date.now,onChange
       if(text===value)return;text=value;notify();if(enabled){last=now();read();}
     },
     context(value){stop();last=-Infinity;latest='';text='';this.say(value);},
-    repeat(){if(enabled){last=now();read();}},
+    repeat(){if(enabled){voiceFailed=false;last=now();read();}},
     dispose(){stop();speech?.removeEventListener?.('voiceschanged',refreshVoices);},
   };
 }

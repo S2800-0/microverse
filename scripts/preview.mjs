@@ -5,18 +5,20 @@ import { resolve, extname } from 'node:path';
 import { stripTypeScriptTypes } from 'node:module';
 
 const root=fileURLToPath(new URL('..',import.meta.url));
-export function createPreviewServer({ motion=false, testSprite=process.env.MICROVERSE_TEST_SPRITE,creatureApi,sparkApi }={}) {
+export function createPreviewServer({ motion=false, testSprite=process.env.MICROVERSE_TEST_SPRITE,creatureApi,sparkApi,speechApi,narrationApi }={}) {
   return createServer(async(req,res)=>{
     const path=new URL(req.url,'http://localhost').pathname;
     if(path.startsWith('/api/creature/')&&creatureApi){await creatureApi(req,res,path);return;}
     if(path.startsWith('/api/spark/')&&sparkApi){await sparkApi(req,res,path);return;}
+    if(path.startsWith('/api/speech/')&&speechApi){await speechApi(req,res,path);return;}
+    if(path.startsWith('/api/narration/')&&narrationApi){await narrationApi(req,res,path);return;}
     if(!['GET','HEAD'].includes(req.method)){res.writeHead(404);res.end('Not found');return;}
     let file;
     if(path==='/')file=motion?'examples/motion/index.html':'app/index.html';
     else if(path==='/forest.css')file='app/forest.css';
     else if(path==='/teacher.html')file='app/teacher.html';
     else if(path==='/test-fixture.png'&&testSprite)file=testSprite;
-    else if(/^\/examples\/(motion|forest|creature)\/[a-z-]+\.(html|js)$/.test(path)||/^\/src\/(motion|sim|scene|creature|investigation)\/[a-z-]+\.(js|ts)$/.test(path))file=`.${path}`;
+    else if(/^\/examples\/(motion|forest|creature)\/[a-z-]+\.(html|js)$/.test(path)||/^\/src\/(motion|sim|scene|creature|investigation|voice)\/[a-z-]+\.(js|ts)$/.test(path))file=`.${path}`;
     else if(/^\/(animals|maps)\/[a-z-]+\.png$/.test(path))file=`public${path}`;
     else {res.writeHead(404);res.end('Not found');return;}
     try{

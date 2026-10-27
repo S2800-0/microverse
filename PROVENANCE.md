@@ -59,3 +59,7 @@ New `src/investigation/`, Spark server adapters, typed intervention/replay-v2 su
 ### Optional narration
 
 New `src/scene/narration.js` and `narration-view.js` were assembled October 27, 2026 around the existing model/evidence APIs. They generate bounded captions from recorded numbers/events and optionally use explicitly local English browser voices. No generated voice asset, paid inference, new image, animal recording or private learner text is added. Speech availability and perceptual quality depend on the target device and are not established by transport fixtures. The accompanying photo-pilot protocol describes pending live tests, not completed generation results.
+
+### Neural narration and Meta dictation
+
+The voice-input/output slice replaces the app's device-voice wiring with an optional local Kokoro Heart adapter and separate Meta Muse Voice Transcribe question entry. The generic caption/controller tests remain. Kokoro/Transformers/phonemizer are upstream dependencies with their own licences, not original project models. A fixed-revision ONNX model is downloaded to ignored local runtime storage; no model weights or generated audio are committed. One local synthetic question was transcribed successfully by Meta; no microphone or learner speech was recorded by the agent. UI defaults to silent captions; sending a clip and using its transcript are separate actions. Account credentials, audio clips and billing receipts remain private.

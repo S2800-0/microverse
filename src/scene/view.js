@@ -102,7 +102,7 @@ el('fieldnotes').onclick=()=>{const open=el('notes').hidden;forest.select(null);
 el('card-close').onclick=()=>{forest.select(null);updateCard();};
 const importer=installCreatureImport({onAdd:add,onPause:()=>setPlaying(false)});el('bring').onclick=()=>importer.open();
 const experiments=installExperimentView({snapshot:()=>forest.toSnapshot(),eventText,onStatus:status,narrator,onReturn:()=>narrator.context(forestNarration(null,forest.getState()))});
-const questions=installQuestions({onPause:()=>setPlaying(false),onRun:(...args)=>experiments.open(...args)});
+const questions=installQuestions({onPause:()=>setPlaying(false),onRecord:()=>narrator.stop(),onRun:(...args)=>experiments.open(...args)});
 el('investigate').onclick=()=>questions.open();
 el('open-replay').onclick=()=>{setPlaying(false);experiments.chooseReplay();};
 for(const button of document.querySelectorAll('[data-experiment]'))button.onclick=()=>{

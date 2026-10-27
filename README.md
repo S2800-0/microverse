@@ -6,7 +6,7 @@ This public repository is being assembled one feature at a time. The living fore
 
 ## Development
 
-Use Node.js 24 or newer. The browser/simulation has no package runtime dependencies; the optional local server uses the pinned official SAM parser.
+Use Node.js 24 or newer. The browser/simulation has no package runtime dependencies; the optional local server uses the pinned official SAM parser and Kokoro runtime for neural narration.
 
 ```sh
 npm ci --ignore-scripts
@@ -30,7 +30,7 @@ The [Meta creature bridge guide](docs/meta-creature.md) describes `npm run previ
 
 Choose **Ask “what if?”** for six prepared questions or a supported manual change. The [investigation guide](docs/investigation.md) documents the optional Spark proposal/evidence adapters, exact change approval, funding settings, live verification and limits. Meta Spark has passed one live custom-proposal check; Baseten is configured separately and has not been tested live. Open `/teacher.html` for the printable activity and observation sheet.
 
-**Narration: On** adds model-derived captions in the forest and comparisons, plus optional local device speech where available. It starts off and makes no AI calls. See [narration and voice limits](docs/narration.md). The [first photo pilot](docs/image-pilot.md) specifies a staged dog/cat/accessory test set and a $0.10 local ceiling; it has not spent or enabled that budget.
+**Narration: On** adds model-derived captions. Read aloud separately opts into local Kokoro Heart neural speech, with no hosted inference charge or device-voice fallback. **Speak a question** adds review-before-send Meta dictation and an editable transcript; it never runs an experiment automatically. See [voice setup, costs and verified limits](docs/narration.md).
 
 ## Provenance and event contributions
 
