@@ -41,3 +41,8 @@ button:not(:disabled):active{scale:.96}
 #app:has(#welcome:not([hidden])) .loading{display:none}
 body:has(#experiment-dialog[open]) .bottom{display:none}
 @media(max-width:600px){.welcome{top:auto;bottom:16px;left:16px;right:16px;width:auto;padding:20px}.welcome h1{font-size:32px;margin:8px 0 10px}.welcome p{max-width:none;font-size:15px;margin:0}.welcome-actions{margin:14px 0 10px}}
+/* guided steps keep the question, step and next action in view while results scroll beneath */
+#comparison-dialog.guided .guide-panel{position:sticky;top:-30px;z-index:5;margin:0 -30px 12px;padding:12px 30px;border-radius:0;box-shadow:0 6px 14px #2b2a2618}
+#comparison-dialog.guided .guide-panel #guide-copy{font-size:14px;margin:4px 0 0}
+#comparison-dialog.guided .guide-panel h3{font-size:20px;margin:2px 0}
+@media(max-width:600px){#comparison-dialog.guided .guide-panel{top:-20px;margin:0 -20px 10px;padding:10px 20px}#comparison-dialog.guided .guide-panel #guide-copy{display:none}}
