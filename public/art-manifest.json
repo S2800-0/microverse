@@ -35,6 +35,31 @@
       "file": "animals/wolf-standing.png",
       "sha256": "77dec4825c4fd88ba05c28eea1030606d48b7d31a48ca41bd588192528625981",
       "origin": "Pre-event generated prototype art; unchanged binary import"
+    },
+    {
+      "file": "animals/fawn-grazing.png",
+      "sha256": "af14e655991a7462e6e79773c616122a2fd67351f1ffcb060c0b2c2998d44c7a",
+      "origin": "Supplied by the project owner during UI work (transparent WebP re-saved as PNG, pixels unchanged). Generator, creation date and reuse eligibility are not recorded here; confirm before submission."
+    },
+    {
+      "file": "animals/fawn-running.png",
+      "sha256": "cdf7b79ae93cd5fcfab11c7dd9bbfc680859d4bc57ed711ebbad6ef9084cb73e",
+      "origin": "Supplied by the project owner during UI work (transparent WebP re-saved as PNG, pixels unchanged). Generator, creation date and reuse eligibility are not recorded here; confirm before submission."
+    },
+    {
+      "file": "animals/fawn-standing.png",
+      "sha256": "534bb27bfaccfa79880e3b41f6c6823628d9e18f6240375c03eeb47c7fb1ff35",
+      "origin": "Supplied by the project owner during UI work (transparent WebP re-saved as PNG, pixels unchanged). Generator, creation date and reuse eligibility are not recorded here; confirm before submission."
+    },
+    {
+      "file": "animals/rabbit-grazing.png",
+      "sha256": "126874074d7f3f7457e1ecd433fbc5940dfd960a26c26f915bd3a0c2c62e9e9f",
+      "origin": "Supplied by the project owner during UI work (transparent WebP re-saved as PNG, pixels unchanged). Generator, creation date and reuse eligibility are not recorded here; confirm before submission."
+    },
+    {
+      "file": "animals/rabbit-running.png",
+      "sha256": "cefe01bb16e38fe6eb85625cd53628be15488940a52cd18364795f8f1098c23c",
+      "origin": "Supplied by the project owner during UI work (transparent WebP re-saved as PNG, pixels unchanged). Generator, creation date and reuse eligibility are not recorded here; confirm before submission."
     }
   ]
 }

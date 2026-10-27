@@ -1,5 +1,5 @@
 import { createForestController } from './controller.ts';
-import { ART, bodyScale } from './art.js';
+import { ART, POSES, poseFor, bodyScale } from './art.js';
 import { buildRig, GAITS } from '../motion/rig.js';
 import { assessRig } from '../motion/rig-analysis.js';
 import { prepareJointPieces, drawPuppet } from '../motion/puppet-motion.js';
@@ -15,7 +15,7 @@ const el=id=>document.getElementById(id);
 const forest=createForestController();
 const narrator=installNarration();
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-const assets=new Map(),actors=new Map();
+const assets=new Map(),actors=new Map(),poses=new Map();
 let playing=false,speed=1,accumulator=0,progress=1,last=0,clock=0;
 let needsDraw=true;
 const cam={x:0,y:0,zoom:1,minZoom:1,width:0,height:0};
@@ -33,6 +33,7 @@ async function loadArt(){
       assets.set(species,{image,rig});
     }catch{failures++;}
   }));
+  await Promise.all(Object.entries(POSES).map(async([key,src])=>{try{const image=new Image();image.src=src;await image.decode();poses.set(key,image);}catch{/* The standard sprite stays in use. */}}));
   el('loading').hidden=true;
   needsDraw=true;
   status(failures?`${failures} image(s) unavailable; model creatures still work. Click a creature to inspect its record.`:'Ready. Click a creature, or bring someone into the clearing.');
@@ -155,18 +156,18 @@ function render(now){
     const actor=actorFor(animal),art=ART[animal.species],custom=state.appearances.get(animal.id);
     const x=reduced.matches?actor.toX:actor.fromX+(actor.toX-actor.fromX)*progress;
     const y=reduced.matches?actor.toY:actor.fromY+(actor.toY-actor.fromY)*progress;
-    const moved=Math.hypot(x-actor.x,(y-actor.y)*1.7);
+    const moved=Math.hypot(x-actor.x,(y-actor.y)*1.7);if(playing&&moved>.001)actor.runUntil=now+500;
     if(Math.abs(x-actor.x)>.001)actor.dir=x<actor.x?-1:1;
     actor.x=x;actor.y=y;
     const size=Math.max(38,Math.min(105,cam.width*.045))*(art?.size||1)*bodyScale(animal,state.world.params);
     actor.button.style.left=`${x}%`;actor.button.style.top=`${y/state.world.params.height*100}%`;
     actor.button.style.setProperty('--size',`${size}px`);actor.button.style.zIndex=String(Math.round(y*10));
     const ctx=actor.canvas.getContext('2d');ctx.clearRect(0,0,180,180);ctx.save();ctx.translate(90,153);ctx.scale(actor.dir,1);
-    const loaded=assets.get(animal.species),rig=custom?.rig||(!custom?.image&&loaded?.rig);
+    const loaded=assets.get(animal.species),pose=!custom?poses.get(poseFor(animal,state.world.params,now<(actor.runUntil||0))):null,rig=!pose&&(custom?.rig||(!custom?.image&&loaded?.rig));
     if(rig){const preset=getMotion(art?.motion==='cat'?'cat':'dog');if(playing)actor.phase+=moved*cam.width/100*preset.duty/preset.stride;
       drawPuppet(ctx,rig,{size:180,phase:actor.phase,moving:playing&&moved>.001&&!reduced.matches,preset,phases:GAITS.walk.phase,clock:reduced.matches?0:clock});
     }else{
-      let image=loaded?.image;
+      let image=pose||loaded?.image;
       if(custom?.image){if(!actor.image){actor.image=new Image();actor.image.onload=()=>{needsDraw=true;};actor.image.src=custom.image;}image=actor.image;}
       if(image?.complete&&image.naturalWidth){ctx.drawImage(image,-90,-153,180,180);}
       else {ctx.fillStyle='#f4eedf';ctx.beginPath();ctx.arc(0,-45,30,0,Math.PI*2);ctx.fill();ctx.fillStyle='#2b2a26';ctx.font='14px system-ui';ctx.textAlign='center';ctx.fillText(animal.species,0,-40);}

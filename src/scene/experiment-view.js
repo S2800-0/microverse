@@ -1,5 +1,5 @@
 import {createExperiment,experimentFromReplay,validateReplay,runContinuation} from './experiment.ts';
-import {ART,bodyScale} from './art.js';
+import {ART,POSES,poseFor,bodyScale} from './art.js';
 import {buildRig,GAITS} from '../motion/rig.js';
 import {assessRig} from '../motion/rig-analysis.js';
 import {prepareJointPieces,drawPuppet} from '../motion/puppet-motion.js';
@@ -40,7 +40,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     ctx.fillStyle=`rgba(151,114,68,${Math.max(0,.8-state.grass)*.35})`;ctx.fillRect(0,0,w,h);
     for(const a of [...state.animals].sort((a,b)=>a.y-b.y)){
       const custom=state.appearances.get(a.id),art=ART[a.species],src=custom?.image||art?.image;
-      const image=images.get(src),rig=rigs.get(src),x=a.x/state.world.params.width*w,y=a.y/state.world.params.height*h;
+      const pose=custom?null:images.get(POSES[poseFor(a,state.world.params,false)]),image=pose||images.get(src),rig=pose?null:rigs.get(src),x=a.x/state.world.params.width*w,y=a.y/state.world.params.height*h;
       const size=44*(art?.size||1)*bodyScale(a,state.world.params);
       ctx.save();ctx.translate(x,y);
       if(rig){ctx.scale(size/180,size/180);drawPuppet(ctx,rig,{size:180,phase:a.id*.37,moving:false,preset:getMotion(art?.motion==='cat'?'cat':'dog'),phases:GAITS.walk.phase,clock:0});}
@@ -56,6 +56,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
     const current=++revision;images.clear();rigs.clear();
     const sources=new Map([['/maps/spring.png',null]]);
     for(const art of Object.values(ART))if(art.image)sources.set(art.image,art.cut||null);
+    for(const src of Object.values(POSES))sources.set(src,null);
     for(const a of initial.appearances)if(a.image)sources.set(a.image,a.rigConfig||null);
     let unavailable=0,rigFallbacks=0;
     await Promise.all([...sources].map(async([src,cut])=>{

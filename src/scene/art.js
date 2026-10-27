@@ -15,3 +15,14 @@ export function bodyScale(animal,params){
   const age=animal.age<mature?.45+.55*animal.age/Math.max(1,mature):1;
   return age*(animal.sex==='f'?.92:1)*(.94+((animal.id*37)%13)/100);
 }
+
+// Extra poses (owner-supplied; see PROVENANCE.md). Young deer and rabbits swap sprites by state; everything else keeps its single image.
+export const POSES={
+  'fawn-standing':'/animals/fawn-standing.png','fawn-grazing':'/animals/fawn-grazing.png','fawn-running':'/animals/fawn-running.png',
+  'rabbit-grazing':'/animals/rabbit-grazing.png','rabbit-running':'/animals/rabbit-running.png',
+};
+export function poseFor(animal,params,moving){
+  if(animal.species==='deer'&&animal.age<(params?.species?.deer?.matureAge??0))return moving?'fawn-running':animal.id%3===0?'fawn-grazing':'fawn-standing';
+  if(animal.species==='rabbit')return moving?'rabbit-running':animal.id%2?'rabbit-grazing':null;
+  return null;
+}
