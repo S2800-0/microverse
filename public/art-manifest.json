@@ -35,6 +35,11 @@
       "file": "animals/wolf-standing.png",
       "sha256": "77dec4825c4fd88ba05c28eea1030606d48b7d31a48ca41bd588192528625981",
       "origin": "Pre-event generated prototype art; unchanged binary import"
+    },
+    {
+      "file": "animals/fawn-standing.png",
+      "sha256": "177576b5cdd619cdeef26c2df9cf0e9977712f1b887277e52dae9647b8bc542d",
+      "origin": "Pre-event generated prototype art; unchanged binary import"
     }
   ]
 }
