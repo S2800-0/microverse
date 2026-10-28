@@ -1,6 +1,6 @@
 # Microverse: motion and entrance storyboard
 
-Direction accepted October 28, 2026. This is a design study, not a replacement of the working classroom interface. Preview `/storyboard.html`; `/` remains the game. No model calls, personal photos, new generated artwork, or new runtime dependencies are required by this study.
+Direction accepted October 28, 2026, then revised following the owner's request to match the references more closely. The current study is a full-viewport forest journey using the owner's new woodland and fox files. It replaces the earlier two-column landing composition. Preview `/storyboard.html`; `/` remains the game. No model calls, personal photos or new runtime dependencies are required by this study.
 
 ## Promise and audience
 
@@ -12,9 +12,9 @@ The question-led invitation is **“Ever wondered how your choices affect the wo
 
 | Beat | Player sees or does | Meaning and implementation status |
 | --- | --- | --- |
-| Arrival, about 0–4 seconds | A red fox takes a few steps in a painted clearing. The headline and Play now are immediately available. | Working local mesh/IK puppet, reused art. Nobody waits for the fox to finish before playing. |
-| Curiosity, player-controlled | Scroll to an invitation and choose a living forest, more rain, or less rain. | Working illustrative weather treatment and question. Explicitly labelled preview; no ecosystem result is claimed. |
-| Play now | Choose My first adventure or Create my creature. | Working accessible dialog linking to the existing reviewed flows. Escape closes it. |
+| Arrival, about 0–4 seconds | A small red fox takes a few steps on a woodland path. The landscape fills the viewport; the headline sits in the sky. | Working local mesh/IK puppet and new owner-supplied art. Play now is immediately available in the scene and header. |
+| Curiosity, player-controlled | Native scrolling moves the camera toward the path, brings in a dry-spell question, then introduces the player's adventure. | Three reversible local beats. A flattened-painting camera move, not independent foreground parallax or an ecosystem result. |
+| Play now | Choose My first adventure or Create my creature over the forest. | Working full-viewport native dialog linking to the existing reviewed flows. Escape closes it. A short camera move accompanies entry without delaying the choices. |
 | First adventure | Predict what changes first during a dry spell. | Existing live model/lesson opens. Its current interface is retained for the next design pass. |
 | Create my creature | Choose a photo or prepared creature, then review appearance and movement. | Existing creator opens; sending a photo for AI processing remains a separate explicit action. |
 | Optional reflection | Open Behind the world. | Working technology, reusable-building-block and resource disclosures, with source links. |
@@ -22,8 +22,8 @@ The question-led invitation is **“Ever wondered how your choices affect the wo
 ## Motion language
 
 - Watercolor pigment, quiet paper, deep green type, and fox-orange emphasis. The red fox is the proposed brand character; the fawn can remain the lesson protagonist.
-- Walking communicates entering the world; modest pointer parallax supplies depth. No scroll hijacking, forced countdown, sound autoplay, or generated video dependency.
-- A persistent Pause motion control stops the canvas and decorative rain. Reduced-motion preference starts the canvas paused and disables CSS transitions/rain. Mobile keeps the same choices in a stacked layout.
+- Walking communicates entering the world; native scroll supplies a bounded camera move and short question/invitation beats. No scroll hijacking, forced countdown, sound autoplay, or generated video dependency. Below the introduction, optional weather illustrations and the creature invitation remain available.
+- A persistent Pause motion control stops the canvas and decorative rain and retains the current camera/fox position. Reduced-motion preference starts the canvas paused, shortens the introduction to one viewport, and disables CSS transitions/rain. Mobile uses a central portrait crop of the full-bleed forest and the same two choices.
 - Canvas work stops when offscreen or when the document is hidden; its frame rate is capped at roughly 30 FPS. Movement reuses `rig.js`, `puppet-motion.js`, and the existing artistic canine gait, rather than calling a model per step. This is not measured fox locomotion or animal-behaviour research.
 - Still art remains if articulated preparation or canvas setup fails. A visible footer status describes the fallback. The image fallback does not claim to be a working articulated rig.
 
@@ -41,9 +41,13 @@ A portrait, expressions, simple mouth poses, and head options are a separate exp
 
 ## Art direction review
 
-The study uses the already-disclosed public fox, fawn, dog, and spring map. The landing artwork is a composed crop/wash of the existing map, not a newly generated layered forest. Review composition, scale, movement, reading load, and the two entry choices before commissioning a consistent set of scene layers. Pinterest references supplied by the owner are inspiration only; their media and layouts are not copied.
+The owner supplied `Sunlit Watercolor Forest Path.png` (1672×941) and `Watercolor Red Fox Walking Rightward.png` (1536×1024, RGBA). These are imported unchanged; hashes and source details are in `public/intro/manifest.json`. The generation tool and creation date are not independently verified. The main ecological game retains its separate map/species art. Existing fawn/dog examples are reused farther down the page and in entry choices.
 
-Candidate asset set after review: one wide clearing with compatible foreground/distant layers; one approved fox silhouette plus existing reusable rig; short expression-sheet test for one creature. Generated video is optional promotional media, not the simulation renderer.
+The forest is one flattened illustration. The camera can move through it, but true foreground occlusion/parallax requires registered scenery layers and paint behind the foreground objects. The fox is a separate transparent image with the current local rig, not an eight-frame walk cycle. Native aspect ratio and the alpha ground line determine rendering placement, avoiding the old square-sprite assumption.
+
+Pinterest references supplied by the owner are inspiration only; their media and layouts are not copied. The original PORTFOLIO KAM page was inspected directly: its walking character stays near a fixed screen position while scenery moves behind it. The first two clips remain obscured by Pinterest's login overlay, so exact motion/timing matching requires unobstructed clips.
+
+Next asset set: registered sky, hills, far forest, clearing, left foreground and right foreground layers derived from this approved master, ideally delivered as one layered source file. Retain the original canvas positions and fill regions revealed by camera movement. Then test one coherent eight-frame fox walk cycle or layered puppet before expanding to other poses. A short expression-sheet test follows separately. Generated video is optional promotional media, not the simulation renderer.
 
 ## Behind the world: claims and evidence
 
@@ -62,6 +66,6 @@ See [resource-use.md](resource-use.md) for implemented cache/processing behaviou
 ## Acceptance and review record
 
 - Desktop hero, working weather choices, Play now dialog, and both destination flows inspected in the browser.
-- Node suite: 135 passing tests; syntax and static build passed. Server coverage checks the new routes alongside existing private-file protections.
-- Phone layout checked at 390×844 and 320×740; document width matches viewport width after clipping decorative scene overflow. The two-choice dialog was visually checked at 390px. Desktop screenshot comparisons confirmed unchanged canvas pixels while paused and changing pixels after replay. Escape/entry choice navigation uses a native dialog. OS-level reduced-motion and physical-device testing remain pending; these developer checks are not participant evidence.
+- Node suite: 137 passing tests; syntax and static build passed. New coverage verifies owner-supplied image hashes and bounded reversible choreography. Server coverage checks the new routes alongside existing private-file protections.
+- Full-screen revision: desktop composition and question beat inspected; 390×844 and 320×740 document widths match the viewport; phone intro fills the screen and a one-page scroll reaches the middle question; full-screen entry dialog and Escape checked; camera scale and fox position remain unchanged while scrolling with motion paused. The working first-lesson destination was reopened. OS-level reduced-motion and physical-device testing remain pending; these developer checks are not participant evidence.
 - Next review: does the forest entrance feel inviting; is the fox's motion acceptable; can a new player choose a path without reading a paragraph? No usability finding is claimed until someone outside development tries it.

@@ -5,32 +5,36 @@
   <meta name="theme-color" content="#f7f3e9">
   <title>Microverse · Small world, big consequences</title>
   <link rel="stylesheet" href="/storyboard.css">
+  <link rel="stylesheet" href="/journey.css">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to the story</a>
 <header class="site-header">
   <a class="wordmark" href="#main" aria-label="Microverse home">microverse<span aria-hidden="true">✳</span></a>
   <nav aria-label="Explore Microverse"><a href="#possibilities">The adventure</a><a href="#creature">Your creature</a><a href="#behind">Behind the world</a></nav>
-  <button id="motion-toggle" class="quiet" type="button" aria-pressed="false">Pause motion</button>
+  <div class="header-actions"><button id="motion-toggle" class="quiet" type="button" aria-pressed="false">Pause motion</button><button class="header-play" type="button" data-enter>Play now <span aria-hidden="true">↗</span></button></div>
 </header>
 <main id="main">
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="hero-copy">
-      <p class="eyebrow"><span></span> A LIVING WORLD TO WONDER ABOUT</p>
+  <section class="journey" id="journey" aria-label="Enter the world of Microverse">
+  <div class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy" id="opening-copy">
+      <p class="eyebrow"><span></span> YOUR LITTLE WORLD IS WAITING</p>
       <h1 id="hero-title">Small world,<br><em>big consequences.</em></h1>
-      <p class="intro">Change the rain. Follow a creature.<br>Discover what connects us.</p>
+      <p class="intro">Follow a little curiosity.</p>
       <div class="actions"><button class="primary" type="button" data-enter>Play now <span aria-hidden="true">↗</span></button><a class="text-link" href="#possibilities">Take a little look <span aria-hidden="true">↓</span></a></div>
       <p class="audience">For curious minds, families &amp; classrooms.</p>
     </div>
+    <div class="journey-copy" id="question-copy" hidden><p class="eyebrow">ONE SMALL CHANGE</p><h2>What if the rain<br><em>slows down?</em></h2><p>Start with a question. Follow the connections.</p><span class="illustration-label">An illustrated invitation to explore</span></div>
+    <div class="journey-copy" id="invitation-copy" hidden><p class="eyebrow">THERE’S MORE TO THIS LITTLE WORLD</p><h2>A forest to explore.<br><em>A story to make yours.</em></h2><div class="actions"><button class="primary" type="button" data-enter>Let’s go <span aria-hidden="true">↗</span></button><a class="text-link" href="#creature">Bring someone familiar ↗</a></div></div>
     <div class="fox-scene" id="fox-scene" data-weather="spring">
       <div class="painted-world" aria-hidden="true"></div><div class="sun-wash" aria-hidden="true"></div>
       <div class="rain" aria-hidden="true"></div><div class="ground-shadow" aria-hidden="true"></div>
-      <img id="fox-still" class="fox-still" src="/animals/fox-standing.png" alt="A red fox in a watercolor clearing">
+      <img id="fox-still" class="fox-still" src="/intro/fox.png" alt="A red fox on a sunlit woodland path">
       <canvas id="fox-canvas" width="900" height="620" aria-label="A watercolor red fox taking a few steps through a clearing" hidden></canvas>
-      <button class="fox-greeting" id="fox-walk" type="button">A few tiny footsteps <span aria-hidden="true">↗</span></button>
-      <span class="scene-label">A little look into Microverse</span>
+      <button class="fox-greeting" id="fox-walk" type="button">Follow the fox <span aria-hidden="true">↗</span></button>
     </div>
-    <div class="chapter-note"><span>01 / ENTER THE CLEARING</span><a href="#possibilities">There’s a story in every small change <span aria-hidden="true">↓</span></a></div>
+    <div class="chapter-note"><span id="journey-chapter">01 / A LITTLE WORLD</span><span class="journey-progress" aria-hidden="true"><i></i></span><a href="#possibilities">Scroll to explore · Skip intro <span aria-hidden="true">↓</span></a></div>
+  </div>
   </section>
 
   <section class="possibilities section" id="possibilities" aria-labelledby="possibilities-title">
@@ -54,7 +58,7 @@
 
   <section class="behind-section section" id="behind" aria-labelledby="behind-title"><div><p class="eyebrow">BEHIND THE WORLD</p><h2 id="behind-title">Even this little world<br>has a footprint.</h2><p>We reuse generated artwork and run movement and ecosystem experiments without fresh AI calls. Computing still uses resources, and we haven’t measured this project’s full environmental footprint.</p></div><div class="behind-details"><details><summary>A little AI. A lot of reusable craft.</summary><p>Muse Image creates optional illustrations. SAM makes cutouts. Spark helps interpret custom questions. Our code runs the ecosystem, movement, validated changes, and replay.</p><p>Prepared questions work without model inference. Voice and custom creation remain optional.</p></details><details><summary>What could others build with this?</summary><p>Reusable creature puppets, experiments you can rerun, and explanations tied to recorded events. These are building blocks to explore, rather than demonstrated educational or conservation outcomes.</p></details><details><summary>Progress, trade-offs, and sources</summary><p>Meta reports improvements to cooling and has water-restoration and clean-energy goals. We haven’t established that Muse is environmentally better than another provider or measured this app’s water use.</p><p><a href="https://about.fb.com/news/2026/08/closed-loop-cooling-explained-the-plumbing-behind-metas-ai/" target="_blank" rel="noopener">Meta: cooling improvements</a> · <a href="https://sustainability.atmeta.com/2025-sustainability-report/" target="_blank" rel="noopener">Meta: reported goals</a> · <a href="https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary" target="_blank" rel="noopener">IEA: efficiency and growing demand</a></p></details></div></section>
 </main>
-<footer class="site-footer"><a class="wordmark" href="#main">microverse<span aria-hidden="true">✳</span></a><p>Small world, big consequences.</p><span>Motion storyboard · existing artwork · no generation on this page</span><p id="art-status" role="status"></p></footer>
+<footer class="site-footer"><a class="wordmark" href="#main">microverse<span aria-hidden="true">✳</span></a><p>Small world, big consequences.</p><span>Motion study · owner-supplied forest and fox · no generation on this page</span><p id="art-status" role="status"></p></footer>
 
 <dialog id="entry-dialog" aria-labelledby="entry-title"><button id="entry-close" class="dialog-close" type="button" aria-label="Close entry choices">×</button><p class="eyebrow">WELCOME TO YOUR LITTLE WORLD</p><h2 id="entry-title">Where shall we begin?</h2><div class="entry-choices"><a href="/?entry=lesson"><img src="/animals/fawn-standing.png" alt=""><strong>My first adventure <span aria-hidden="true">↗</span></strong><span>A dry spell. A forest. A question to follow.</span></a><a href="/?entry=creature"><img src="/animals/dog-standing.png" alt=""><strong>Create my creature <span aria-hidden="true">↗</span></strong><span>Bring a familiar face into a new world.</span></a></div><p class="small">You can always try the other path later.</p></dialog>
 <script type="module" src="/src/scene/storyboard.js"></script>

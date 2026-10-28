@@ -18,6 +18,8 @@ export function createPreviewServer({ motion=false, testSprite=process.env.MICRO
     if(path==='/')file=motion?'examples/motion/index.html':'app/index.html';
     else if(path==='/storyboard.html')file='app/storyboard.html';
     else if(path==='/storyboard.css')file='app/storyboard.css';
+    else if(path==='/journey.css')file='app/journey.css';
+    else if(/^\/intro\/(forest|fox)\.png$/.test(path))file=`public${path}`;
     else if(path==='/forest.css')file='app/forest.css';
     else if(path==='/teacher.html')file='app/teacher.html';
     else if(path==='/places/garden-pond-analysis.json')file='public/places/garden-pond-analysis.json';

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "file": "forest.png",
+      "sourceFile": "Sunlit Watercolor Forest Path.png",
+      "sha256": "21b34bd565dc76bd1e0754e3a09fa45f494b902b4de82ebfddca6fdeb63ec0ad",
+      "width": 1672,
+      "height": 941,
+      "role": "Full-screen woodland master composition",
+      "origin": "Owner-supplied artwork, received October 28, 2026; generation tool and creation date not independently verified; unchanged binary import"
+    },
+    {
+      "file": "fox.png",
+      "sourceFile": "Watercolor Red Fox Walking Rightward.png",
+      "sha256": "b0ff7bb29229a1333cef3779ca1110e584833a59df7802b0192b5dd22a4678e8",
+      "width": 1536,
+      "height": 1024,
+      "role": "Transparent right-facing fox design",
+      "origin": "Owner-supplied artwork, received October 28, 2026; generation tool and creation date not independently verified; unchanged binary import"
+    }
+  ]
+}
