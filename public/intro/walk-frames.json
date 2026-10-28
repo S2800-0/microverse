@@ -1,0 +1,151 @@
+{
+  "version": 1,
+  "sourceFile": "Watercolor Red Fox Walking Cycle Sheet.png",
+  "sourceSha256": "35cab7a7a1a129cb537ec92b4e9c7bf257b8e0ab4da8a9528841c5e87201228a",
+  "sourceSize": [
+    1774,
+    887
+  ],
+  "atlasSha256": "8cbc252709b983c34adc08bf680ae0f98b218cfe466ddc6a8545c6b55dea64eb",
+  "atlasSize": [
+    2048,
+    1024
+  ],
+  "columns": 4,
+  "rows": 2,
+  "cellSize": 512,
+  "scale": 0.95,
+  "anchorRight": 460,
+  "targetBaseline": 425,
+  "frames": [
+    {
+      "index": 0,
+      "sourceBounds": [
+        13,
+        107,
+        433,
+        383
+      ],
+      "occupiedBounds": [
+        61,
+        164,
+        461,
+        427
+      ],
+      "baseline": 426
+    },
+    {
+      "index": 1,
+      "sourceBounds": [
+        447,
+        106,
+        882,
+        384
+      ],
+      "occupiedBounds": [
+        48,
+        162,
+        461,
+        426
+      ],
+      "baseline": 425
+    },
+    {
+      "index": 2,
+      "sourceBounds": [
+        902,
+        107,
+        1329,
+        382
+      ],
+      "occupiedBounds": [
+        56,
+        164,
+        461,
+        427
+      ],
+      "baseline": 426
+    },
+    {
+      "index": 3,
+      "sourceBounds": [
+        1340,
+        106,
+        1768,
+        382
+      ],
+      "occupiedBounds": [
+        54,
+        164,
+        461,
+        427
+      ],
+      "baseline": 426
+    },
+    {
+      "index": 4,
+      "sourceBounds": [
+        9,
+        528,
+        450,
+        793
+      ],
+      "occupiedBounds": [
+        42,
+        174,
+        461,
+        427
+      ],
+      "baseline": 426
+    },
+    {
+      "index": 5,
+      "sourceBounds": [
+        448,
+        527,
+        892,
+        797
+      ],
+      "occupiedBounds": [
+        39,
+        170,
+        460,
+        427
+      ],
+      "baseline": 426
+    },
+    {
+      "index": 6,
+      "sourceBounds": [
+        892,
+        527,
+        1326,
+        799
+      ],
+      "occupiedBounds": [
+        49,
+        168,
+        462,
+        426
+      ],
+      "baseline": 425
+    },
+    {
+      "index": 7,
+      "sourceBounds": [
+        1332,
+        523,
+        1761,
+        799
+      ],
+      "occupiedBounds": [
+        54,
+        163,
+        461,
+        427
+      ],
+      "baseline": 426
+    }
+  ],
+  "processing": "Connected alpha silhouettes, edge-preserving local cutout, uniform scale and foot/nose registration. No generated or reconstructed poses."
+}

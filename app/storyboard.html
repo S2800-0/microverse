@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f3e9">
+  <title>Microverse · Small world, big consequences</title>
+  <link rel="stylesheet" href="/storyboard.css">
+  <link rel="stylesheet" href="/journey.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the story</a>
+<header class="site-header">
+  <a class="wordmark" href="#main" aria-label="Microverse home">microverse<span aria-hidden="true">✳</span></a>
+  <nav aria-label="Explore Microverse"><a href="#possibilities">The adventure</a><a href="#creature">Your creature</a><a href="#behind">Behind the world</a></nav>
+  <div class="header-actions"><button id="motion-toggle" class="quiet" type="button" aria-pressed="false">Pause motion</button><button class="header-play" type="button" data-enter>Play now <span aria-hidden="true">↗</span></button></div>
+</header>
+<main id="main">
+  <section class="journey" id="journey" aria-label="Enter the world of Microverse">
+  <div class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy" id="opening-copy">
+      <p class="eyebrow"><span></span> YOUR LITTLE WORLD IS WAITING</p>
+      <h1 id="hero-title">Small world,<br><em>big consequences.</em></h1>
+      <p class="intro">Follow a little curiosity.</p>
+      <div class="actions"><button class="primary" type="button" data-enter>Play now <span aria-hidden="true">↗</span></button><a class="text-link" href="#possibilities">Take a little look <span aria-hidden="true">↓</span></a></div>
+      <p class="audience">For curious minds, families &amp; classrooms.</p>
+    </div>
+    <div class="journey-copy" id="question-copy" hidden><p class="eyebrow">ONE SMALL CHANGE</p><h2>What if the rain<br><em>slows down?</em></h2><p>Start with a question. Follow the connections.</p><span class="illustration-label">An illustrated invitation to explore</span></div>
+    <div class="journey-copy" id="invitation-copy" hidden><p class="eyebrow">THERE’S MORE TO THIS LITTLE WORLD</p><h2>A forest to explore.<br><em>A story to make yours.</em></h2><div class="actions"><button class="primary" type="button" data-enter>Let’s go <span aria-hidden="true">↗</span></button><a class="text-link" href="#creature">Bring someone familiar ↗</a></div></div>
+    <div class="fox-scene" id="fox-scene" data-weather="spring">
+      <div class="painted-world" aria-hidden="true"></div><div class="sun-wash" aria-hidden="true"></div>
+      <div class="forest-layer forest-left" aria-hidden="true"></div><div class="forest-layer forest-right" aria-hidden="true"></div>
+      <div class="rain" aria-hidden="true"></div><div class="ground-shadow" aria-hidden="true"></div>
+      <img id="fox-still" class="fox-still" src="/intro/fox-poster.png" alt="A red fox on a sunlit woodland path">
+      <canvas id="fox-canvas" width="900" height="620" aria-label="A watercolor red fox taking a few steps through a clearing" hidden></canvas>
+      <button class="fox-greeting" id="fox-walk" type="button">Follow the fox <span aria-hidden="true">↗</span></button>
+    </div>
+    <div class="chapter-note"><span id="journey-chapter">01 / A LITTLE WORLD</span><span class="journey-progress" aria-hidden="true"><i></i></span><a href="#possibilities">Scroll to explore · Skip intro <span aria-hidden="true">↓</span></a></div>
+  </div>
+  </section>
+
+  <section class="possibilities section" id="possibilities" aria-labelledby="possibilities-title">
+    <div class="section-heading"><p class="eyebrow">ONE SMALL QUESTION</p><h2 id="possibilities-title">Ever wondered how your choices<br>affect the world around you?</h2><p>Start small. Change one thing. Follow what happens next.</p></div>
+    <div class="weather-story">
+      <div class="weather-picture" id="weather-picture" data-weather="spring"><div class="weather-map" aria-hidden="true"></div><div class="rain" aria-hidden="true"></div><img src="/animals/fawn-standing.png" alt="A fawn in an illustrated woodland"><span class="preview-label">Illustrated preview</span></div>
+      <div class="weather-copy"><p class="eyebrow">A FOREST FULL OF WHAT IFS</p><h3 id="weather-title">Every story starts somewhere.</h3><p id="weather-copy">Meet the plants, grazers, and hunters that share this little world.</p>
+        <div class="weather-choices" aria-label="Preview a story"><button type="button" data-weather-choice="spring" aria-pressed="true">A living forest</button><button type="button" data-weather-choice="rain" aria-pressed="false">More rain</button><button type="button" data-weather-choice="dry" aria-pressed="false">Less rain</button></div>
+        <p class="small" id="weather-status" role="status">Choose a question, then explore it in the game.</p>
+        <a class="text-link" href="/?entry=lesson">Try the first adventure <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="creature-section section" id="creature" aria-labelledby="creature-title">
+    <div class="creature-portrait"><div class="portrait-wash" aria-hidden="true"></div><img src="/animals/dog-standing.png" alt="An example illustrated dog companion"><span class="hand-note">a familiar face,<br>a little more storybook.</span></div>
+    <div class="creature-copy"><p class="eyebrow">SOMEONE YOU ALREADY LOVE</p><h2 id="creature-title">Your pet.<br>A whole new world.</h2><p>Bring a photo. Meet their watercolor self.<br>Check their look, watch their first steps, and welcome them in.</p><a class="primary" href="/?entry=creature">Create your creature <span aria-hidden="true">↗</span></a><p class="small">Or start exploring. Your creature can join you later.</p><details class="reveal-plan"><summary>The reveal we’re designing</summary><ol><li>Your photo becomes a watercolor illustration.</li><li>The cutout is prepared for movement.</li><li>Your creature takes its first steps.</li><li>You choose whether the look and movement feel right.</li></ol><p class="small">This page shows existing example art. The redesigned reveal and talking portraits are storyboard plans; the button opens the current working creator.</p></details></div>
+  </section>
+
+  <section class="begin-section section" aria-labelledby="begin-title"><p class="eyebrow">YOU DON’T HAVE TO KNOW ECOLOGY TO BE CURIOUS</p><h2 id="begin-title">Come for the creatures.<br>Stay for the connections.</h2><button class="primary" type="button" data-enter>Let’s play <span aria-hidden="true">↗</span></button><p class="small">Explore consequences in a simplified ecosystem model.</p></section>
+
+  <section class="behind-section section" id="behind" aria-labelledby="behind-title"><div><p class="eyebrow">BEHIND THE WORLD</p><h2 id="behind-title">Even this little world<br>has a footprint.</h2><p>We reuse generated artwork and run movement and ecosystem experiments without fresh AI calls. Computing still uses resources, and we haven’t measured this project’s full environmental footprint.</p></div><div class="behind-details"><details><summary>A little AI. A lot of reusable craft.</summary><p>Muse Image creates optional illustrations. SAM makes cutouts. Spark helps interpret custom questions. Our code runs the ecosystem, movement, validated changes, and replay.</p><p>Prepared questions work without model inference. Voice and custom creation remain optional.</p></details><details><summary>What could others build with this?</summary><p>Reusable creature puppets, experiments you can rerun, and explanations tied to recorded events. These are building blocks to explore, rather than demonstrated educational or conservation outcomes.</p></details><details><summary>Progress, trade-offs, and sources</summary><p>Meta reports improvements to cooling and has water-restoration and clean-energy goals. We haven’t established that Muse is environmentally better than another provider or measured this app’s water use.</p><p><a href="https://about.fb.com/news/2026/08/closed-loop-cooling-explained-the-plumbing-behind-metas-ai/" target="_blank" rel="noopener">Meta: cooling improvements</a> · <a href="https://sustainability.atmeta.com/2025-sustainability-report/" target="_blank" rel="noopener">Meta: reported goals</a> · <a href="https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary" target="_blank" rel="noopener">IEA: efficiency and growing demand</a></p></details></div></section>
+</main>
+<footer class="site-footer"><a class="wordmark" href="#main">microverse<span aria-hidden="true">✳</span></a><p>Small world, big consequences.</p><span>Motion study · owner-supplied forest and fox · no generation on this page</span><p id="art-status" role="status"></p></footer>
+
+<dialog id="entry-dialog" aria-labelledby="entry-title"><button id="entry-close" class="dialog-close" type="button" aria-label="Close entry choices">×</button><p class="eyebrow">WELCOME TO YOUR LITTLE WORLD</p><h2 id="entry-title">Where shall we begin?</h2><div class="entry-choices"><a href="/?entry=lesson"><img src="/animals/fawn-standing.png" alt=""><strong>My first adventure <span aria-hidden="true">↗</span></strong><span>A dry spell. A forest. A question to follow.</span></a><a href="/?entry=creature"><img src="/animals/dog-standing.png" alt=""><strong>Create my creature <span aria-hidden="true">↗</span></strong><span>Bring a familiar face into a new world.</span></a></div><p class="small">You can always try the other path later.</p></dialog>
+<script type="module" src="/src/scene/storyboard.js"></script>
+</body></html>
