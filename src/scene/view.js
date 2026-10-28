@@ -212,3 +212,7 @@ layout();cam.x=(innerWidth-cam.width)/2;cam.y=(innerHeight-cam.height)/2;
 // narrow screens show a slice of the map: start centred on where the animals are
 {const live=forest.getState().animals.filter(x=>x.alive!==false);if(live.length&&cam.width>el('viewport').clientWidth)cam.x=el('viewport').clientWidth/2-live.reduce((t,x)=>t+x.x,0)/live.length/100*cam.width*cam.zoom;}
 clampCamera();sync();narrator.context(forestNarration(null,forest.getState()));loadArt();requestAnimationFrame(render);
+// Explicit landing-page choices open the existing reviewed flows; neither runs inference.
+const entry=new URLSearchParams(location.search).get('entry');
+if(entry==='lesson')openGuide();
+else if(entry==='creature'){collection.open();el('create-creature').click();}
