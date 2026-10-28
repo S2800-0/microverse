@@ -6,12 +6,13 @@ let paused=reduced.matches,fox=null,disposed=false,scrollRaf=0,chapter=-1;
 function motionState(){document.body.dataset.motion=paused?'paused':'playing';el('motion-toggle').textContent=paused?'Play motion':'Pause motion';el('motion-toggle').setAttribute('aria-pressed',String(paused));fox?.setPaused(paused);updateJourney(false);}
 el('motion-toggle').onclick=()=>{paused=!paused;motionState();};
 reduced.addEventListener('change',()=>{paused=reduced.matches;motionState();});motionState();
-mountFoxScene(el('fox-canvas'),{paused,onReady:({articulated})=>{el('fox-still').hidden=true;if(!articulated)el('art-status').textContent='The fox illustration is ready; articulated movement is unavailable in this browser.';}}).then(value=>{if(disposed)value.destroy();else{fox=value;fox.setPaused(paused);}}).catch(()=>{el('art-status').textContent='The still fox is shown while motion is unavailable.';el('fox-walk').disabled=true;});
+mountFoxScene(el('fox-canvas'),{paused,onReady:({mode})=>{el('fox-still').hidden=true;if(mode==='still')el('art-status').append(' The still fox is shown while the walk sheet is unavailable.');}}).then(value=>{if(disposed)value.destroy();else{fox=value;fox.setPaused(paused);}}).catch(()=>{el('art-status').append(' The still fox is shown while motion is unavailable.');el('fox-walk').disabled=true;});
+Promise.all(['/intro/clean-plate.png','/intro/foreground-left.png','/intro/foreground-right.png'].map(async src=>{const image=new Image();image.src=src;await image.decode();if(image.naturalWidth!==1672||image.naturalHeight!==941)throw new Error('Layer registration mismatch.');})).then(()=>{document.body.dataset.forestLayers='ready';}).catch(()=>{el('art-status').append(' The original forest is shown while scenery layers are unavailable.');});
 el('fox-walk').onclick=()=>{if(!fox)return;if(paused&&!reduced.matches){paused=false;motionState();}fox.replay();};
 function updateJourney(moveFox=true){
   const region=el('journey'),box=region.getBoundingClientRect(),frame=journeyFrame(-box.top/Math.max(1,region.offsetHeight-innerHeight));
   const scene=el('fox-scene');region.style.setProperty('--journey',String(frame.progress));
-  if(!paused){region.style.setProperty('--camera',String(frame.camera));region.style.setProperty('--fox-left',`${frame.foxLeft}%`);}
+  if(!paused){region.style.setProperty('--camera',String(frame.camera));region.style.setProperty('--foreground-camera',String(frame.foregroundCamera));region.style.setProperty('--foreground-shift',`${frame.foregroundShift}%`);region.style.setProperty('--fox-left',`${frame.foxLeft}%`);}
   document.body.dataset.beyondIntro=String(box.bottom<=100);
   if(chapter!==frame.chapter){chapter=frame.chapter;for(const [i,id]of ['opening-copy','question-copy','invitation-copy'].entries())el(id).hidden=i!==chapter;el('journey-chapter').textContent=['01 / A LITTLE WORLD','02 / ONE SMALL CHANGE','03 / YOUR OWN ADVENTURE'][chapter];scene.dataset.weather=frame.weather;}
   if(moveFox&&box.top<0&&box.bottom>0&&!paused){const canvas=el('fox-canvas');fox?.setJourney((frame.foxLeft-48)/100*region.clientWidth*canvas.width/Math.max(1,canvas.clientWidth));}

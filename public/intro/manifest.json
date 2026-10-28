@@ -18,6 +18,53 @@
       "height": 1024,
       "role": "Transparent right-facing fox design",
       "origin": "Owner-supplied artwork, received October 28, 2026; generation tool and creation date not independently verified; unchanged binary import"
+    },
+    {
+      "file": "clean-plate.png",
+      "sourceFile": "Sunlit Meadow Path to Distant Lake.png",
+      "sha256": "07152716df1e77f3c794a34a25a876fe411c67862763bd4344b5bf25fe399fa4",
+      "width": 1672,
+      "height": 941,
+      "role": "Reconstructed woodland background",
+      "origin": "Owner-supplied artwork received October 28, 2026; unchanged binary import; generation tool and creation date unverified"
+    },
+    {
+      "file": "foreground-left.png",
+      "sourceFile": "Watercolor Forest Corner Cutout.png",
+      "sha256": "3870f720af15b6df1bde8cb25b2a2f338addf6e2f3f0866e4440fc30e64b7024",
+      "width": 1672,
+      "height": 941,
+      "role": "Registered left foreground",
+      "origin": "Owner-supplied artwork received October 28, 2026; unchanged binary import; generation tool and creation date unverified"
+    },
+    {
+      "file": "foreground-right.png",
+      "sourceFile": "Watercolor Forest Corner Overlay.png",
+      "sha256": "a790273806e064e00ae41e60de6488eef7f796310700d1a0a8165d4f0c201c36",
+      "width": 1672,
+      "height": 941,
+      "role": "Registered right foreground",
+      "origin": "Owner-supplied artwork received October 28, 2026; unchanged binary import; generation tool and creation date unverified"
+    },
+    {
+      "file": "fox-walk.png",
+      "sourceFile": "Watercolor Red Fox Walking Cycle Sheet.png",
+      "sourceSha256": "35cab7a7a1a129cb537ec92b4e9c7bf257b8e0ab4da8a9528841c5e87201228a",
+      "sha256": "8cbc252709b983c34adc08bf680ae0f98b218cfe466ddc6a8545c6b55dea64eb",
+      "width": 2048,
+      "height": 1024,
+      "role": "Locally registered eight-frame walking atlas",
+      "origin": "Owner-supplied artwork, locally cut and aligned with scripts/prepare-walk-sheet.py; original preserved; no new inference"
+    },
+    {
+      "file": "fox-poster.png",
+      "sourceFile": "Watercolor Red Fox Walking Cycle Sheet.png",
+      "sourceSha256": "35cab7a7a1a129cb537ec92b4e9c7bf257b8e0ab4da8a9528841c5e87201228a",
+      "sha256": "b758842cdb75cfdc31f51d25d402dae79dca9093e87b4cb428a373ab58d3ef6d",
+      "width": 900,
+      "height": 620,
+      "role": "Static poster from registered frame two",
+      "origin": "Owner-supplied artwork, locally cut and aligned with scripts/prepare-walk-sheet.py; original preserved; no new inference"
     }
   ]
 }

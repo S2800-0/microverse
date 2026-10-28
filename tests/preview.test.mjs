@@ -17,6 +17,7 @@ test('preview serves browser modules and hides repository internals',async()=>{
     assert.match((await fetch(base+'/journey.css')).headers.get('content-type'),/text\/css/);
     assert.equal((await fetch(base+'/intro/forest.png',{method:'HEAD'})).status,200);
     assert.equal((await fetch(base+'/intro/fox.png',{method:'HEAD'})).status,200);
+    for(const file of ['clean-plate','foreground-left','foreground-right','fox-walk','fox-poster'])assert.equal((await fetch(`${base}/intro/${file}.png`,{method:'HEAD'})).status,200);
     assert.equal((await fetch(base+'/intro/manifest.json')).status,404);
     assert.equal((await fetch(base+'/src/motion/fox-scene.js')).status,200);
     assert.equal((await fetch(base,{method:'POST'})).status,404);
