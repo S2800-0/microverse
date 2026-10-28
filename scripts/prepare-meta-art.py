@@ -53,6 +53,11 @@ for filename in ['fox-walk-atlas.png','fox-poster.png']:
     p=output/filename
     if p.exists():
         im=Image.open(p);derived.append({'file':filename,'sha256':hash_file(p),'width':im.width,'height':im.height,'source':'fox-walk-wide.png','processing':'Connected-alpha frame extraction, uniform scaling and shared foot/nose anchors with prepare-walk-sheet.py.'})
+for name in ['dog','fawn']:
+    p=output/f'{name}.png'
+    if p.exists():
+        im=Image.open(p);im.thumbnail((480,320),Image.Resampling.LANCZOS);dest=output/f'{name}-card.png';im.save(dest,optimize=True)
+        derived.append({'file':dest.name,'sha256':hash_file(dest),'width':im.width,'height':im.height,'source':p.name,'processing':'Uniform local downsize for static landing/entry cards; original candidate retained.'})
 attempts=[]
 for p in sorted(batch.glob('*.json')):
     if p.name.endswith('-masks.json'):continue

@@ -16,6 +16,22 @@
       "height": 620,
       "source": "fox-walk-wide.png",
       "processing": "Connected-alpha frame extraction, uniform scaling and shared foot/nose anchors with prepare-walk-sheet.py."
+    },
+    {
+      "file": "dog-card.png",
+      "sha256": "2cedc82f79b0f5f8ffdd2eb0e71cfdc13977a7acbd9826ddbf71f10156b0c9a4",
+      "width": 480,
+      "height": 320,
+      "source": "dog.png",
+      "processing": "Uniform local downsize for static landing/entry cards; original candidate retained."
+    },
+    {
+      "file": "fawn-card.png",
+      "sha256": "5f7b57a0b055fa97aee354aec10f0026a0d505db2fab376806649fe13a404ae5",
+      "width": 480,
+      "height": 320,
+      "source": "fawn.png",
+      "processing": "Uniform local downsize for static landing/entry cards; original candidate retained."
     }
   ],
   "attempts": [
