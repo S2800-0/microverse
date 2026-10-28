@@ -8,6 +8,8 @@ This public repository is being assembled one feature at a time. The living fore
 
 ![Microverse software architecture](docs/architecture.svg)
 
+The diagram is generated from [docs/architecture.drawio](docs/architecture.drawio), which opens and edits in [diagrams.net](https://app.diagrams.net).
+
 ## Development
 
 Use Node.js 24 or newer. The browser/simulation has no package runtime dependencies; the optional local server uses the pinned official SAM parser and Kokoro runtime for neural narration.

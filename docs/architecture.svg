@@ -1,9 +1,207 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="680" height="650" viewBox="0 0 680 650" role="img"><title>Microverse software architecture</title><desc>Three layers: a browser app that runs the simulation, rigs and guide on the device; a loopback-only local server that holds the API key and spend caps; and the Meta APIs it can call.</desc><style>
-text{font-family:-apple-system,system-ui,"Segoe UI",sans-serif;fill:#2b2a26}.th{font-size:14px;font-weight:500}.ts{font-size:12px;fill:#5b5646}
-.frame{fill:#faf6ed;stroke:#9e957e;stroke-width:.5;stroke-dasharray:4 4}.arr{stroke:#5b5646;stroke-width:1.5;fill:none}
-.green rect{fill:#EAF3DE;stroke:#3B6D11;stroke-width:.5}.green .th{fill:#27500A}.green .ts{fill:#3B6D11}
-.purple rect{fill:#EEEDFE;stroke:#534AB7;stroke-width:.5}.purple .th{fill:#3C3489}.purple .ts{fill:#534AB7}
-.gray rect{fill:#F1EFE8;stroke:#5F5E5A;stroke-width:.5}.gray .th{fill:#444441}.gray .ts{fill:#5F5E5A}
-@media(prefers-color-scheme:dark){text{fill:#e8e4d8}.ts{fill:#b4b2a9}.frame{fill:#2b2a26;stroke:#888780}.arr{stroke:#b4b2a9}
-.green rect{fill:#27500A;stroke:#97C459}.green .th{fill:#EAF3DE}.green .ts{fill:#C0DD97}.purple rect{fill:#3C3489;stroke:#AFA9EC}.purple .th{fill:#EEEDFE}.purple .ts{fill:#CECBF6}.gray rect{fill:#444441;stroke:#B4B2A9}.gray .th{fill:#F1EFE8}.gray .ts{fill:#D3D1C7}}
-</style><defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs><rect width="680" height="650" fill="none"/><rect class="frame" x="40" y="30" width="600" height="262" rx="20"/><text class="th" x="60" y="54">Browser app: static pages, plain JavaScript</text><g class="green"><rect x="60" y="86" width="176" height="60" rx="8"/><text class="th" x="148" y="106" text-anchor="middle" dominant-baseline="central">Forest scene</text><text class="ts" x="148" y="127" text-anchor="middle" dominant-baseline="central">Map, animals, camera</text></g><g class="green"><rect x="252" y="86" width="176" height="60" rx="8"/><text class="th" x="340" y="106" text-anchor="middle" dominant-baseline="central">Investigation</text><text class="ts" x="340" y="127" text-anchor="middle" dominant-baseline="central">Guide, results, notes</text></g><g class="purple"><rect x="444" y="86" width="176" height="60" rx="8"/><text class="th" x="532" y="106" text-anchor="middle" dominant-baseline="central">Creature import</text><text class="ts" x="532" y="127" text-anchor="middle" dominant-baseline="central">Photo, cutout, review</text></g><g class="green"><rect x="60" y="160" width="176" height="60" rx="8"/><text class="th" x="148" y="180" text-anchor="middle" dominant-baseline="central">Model engine</text><text class="ts" x="148" y="201" text-anchor="middle" dominant-baseline="central">Seeded and replayable</text></g><g class="green"><rect x="252" y="160" width="176" height="60" rx="8"/><text class="th" x="340" y="180" text-anchor="middle" dominant-baseline="central">Rig and motion</text><text class="ts" x="340" y="201" text-anchor="middle" dominant-baseline="central">Legs cut from the art</text></g><g class="purple"><rect x="444" y="160" width="176" height="60" rx="8"/><text class="th" x="532" y="180" text-anchor="middle" dominant-baseline="central">Ask the guide</text><text class="ts" x="532" y="201" text-anchor="middle" dominant-baseline="central">Local, Spark optional</text></g><g class="gray"><rect x="60" y="236" width="560" height="40" rx="8"/><text class="ts" x="340" y="256" text-anchor="middle" dominant-baseline="central">Device only: saved creatures, replays, discovery cards, local voice</text></g><line x1="340" y1="294" x2="340" y2="326" class="arr" marker-end="url(#arrow)"/><rect class="frame" x="40" y="328" width="600" height="120" rx="20"/><text class="th" x="60" y="352">Local server: loopback only, holds the API key</text><g class="purple"><rect x="60" y="372" width="128" height="56" rx="8"/><text class="th" x="124" y="392" text-anchor="middle" dominant-baseline="central">Spark service</text><text class="ts" x="124" y="413" text-anchor="middle" dominant-baseline="central">Picks evidence</text></g><g class="purple"><rect x="204" y="372" width="128" height="56" rx="8"/><text class="th" x="268" y="392" text-anchor="middle" dominant-baseline="central">Creature art</text><text class="ts" x="268" y="413" text-anchor="middle" dominant-baseline="central">Paint, cut out</text></g><g class="purple"><rect x="348" y="372" width="128" height="56" rx="8"/><text class="th" x="412" y="392" text-anchor="middle" dominant-baseline="central">Voice, place</text><text class="ts" x="412" y="413" text-anchor="middle" dominant-baseline="central">Dictation, SAM</text></g><g class="gray"><rect x="492" y="372" width="128" height="56" rx="8"/><text class="th" x="556" y="392" text-anchor="middle" dominant-baseline="central">Spend caps</text><text class="ts" x="556" y="413" text-anchor="middle" dominant-baseline="central">Local ledgers</text></g><line x1="340" y1="450" x2="340" y2="482" class="arr" marker-end="url(#arrow)"/><rect class="frame" x="40" y="484" width="600" height="118" rx="20"/><text class="th" x="60" y="508">Meta APIs: every call is explicit and capped</text><g class="purple"><rect x="60" y="528" width="128" height="56" rx="8"/><text class="th" x="124" y="548" text-anchor="middle" dominant-baseline="central">Muse Spark</text><text class="ts" x="124" y="569" text-anchor="middle" dominant-baseline="central">Tool calls</text></g><g class="purple"><rect x="204" y="528" width="128" height="56" rx="8"/><text class="th" x="268" y="548" text-anchor="middle" dominant-baseline="central">Muse Image</text><text class="ts" x="268" y="569" text-anchor="middle" dominant-baseline="central">Repaints pets</text></g><g class="purple"><rect x="348" y="528" width="128" height="56" rx="8"/><text class="th" x="412" y="548" text-anchor="middle" dominant-baseline="central">SAM 3.1</text><text class="ts" x="412" y="569" text-anchor="middle" dominant-baseline="central">Cutouts</text></g><g class="purple"><rect x="492" y="528" width="128" height="56" rx="8"/><text class="th" x="556" y="548" text-anchor="middle" dominant-baseline="central">Speech-to-text</text><text class="ts" x="556" y="569" text-anchor="middle" dominant-baseline="central">Dictation</text></g><g class="green"><rect x="60" y="620" width="12" height="12" rx="2"/></g><text class="ts" x="80" y="626" dominant-baseline="central">Runs on this device</text><g class="purple"><rect x="250" y="620" width="12" height="12" rx="2"/></g><text class="ts" x="270" y="626" dominant-baseline="central">Can use Meta, optional</text><g class="gray"><rect x="460" y="620" width="12" height="12" rx="2"/></g><text class="ts" x="480" y="626" dominant-baseline="central">Storage and limits</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1790" height="1290" viewBox="0 0 1790 1290" role="img">
+<title>Microverse software architecture</title>
+<desc>Learner, browser app modules, local server, external Meta and Baseten APIs, and build and CI. Generated from docs/architecture.drawio.</desc>
+<style>text{font-family:Helvetica,Arial,sans-serif;font-size:12px;fill:#333333}.b{font-weight:bold}.lbl{font-size:11px}</style>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#000000"/></marker></defs>
+<rect width="1790" height="1290" fill="#ffffff"/>
+<g fill="#f5f5f5" stroke="#666666" stroke-width="1"><circle cx="750.0" cy="30" r="9"/><path d="M750.0 39V66M732.0 48H768.0M750.0 66L736.0 90M750.0 66L764.0 90" fill="none"/></g>
+<text x="790.0" y="58" dominant-baseline="central">Learner or teacher</text>
+<rect x="30" y="130" width="1440" height="450" fill="#ffffff" stroke="#666666"/>
+<rect x="30" y="130" width="1440" height="28" fill="#f5f5f5" stroke="#666666"/>
+<text class="b" x="750.0" y="144.0" text-anchor="middle" dominant-baseline="central">Browser app: static HTML, CSS and ES modules (no framework, no build step)</text>
+<rect x="50" y="168" width="330" height="372" fill="#ffffff" stroke="#666666"/>
+<rect x="50" y="168" width="330" height="26" fill="#f5f5f5" stroke="#666666"/>
+<text class="b" x="215.0" y="181.0" text-anchor="middle" dominant-baseline="central">Pages and forest scene</text>
+<rect x="400" y="168" width="330" height="372" fill="#ffffff" stroke="#666666"/>
+<rect x="400" y="168" width="330" height="26" fill="#f5f5f5" stroke="#666666"/>
+<text class="b" x="565.0" y="181.0" text-anchor="middle" dominant-baseline="central">Model and motion</text>
+<rect x="750" y="168" width="330" height="372" fill="#ffffff" stroke="#666666"/>
+<rect x="750" y="168" width="330" height="26" fill="#f5f5f5" stroke="#666666"/>
+<text class="b" x="915.0" y="181.0" text-anchor="middle" dominant-baseline="central">Investigation and guide</text>
+<rect x="1100" y="168" width="330" height="372" fill="#ffffff" stroke="#666666"/>
+<rect x="1100" y="168" width="330" height="26" fill="#f5f5f5" stroke="#666666"/>
+<text class="b" x="1265.0" y="181.0" text-anchor="middle" dominant-baseline="central">Creatures, voice and place</text>
+<rect x="60" y="202" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="215.0" y="217.0" text-anchor="middle" dominant-baseline="central">index.html, forest.css: pages and styles</text>
+<rect x="60" y="244" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="215.0" y="259.0" text-anchor="middle" dominant-baseline="central">view.js: forest loop, camera, actors</text>
+<rect x="60" y="286" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="215.0" y="301.0" text-anchor="middle" dominant-baseline="central">controller.ts: scene state and snapshots</text>
+<rect x="60" y="328" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="215.0" y="343.0" text-anchor="middle" dominant-baseline="central">terrain.js, art.js: map shapes, deer variants</text>
+<rect x="60" y="370" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="215.0" y="385.0" text-anchor="middle" dominant-baseline="central">snapshot.ts: scene file format</text>
+<rect x="60" y="412" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="215.0" y="427.0" text-anchor="middle" dominant-baseline="central">narration.js, narration-view.js: captions</text>
+<rect x="60" y="454" width="310" height="30" rx="5" fill="#e1d5e7" stroke="#9673a6"/>
+<text x="215.0" y="469.0" text-anchor="middle" dominant-baseline="central">natural-speaker.js: local voice playback</text>
+<rect x="60" y="496" width="310" height="30" rx="5" fill="#fff2cc" stroke="#d6b656"/>
+<text x="215.0" y="511.0" text-anchor="middle" dominant-baseline="central">public/: static maps and animals</text>
+<rect x="410" y="202" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="565.0" y="217.0" text-anchor="middle" dominant-baseline="central">motion-library.js: gait presets</text>
+<rect x="410" y="244" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="565.0" y="259.0" text-anchor="middle" dominant-baseline="central">puppet-motion.js: draws legs and bodies</text>
+<rect x="410" y="286" width="310" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+<text x="565.0" y="301.0" text-anchor="middle" dominant-baseline="central">engine.ts: seeded ecosystem rules</text>
+<rect x="410" y="328" width="310" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+<text x="565.0" y="343.0" text-anchor="middle" dominant-baseline="central">scene-ecology.ts: companions and visitors</text>
+<rect x="410" y="370" width="310" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+<text x="565.0" y="385.0" text-anchor="middle" dominant-baseline="central">sim/snapshot.ts: state, RNG, replay</text>
+<rect x="410" y="412" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="565.0" y="427.0" text-anchor="middle" dominant-baseline="central">rig.js: cuts legs from the image</text>
+<rect x="410" y="454" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="565.0" y="469.0" text-anchor="middle" dominant-baseline="central">rig-fitting.js, rig-analysis.js: auto fit</text>
+<rect x="410" y="496" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="565.0" y="511.0" text-anchor="middle" dominant-baseline="central">rig-review.js: human review of the rig</text>
+<rect x="760" y="202" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="915.0" y="217.0" text-anchor="middle" dominant-baseline="central">questions-view.js: what-if questions</text>
+<rect x="760" y="244" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="915.0" y="259.0" text-anchor="middle" dominant-baseline="central">experiment-view.js: stage, HUD, notebook</text>
+<rect x="760" y="286" width="310" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+<text x="915.0" y="301.0" text-anchor="middle" dominant-baseline="central">experiment.ts: paired models, replay</text>
+<rect x="760" y="328" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="915.0" y="343.0" text-anchor="middle" dominant-baseline="central">evidence.js: evidence packet, cards</text>
+<rect x="760" y="370" width="310" height="30" rx="5" fill="#e1d5e7" stroke="#9673a6"/>
+<text x="915.0" y="385.0" text-anchor="middle" dominant-baseline="central">guide.js: local guide, narrows replies</text>
+<rect x="760" y="412" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="915.0" y="427.0" text-anchor="middle" dominant-baseline="central">discovery.js: summaries, tap-to-ask</text>
+<rect x="760" y="454" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="915.0" y="469.0" text-anchor="middle" dominant-baseline="central">changes.js: the supported changes</text>
+<rect x="760" y="496" width="310" height="30" rx="5" fill="#e1d5e7" stroke="#9673a6"/>
+<text x="915.0" y="511.0" text-anchor="middle" dominant-baseline="central">investigation/client.js: Spark requests</text>
+<rect x="1110" y="202" width="310" height="30" rx="5" fill="#e1d5e7" stroke="#9673a6"/>
+<text x="1265.0" y="217.0" text-anchor="middle" dominant-baseline="central">creature-import.js: photo, review, rig</text>
+<rect x="1110" y="244" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="1265.0" y="259.0" text-anchor="middle" dominant-baseline="central">collection-view.js: My creatures</text>
+<rect x="1110" y="286" width="310" height="30" rx="5" fill="#fff2cc" stroke="#d6b656"/>
+<text x="1265.0" y="301.0" text-anchor="middle" dominant-baseline="central">creature-library.js: saved in localStorage</text>
+<rect x="1110" y="328" width="310" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="1265.0" y="343.0" text-anchor="middle" dominant-baseline="central">creature-facts.js: sourced species facts</text>
+<rect x="1110" y="370" width="310" height="30" rx="5" fill="#e1d5e7" stroke="#9673a6"/>
+<text x="1265.0" y="385.0" text-anchor="middle" dominant-baseline="central">creature/client.js: paint and cutout</text>
+<rect x="1110" y="412" width="310" height="30" rx="5" fill="#e1d5e7" stroke="#9673a6"/>
+<text x="1265.0" y="427.0" text-anchor="middle" dominant-baseline="central">speech-input.js, recorder.js: dictation</text>
+<rect x="1110" y="454" width="310" height="30" rx="5" fill="#e1d5e7" stroke="#9673a6"/>
+<text x="1265.0" y="469.0" text-anchor="middle" dominant-baseline="central">place/view.js: place photo review</text>
+<rect x="1110" y="496" width="310" height="30" rx="5" fill="#fff2cc" stroke="#d6b656"/>
+<text x="1265.0" y="511.0" text-anchor="middle" dominant-baseline="central">Downloads: replay JSON, discovery card</text>
+<rect x="30" y="640" width="1440" height="352" fill="#ffffff" stroke="#666666"/>
+<rect x="30" y="640" width="1440" height="28" fill="#f5f5f5" stroke="#666666"/>
+<text class="b" x="750.0" y="654.0" text-anchor="middle" dominant-baseline="central">Local server: Node, 127.0.0.1 only, keeps the API key</text>
+<rect x="50" y="678" width="330" height="246" fill="#ffffff" stroke="#666666"/>
+<rect x="50" y="678" width="330" height="26" fill="#f5f5f5" stroke="#666666"/>
+<text class="b" x="215.0" y="691.0" text-anchor="middle" dominant-baseline="central">Local narration</text>
+<rect x="400" y="678" width="330" height="246" fill="#ffffff" stroke="#666666"/>
+<rect x="400" y="678" width="330" height="26" fill="#f5f5f5" stroke="#666666"/>
+<text class="b" x="565.0" y="691.0" text-anchor="middle" dominant-baseline="central">Page server and wiring</text>
+<rect x="750" y="678" width="330" height="246" fill="#ffffff" stroke="#666666"/>
+<rect x="750" y="678" width="330" height="26" fill="#f5f5f5" stroke="#666666"/>
+<text class="b" x="915.0" y="691.0" text-anchor="middle" dominant-baseline="central">Reasoning</text>
+<rect x="1100" y="678" width="330" height="246" fill="#ffffff" stroke="#666666"/>
+<rect x="1100" y="678" width="330" height="26" fill="#f5f5f5" stroke="#666666"/>
+<text class="b" x="1265.0" y="691.0" text-anchor="middle" dominant-baseline="central">Creatures, voice and place</text>
+<rect x="60" y="712" width="310" height="30" rx="5" fill="#ffe6cc" stroke="#d79b00"/>
+<text x="215.0" y="727.0" text-anchor="middle" dominant-baseline="central">natural-voice.mjs: Kokoro Heart voice</text>
+<rect x="60" y="754" width="310" height="30" rx="5" fill="#fff2cc" stroke="#d6b656"/>
+<text x="215.0" y="769.0" text-anchor="middle" dominant-baseline="central">runtime/kokoro-model: local model files</text>
+<rect x="410" y="712" width="310" height="30" rx="5" fill="#ffe6cc" stroke="#d79b00"/>
+<text x="565.0" y="727.0" text-anchor="middle" dominant-baseline="central">preview.mjs: static files, Host/Origin checks</text>
+<rect x="410" y="754" width="310" height="30" rx="5" fill="#ffe6cc" stroke="#d79b00"/>
+<text x="565.0" y="769.0" text-anchor="middle" dominant-baseline="central">creature-server.mjs: wires services from .env</text>
+<rect x="410" y="796" width="310" height="30" rx="5" fill="#fff2cc" stroke="#d6b656"/>
+<text x="565.0" y="811.0" text-anchor="middle" dominant-baseline="central">.env: key and switches (git-ignored)</text>
+<rect x="760" y="712" width="310" height="30" rx="5" fill="#ffe6cc" stroke="#d79b00"/>
+<text x="915.0" y="727.0" text-anchor="middle" dominant-baseline="central">spark-service.mjs: propose, explain, guide</text>
+<rect x="760" y="754" width="310" height="30" rx="5" fill="#ffe6cc" stroke="#d79b00"/>
+<text x="915.0" y="769.0" text-anchor="middle" dominant-baseline="central">spark-provider.mjs: one strict tool call</text>
+<rect x="1110" y="712" width="310" height="30" rx="5" fill="#ffe6cc" stroke="#d79b00"/>
+<text x="1265.0" y="727.0" text-anchor="middle" dominant-baseline="central">creature-api.mjs: request checks, limits</text>
+<rect x="1110" y="754" width="310" height="30" rx="5" fill="#ffe6cc" stroke="#d79b00"/>
+<text x="1265.0" y="769.0" text-anchor="middle" dominant-baseline="central">creature-pipeline.mjs: paint, then cut out</text>
+<rect x="1110" y="796" width="310" height="30" rx="5" fill="#ffe6cc" stroke="#d79b00"/>
+<text x="1265.0" y="811.0" text-anchor="middle" dominant-baseline="central">meta-provider.mjs: Muse Image and SAM calls</text>
+<rect x="1110" y="838" width="310" height="30" rx="5" fill="#ffe6cc" stroke="#d79b00"/>
+<text x="1265.0" y="853.0" text-anchor="middle" dominant-baseline="central">speech-service.mjs: dictation</text>
+<rect x="1110" y="880" width="310" height="30" rx="5" fill="#ffe6cc" stroke="#d79b00"/>
+<text x="1265.0" y="895.0" text-anchor="middle" dominant-baseline="central">place-service.mjs: SAM place shares</text>
+<rect x="50" y="938" width="700" height="44" rx="5" fill="#fff2cc" stroke="#d6b656"/>
+<text x="400.0" y="960.0" text-anchor="middle" dominant-baseline="central">creature-budget.mjs and runtime/*.json ledgers: every paid call reserves first, fails closed, never retries</text>
+<rect x="30" y="1060" width="1440" height="140" fill="#ffffff" stroke="#666666"/>
+<rect x="30" y="1060" width="1440" height="28" fill="#f5f5f5" stroke="#666666"/>
+<text class="b" x="750.0" y="1074.0" text-anchor="middle" dominant-baseline="central">External services (optional, explicit, capped)</text>
+<rect x="750" y="1104" width="155" height="76" rx="5" fill="#f8cecc" stroke="#b85450"/>
+<text x="827.5" y="1134.5" text-anchor="middle" dominant-baseline="central">Meta Muse Spark 1.3</text><text x="827.5" y="1149.5" text-anchor="middle" dominant-baseline="central">chat completions, tool calls</text>
+<rect x="925" y="1104" width="155" height="76" rx="5" fill="#f8cecc" stroke="#b85450"/>
+<text x="1002.5" y="1134.5" text-anchor="middle" dominant-baseline="central">Baseten Muse Spark Open</text><text x="1002.5" y="1149.5" text-anchor="middle" dominant-baseline="central">optional, not tested live</text>
+<rect x="1100" y="1104" width="155" height="76" rx="5" fill="#f8cecc" stroke="#b85450"/>
+<text x="1177.5" y="1134.5" text-anchor="middle" dominant-baseline="central">Meta Muse Image 1.0</text><text x="1177.5" y="1149.5" text-anchor="middle" dominant-baseline="central">and SAM 3.1</text>
+<rect x="1275" y="1104" width="175" height="76" rx="5" fill="#f8cecc" stroke="#b85450"/>
+<text x="1362.5" y="1134.5" text-anchor="middle" dominant-baseline="central">Meta speech-to-text</text><text x="1362.5" y="1149.5" text-anchor="middle" dominant-baseline="central">question dictation</text>
+<rect x="1520" y="130" width="260" height="450" fill="#ffffff" stroke="#666666"/>
+<rect x="1520" y="130" width="260" height="28" fill="#f5f5f5" stroke="#666666"/>
+<text class="b" x="1650.0" y="144.0" text-anchor="middle" dominant-baseline="central">Build and CI</text>
+<rect x="1540" y="174" width="220" height="70" rx="5" fill="#f5f5f5" stroke="#666666"/>
+<text x="1650.0" y="201.5" text-anchor="middle" dominant-baseline="central">GitHub: S2800-0/microverse</text><text x="1650.0" y="216.5" text-anchor="middle" dominant-baseline="central">feature branches, pull requests</text>
+<rect x="1540" y="294" width="220" height="80" rx="5" fill="#f5f5f5" stroke="#666666"/>
+<text x="1650.0" y="319.0" text-anchor="middle" dominant-baseline="central">GitHub Actions</text><text x="1650.0" y="334.0" text-anchor="middle" dominant-baseline="central">npm ci, test (135 checks),</text><text x="1650.0" y="349.0" text-anchor="middle" dominant-baseline="central">check, build</text>
+<rect x="1540" y="424" width="220" height="80" rx="5" fill="#fff2cc" stroke="#d6b656"/>
+<text x="1650.0" y="456.5" text-anchor="middle" dominant-baseline="central">dist/: static build</text><text x="1650.0" y="471.5" text-anchor="middle" dominant-baseline="central">no server, no key, no uploads</text>
+<rect x="40" y="1230" width="220" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+<text x="150.0" y="1245.0" text-anchor="middle" dominant-baseline="central">Browser module</text>
+<rect x="285" y="1230" width="220" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+<text x="395.0" y="1245.0" text-anchor="middle" dominant-baseline="central">Model and replay</text>
+<rect x="530" y="1230" width="220" height="30" rx="5" fill="#e1d5e7" stroke="#9673a6"/>
+<text x="640.0" y="1245.0" text-anchor="middle" dominant-baseline="central">Calls the local server</text>
+<rect x="775" y="1230" width="220" height="30" rx="5" fill="#ffe6cc" stroke="#d79b00"/>
+<text x="885.0" y="1245.0" text-anchor="middle" dominant-baseline="central">Server module</text>
+<rect x="1020" y="1230" width="220" height="30" rx="5" fill="#f8cecc" stroke="#b85450"/>
+<text x="1130.0" y="1245.0" text-anchor="middle" dominant-baseline="central">Meta or Baseten API</text>
+<rect x="1265" y="1230" width="220" height="30" rx="5" fill="#fff2cc" stroke="#d6b656"/>
+<text x="1375.0" y="1245.0" text-anchor="middle" dominant-baseline="central">Data kept locally</text>
+<rect x="1510" y="1230" width="220" height="30" rx="5" fill="#f5f5f5" stroke="#666666"/>
+<text x="1620.0" y="1245.0" text-anchor="middle" dominant-baseline="central">Layer or build</text>
+<path d="M750.0 90.0L750.0 130.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M215.0 540.0L215.0 678.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<rect x="171.8" y="601.0" width="86.4" height="16" fill="#ffffff"/>
+<text class="lbl" x="215.0" y="609.0" text-anchor="middle" dominant-baseline="central">audio requests</text>
+<path d="M565.0 540.0L565.0 678.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<rect x="510.6" y="601.0" width="108.8" height="16" fill="#ffffff"/>
+<text class="lbl" x="565.0" y="609.0" text-anchor="middle" dominant-baseline="central">page and art loads</text>
+<path d="M915.0 540.0L915.0 678.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<rect x="846.6" y="601.0" width="136.8" height="16" fill="#ffffff"/>
+<text class="lbl" x="915.0" y="609.0" text-anchor="middle" dominant-baseline="central">propose, explain, guide</text>
+<path d="M1265.0 540.0L1265.0 678.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<rect x="1196.6" y="601.0" width="136.8" height="16" fill="#ffffff"/>
+<text class="lbl" x="1265.0" y="609.0" text-anchor="middle" dominant-baseline="central">creature, speech, place</text>
+<path d="M915.0 924.0L915.0 1014.0L827.5 1014.0L827.5 1104.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<rect x="822.5" y="1006.0" width="97.6" height="16" fill="#ffffff"/>
+<text class="lbl" x="871.2" y="1014.0" text-anchor="middle" dominant-baseline="central">chat completions</text>
+<path d="M915.0 924.0L915.0 1014.0L1002.5 1014.0L1002.5 1104.0" fill="none" stroke="#000000" stroke-width="1" stroke-dasharray="4 4" marker-end="url(#ah)"/>
+<rect x="932.4" y="1006.0" width="52.8" height="16" fill="#ffffff"/>
+<text class="lbl" x="958.8" y="1014.0" text-anchor="middle" dominant-baseline="central">optional</text>
+<path d="M1265.0 924.0L1265.0 1014.0L1177.5 1014.0L1177.5 1104.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<rect x="1158.5" y="1006.0" width="125.6" height="16" fill="#ffffff"/>
+<text class="lbl" x="1221.2" y="1014.0" text-anchor="middle" dominant-baseline="central">paint, cut out, place</text>
+<path d="M1265.0 924.0L1265.0 1014.0L1362.5 1014.0L1362.5 1104.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<rect x="1284.5" y="1006.0" width="58.4" height="16" fill="#ffffff"/>
+<text class="lbl" x="1313.8" y="1014.0" text-anchor="middle" dominant-baseline="central">dictation</text>
+<path d="M370.0 259.0L410.0 259.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M370.0 301.0L410.0 301.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M760.0 259.0L720.0 259.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M760.0 301.0L720.0 301.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M1110.0 259.0L1070.0 259.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M215.0 274.0L215.0 286.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M915.0 274.0L915.0 286.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M915.0 370.0L915.0 358.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M215.0 742.0L215.0 754.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M565.0 754.0L565.0 742.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M565.0 796.0L565.0 784.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M915.0 742.0L915.0 754.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M1265.0 742.0L1265.0 754.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M1265.0 784.0L1265.0 796.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M1650.0 244.0L1650.0 294.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M1650.0 374.0L1650.0 424.0" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#ah)"/>
+<path d="M1540.0 464.0L1505.0 464.0L1505.0 355.0L1470.0 355.0" fill="none" stroke="#000000" stroke-width="1" stroke-dasharray="4 4" marker-end="url(#ah)"/>
+<rect x="1484.2" y="401.5" width="41.6" height="16" fill="#ffffff"/>
+<text class="lbl" x="1505.0" y="409.5" text-anchor="middle" dominant-baseline="central">deploy</text>
+</svg>
