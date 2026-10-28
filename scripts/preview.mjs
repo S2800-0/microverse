@@ -17,6 +17,10 @@ export function createPreviewServer({ motion=false, testSprite=process.env.MICRO
     let file;
     if(path==='/')file=motion?'examples/motion/index.html':'app/index.html';
     else if(path==='/storyboard.html')file='app/storyboard.html';
+    else if(path==='/art-review.html')file='app/art-review.html';
+    else if(path==='/meta-art.css')file='app/meta-art.css';
+    else if(path==='/meta-art/manifest.json')file='public/meta-art/manifest.json';
+    else if(/^\/meta-art\/[a-z-]+\.png$/.test(path))file=`public${path}`;
     else if(path==='/storyboard.css')file='app/storyboard.css';
     else if(path==='/journey.css')file='app/journey.css';
     else if(/^\/intro\/(forest|fox|clean-plate|foreground-left|foreground-right|fox-walk|fox-poster)\.png$/.test(path))file=`public${path}`;
