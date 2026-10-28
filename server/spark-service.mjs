@@ -30,7 +30,7 @@ export function createSparkService({enabled=false,creditsConfirmed=false,provide
       try{
         await budget.reserve(hash);
         const result=await provider.request(input.operation,payload);
-        const value=input.operation==='propose'?validateProposal(result.value):input.operation==='guide'?validateGuide(result.value,payload.evidence):validateEvidenceSelection(result.value,payload.evidence);
+        const value=input.operation==='propose'?validateProposal(result.value,question):input.operation==='guide'?validateGuide(result.value,payload.evidence):validateEvidenceSelection(result.value,payload.evidence);
         const response={value,provider:result.provider||provider.label,usage:result.usage,cached:false};
         if(cache.size>=20)cache.delete(cache.keys().next().value);cache.set(hash,structuredClone(response));return response;
       }finally{active=false;}

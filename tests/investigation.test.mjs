@@ -88,6 +88,25 @@ test('custom proposals are validated, cached and never mutate the source forest'
   const a=await service.run(input),b=await service.run(input);assert.equal(b.cached,true);assert.equal(calls,1);assert.equal(reservations,1);
   assert.deepEqual(a.value.change,{kind:'rain',rain:.7,durationWeeks:26});assert.deepEqual(c.toSnapshot(),original);
 });
+test('a provider that changes explicit rainfall or weeks returns clarification without repair calls',async()=>{
+  const question='What if this forest gets 65% of normal rainfall for 18 weeks?';
+  for(const change of [
+    {kind:'rain',rain:.6,durationWeeks:19,species:null},
+    {kind:'rain',rain:.6,durationWeeks:18,species:null},
+    {kind:'rain',rain:.65,durationWeeks:19,species:null},
+    {kind:'remove',rain:null,durationWeeks:null,species:'wolf'},
+  ]){
+    let calls=0,reservations=0;
+    const service=createSparkService({enabled:true,creditsConfirmed:true,provider:{async request(){calls++;return {value:{status:'proposal',message:question,change}};}},budget:{async reserve(){reservations++;}}});
+    const result=await service.run({operation:'propose',question,consent:true});
+    assert.equal(result.value.status,'clarify');assert.equal(result.value.change,null);
+    assert.equal(calls,1);assert.equal(reservations,1);
+  }
+  const exact={status:'proposal',message:question,change:{kind:'rain',rain:.65,durationWeeks:18,species:null}};
+  assert.equal(validateProposal(exact,question).status,'proposal');
+  assert.equal(validateProposal(exact,'65 percent of usual rainfall for 18 wks').status,'proposal');
+  assert.equal(validateProposal(exact,'65% of normal rainfall for 18.5 weeks').status,'clarify');
+});
 test('Spark explanations receive recomputed compact facts without learner/private image data',async()=>{
   let sent;const service=createSparkService({enabled:true,creditsConfirmed:true,provider:{label:'test fixture',async request(op,payload){sent=JSON.stringify(payload);return {value:defaultSelection(payload.evidence)};}},budget:{async reserve(){}}});
   const file=experiment().toReplay('PRIVATE REFLECTION');file.activity={before:'PRIVATE BEFORE',after:'PRIVATE AFTER',teacherNotes:'PRIVATE TEACHER'};
@@ -103,6 +122,7 @@ test('provider selection is explicit: fixed URLs, provider-specific tool choice,
   for(const provider of ['meta','baseten']){
     let sent;const p=createSparkProvider({provider,apiKey:'test key',fetchImpl:async(url,options)=>{sent={url,options,body:JSON.parse(options.body)};return new Response(JSON.stringify({choices:[{finish_reason:'tool_calls',message:{tool_calls:[{type:'function',function:{name:'propose_experiment',arguments:JSON.stringify(proposal())}}]}}],usage:{prompt_tokens:1,completion_tokens:1}}));}});
     const result=await p.request('propose',{question:'Rain 70% for 26 weeks?'});assert.equal(result.value.status,'proposal');assert.equal(sent.body.max_tokens,2048);
+    assert.equal(sent.body.model,provider==='meta'?'muse-spark-1.3':'meta-models/muse-spark-open-1026');
     assert.equal(sent.options.redirect,'error');assert.equal(sent.body.parallel_tool_calls,false);assert.deepEqual(sent.body.tool_choice,provider==='meta'?'auto':{type:'function',function:{name:'propose_experiment'}});assert(!('response_format'in sent.body));assert.equal(sent.body.reasoning_effort,provider==='meta'?'low':undefined);
     assert(sent.url.startsWith(provider==='meta'?'https://api.meta.ai/':'https://inference.baseten.co/'));
   }
