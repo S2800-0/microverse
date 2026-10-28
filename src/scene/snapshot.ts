@@ -24,7 +24,7 @@ export function validateCreatureImage(src:unknown) {
   const view=new DataView(header.buffer);const w=view.getUint32(16),h=view.getUint32(20);
   if(w<1||h<1||w>640||h>640)invalid();
 }
-function validateRig(config:any) {
+export function validateRig(config:any) {
   if(!config||typeof config!=='object'||Array.isArray(config))invalid();
   const keys=['knee','kneeHind','kneeFore','hindMaxX','minX','minArea','band','splitX','groundOnly','gait'];
   if(Object.keys(config).some(k=>!keys.includes(k)))invalid();

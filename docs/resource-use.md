@@ -8,6 +8,7 @@ Microverse is an ecology learning prototype with optional AI features. Its educa
 | --- | --- |
 | Forest, procedural motion, paired experiments and replay | Ordinary browser code; no inference per animal, frame or model week. Devices still use electricity. |
 | Prepared questions, supported manual changes and local evidence guide | No model inference. These complete the core classroom activity without a provider key. |
+| Reviewed place photo | Optional explicit SAM request; three image-label checks. Up to 4 successful results cached in server memory; the recorded example and manual review require no fresh inference. |
 | Custom Spark proposal or evidence selection | Explicit request; local prepared routing runs first. Up to 20 successful responses are cached in server memory by operation and validated payload. |
 | Creature painting and segmentation | Explicit optional request; one image edit plus segmentation per new job. Up to 8 successful jobs are cached within a 16 MB server-memory bound. Procedural motion reuses the resulting image. Local import and saved sample creatures need no fresh inference. |
 | Microphone transcription | Explicit review-before-send. Up to 20 successful audio results are cached by audio hash in server memory. Typing remains available. |

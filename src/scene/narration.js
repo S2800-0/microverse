@@ -1,4 +1,4 @@
-import {changeLabel} from '../investigation/changes.js';
+import {discoverySummary,conditionPhrase} from './discovery.js';
 
 const percent=n=>Number((n*100).toFixed(1));
 const plural={rabbit:'rabbits',deer:'deer',fox:'foxes',wolf:'wolves',dog:'dogs',cat:'cats',penguin:'penguins'};
@@ -10,12 +10,12 @@ export function forestNarration(before,state){
   const current=narrationSnapshot(state),lines=[`Model week ${current.week}, ${current.season}.`];
   if(!before){
     const count=Object.values(current.counts).reduce((a,b)=>a+b,0);
-    lines.push(`${count} creatures. Grass cover ${percent(current.grass)} percent; shrub food cover ${percent(current.browse)} percent.`);
+    lines.push(`${count} creatures share this little forest. Rabbits eat grass; deer eat shrub food.`);
     lines.push('Advance a week to hear recorded changes. These are model observations.');return lines.join(' ');
   }
   lines.push(`Changes since model week ${before.week}:`);
   for(const [label,delta]of [['Grass cover',Number((percent(current.grass)-percent(before.grass)).toFixed(1))],['Shrub food cover',Number((percent(current.browse)-percent(before.browse)).toFixed(1))]]){
-    if(Math.abs(delta)>=.1)lines.push(`${label} ${delta>0?'rose':'fell'} by ${Number(Math.abs(delta).toFixed(1))} percentage points.`);
+    if(Math.abs(delta)>=.1)lines.push(`${label==='Grass cover'?'Grass food':'Shrub food'} ${delta>0?'increased':'decreased'} in this step.`);
   }
   const changes=Object.keys(current.counts).map(species=>({species,delta:current.counts[species]-(before.counts[species]||0)})).filter(v=>v.delta).sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta));
   for(const {species,delta}of changes.slice(0,2))lines.push(`${Math.abs(delta)} ${delta>0?'more':'fewer'} ${animalLabel(species,Math.abs(delta))} than before.`);
@@ -23,20 +23,14 @@ export function forestNarration(before,state){
   const records=[['birth','birth','births'],['kill','successful hunt','successful hunts'],['death','death','deaths'],['arrive','arrival','arrivals'],['disturb','companion disturbance','companion disturbances']].filter(([type])=>counts(type)).slice(0,3);
   if(records.length)lines.push(`The event log records ${records.map(([type,one,many])=>`${counts(type)} ${counts(type)===1?one:many}`).join(', ')}.`);
   if(lines.length===2)lines.push('No population or rounded food-cover change was recorded in this step.');
-  lines.push('Inspect the event log for details.');return lines.join(' ');
+  lines.push('Open the forest journal to follow an individual story.');return lines.join(' ');
 }
 export function comparisonNarration(packet){
-  const lines=[`Experiment week ${packet.elapsed}. ${changeLabel(packet.change)}.`];
-  if(!packet.elapsed)return `${lines[0]} Both worlds start from the same forest. Advance them together, then compare the records.`;
-  for(const id of ['grass','browse']){
-    const o=packet.observations.find(v=>v.id===id),difference=Math.abs(o.difference);
-    lines.push(`${id==='grass'?'Grass':'Shrub food'} cover is ${difference?`${difference} percentage points ${o.difference>0?'higher':'lower'}`:'the same at the recorded precision'} in the changed world.`);
-  }
+  if(!packet.elapsed)return 'Both worlds start from the same forest. Watch your chosen change unfold. We will bring forward a comparison when there is something to notice.';
+  const summary=discoverySummary(packet),lines=[`Week ${packet.elapsed}, in the forest ${conditionPhrase(packet.change)}.`,summary.headline,summary.detail];
   const changed=packet.observations.filter(o=>o.id.startsWith('population.')&&o.difference).sort((a,b)=>Math.abs(b.difference)-Math.abs(a.difference));
-  for(const o of changed.slice(0,2))lines.push(`The changed world has ${Math.abs(o.difference)} ${o.difference>0?'more':'fewer'} ${animalLabel(o.id.split('.')[1],Math.abs(o.difference))} than the baseline.`);
-  if(!changed.length)lines.push('Population counts currently match.');
-  lines.push('These differences are observations, not proof of a cause. Inspect the evidence and write your explanation.');
-  return lines.join(' ');
+  if(changed.length){const o=changed[0];lines.push(`There are ${Math.abs(o.difference)} ${o.difference>0?'more':'fewer'} ${animalLabel(o.id.split('.')[1],Math.abs(o.difference))} here than in the reference forest.`);}
+  lines.push('This is an observation, not proof of a cause. What would you look at next?');return lines.join(' ');
 }
 
 // Only explicitly local English voices qualify. No photos, names, questions or

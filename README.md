@@ -2,7 +2,13 @@
 
 An illustrated ecosystem playground: bring a creature to life, predict what an environmental change will do, and compare repeatable model experiments.
 
+Start with **A dry spell begins**, the replayable guided investigation, or visit **My creatures** to save a reviewed companion on this browser. Investigations now show one forest with an optional reference/split view, plain-language food comparisons, recorded-event close-ups and an everyday reflection. See [the experience guide](docs/guided-discovery.md) and [initial curriculum correspondence check](docs/curriculum-review.md).
+
 This public repository is being assembled one feature at a time. The living forest supports complete snapshots, paired experiments and downloadable replay with creature images and learner notes. Prepared ecology questions, manual changes, a traceable evidence guide and a printable classroom activity work without AI calls. Optional Meta creature and Spark bridges are disabled by default. The classroom activity follows **predict → experiment → inspect → explain** to explore indirect ecological effects; teacher/learner usability sessions remain pending.
+
+![Microverse software architecture](docs/architecture.svg)
+
+The diagram is generated from [docs/architecture.drawio](docs/architecture.drawio), which opens and edits in [diagrams.net](https://app.diagrams.net).
 
 ## Development
 

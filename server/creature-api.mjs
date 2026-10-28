@@ -18,6 +18,6 @@ export function createCreatureApi(pipeline,{prefix='/api/creature',action='gener
       req.setTimeout(0);
       let body;try{body=JSON.parse(Buffer.concat(chunks).toString());}catch{send(res,400,{error:'Invalid request JSON.'});return;}
       const result=await pipeline.run(body);if(!res.destroyed)send(res,200,result);
-    }catch(error){if(!res.destroyed)send(res,400,{error:error.publicMessage||errorMessage||'The creature could not be prepared. No automatic retry was made; the reserved amount remains in the local budget.'});}
+    }catch(error){console.error(`[${prefix}] ${String(error?.message||error).slice(0,200)}${error?.diagnostic?' '+JSON.stringify(error.diagnostic).slice(0,300):''}`);if(!res.destroyed)send(res,400,{error:error.publicMessage||errorMessage||'The creature could not be prepared. No automatic retry was made; the reserved amount remains in the local budget.'});}
   };
 }

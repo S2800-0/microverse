@@ -6,7 +6,7 @@ import {normalizeChange} from '../investigation/changes.js';
 export type Scenario='drought'|'remove-wolves'|{kind:'rain';rain:number;durationWeeks:number}|{kind:'remove';species:string};
 export interface Replay {
   format:'microverse-experiment'; version:1|2; initial:SceneSnapshot; scenario:Scenario;
-  elapsed:number; prediction:string; reflection:string;question?:string;activity?:{before:string;after:string;teacherNotes:string};
+  elapsed:number; prediction:string; reflection:string;question?:string;activity?:{before:string;after:string;teacherNotes:string;connection?:string};
 }
 export function validateReplay(input:unknown):asserts input is Replay {
   const r=input as Replay;
@@ -17,7 +17,7 @@ export function validateReplay(input:unknown):asserts input is Replay {
     typeof r.prediction!=='string'||r.prediction.length>1000||typeof r.reflection!=='string'||r.reflection.length>1000)
     throw new Error('Invalid experiment notes or duration.');
   if(r.question!==undefined&&(typeof r.question!=='string'||r.question.length>800))throw new Error('Invalid saved question.');
-  if(r.activity!==undefined&&(!r.activity||Object.keys(r.activity).some(k=>!['before','after','teacherNotes'].includes(k))||!['before','after','teacherNotes'].every(k=>typeof r.activity[k]==='string'&&r.activity[k].length<=1000)))throw new Error('Invalid classroom notes.');
+  if(r.activity!==undefined&&(!r.activity||Object.keys(r.activity).some(k=>!['before','after','teacherNotes','connection'].includes(k))||!['before','after','teacherNotes'].every(k=>typeof r.activity[k]==='string'&&r.activity[k].length<=1000)||(r.activity.connection!==undefined&&(typeof r.activity.connection!=='string'||r.activity.connection.length>1000))))throw new Error('Invalid classroom notes.');
 }
 export function createExperiment(initial:SceneSnapshot,scenario:Scenario,prediction='',question='') {
   const change=normalizeChange(scenario);validateSceneSnapshot(initial);
@@ -34,7 +34,7 @@ export function createExperiment(initial:SceneSnapshot,scenario:Scenario,predict
     if(delta){baseline.step(delta);changed.step(delta);elapsed=week;}
     return getState();
   }
-  function getState(){return {elapsed,scenario:change,startWeek:start.world.week,seed:start.world.seed,baseline:baseline.getState(),changed:changed.getState()};}
+  function getState(){return {elapsed,eventStartIndex:start.world.events.length,scenario:change,startWeek:start.world.week,seed:start.world.seed,baseline:baseline.getState(),changed:changed.getState()};}
   restart();
   return {getState,seek,
     toReplay(reflection=''):Replay {

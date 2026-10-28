@@ -1,5 +1,7 @@
 # Living forest: first playable view
 
+The [guided-discovery redesign](guided-discovery.md) adds the current entry, personal collection, one-forest investigation and plain-language result flow. The sections below describe the original forest migration and its underlying boundaries.
+
 Run `npm run preview`, then open `http://127.0.0.1:8895/`. `npm run preview:motion` retains the standalone rig workbench. `npm run build` writes a static `dist/` tree, erasing TypeScript and rewriting module paths without adding a framework dependency. This is syntax erasure, not semantic type checking.
 
 ## What works
