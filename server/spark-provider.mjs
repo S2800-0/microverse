@@ -4,7 +4,7 @@ import {guideSchema} from '../src/investigation/guide.js';
 export const SPARK_RESERVATION=25000;
 export const SPARK_PROVIDERS={
   meta:{url:'https://api.meta.ai/v1/chat/completions',model:'muse-spark-1.3',label:'Meta · Muse Spark 1.3'},
-  baseten:{url:'https://inference.baseten.co/v1/chat/completions',model:'meta-models/muse-spark-open',label:'Baseten · Muse Spark Open'},
+  baseten:{url:'https://inference.baseten.co/v1/chat/completions',model:'meta-models/muse-spark-open-1026',label:'Baseten · Muse Spark Open (hackathon)'},
 };
 export function createSparkProvider({provider,apiKey,fetchImpl=fetch}){
   const config=SPARK_PROVIDERS[provider];if(!config)throw new Error('Choose Meta or Baseten explicitly.');
@@ -19,8 +19,8 @@ export function createSparkProvider({provider,apiKey,fetchImpl=fetch}){
       tools:[{type:'function',function:{name,description:proposal?'Return a proposed experiment or clarification.':guide?'Choose evidence in this run to show the child.':'Choose traceable evidence from this run.',parameters:proposal?PROPOSAL_SCHEMA:guide?guideSchema(payload.evidence):evidenceSelectionSchema(payload.evidence)}}],
       tool_choice:provider==='meta'?'auto':{type:'function',function:{name}},parallel_tool_calls:false,max_tokens:2048,
       ...(provider==='meta'?{reasoning_effort:'low'}:{})};
-    // Bounds include schema/tool bytes. Both selected models currently share
-    // $1.25/M input and $4.25/M output pricing; the reservation is conservative.
+    // Bounds include schema/tool bytes. The local reservation is an estimate,
+    // not a provider-enforced billing limit or proof of promotional coverage.
     if(Buffer.byteLength(JSON.stringify(body))>11000)throw new Error('The compact reasoning request exceeds its token-budget bound.');
     const response=await fetchImpl(config.url,{method:'POST',redirect:'error',signal:AbortSignal.timeout(60000),
       headers:{Authorization:`Bearer ${apiKey}`,'Content-Type':'application/json'},body:JSON.stringify(body)});

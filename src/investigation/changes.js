@@ -44,7 +44,7 @@ export const PROPOSAL_SCHEMA={type:'object',additionalProperties:false,propertie
   status:{type:'string',enum:['proposal','clarify','unsupported']},message:{type:'string'},
   change:{type:['object','null'],additionalProperties:false,properties:{kind:{type:'string',enum:['rain','remove']},rain:{type:['number','null']},durationWeeks:{type:['integer','null']},species:{type:['string','null'],enum:[...ECOLOGY_ROLES,null]}},required:['kind','rain','durationWeeks','species']},
 },required:['status','message','change']};
-export function validateProposal(value){
+export function validateProposal(value,question){
   if(!value||typeof value!=='object'||Object.keys(value).some(k=>!['status','message','change'].includes(k))||!['proposal','clarify','unsupported'].includes(value.status)||typeof value.message!=='string'||!value.message.trim()||value.message.length>500)throw new Error('Spark returned an invalid proposal. No change was applied.');
   // A clarification or refusal never runs a change. If the provider attached a guess, drop it and keep the question for the learner.
   if(value.status!=='proposal')return {status:value.status,message:value.message,change:null};
@@ -54,5 +54,14 @@ export function validateProposal(value){
   if(c.kind==='rain'&&c.species===null)change=normalizeChange({kind:'rain',rain:c.rain,durationWeeks:c.durationWeeks});
   else if(c.kind==='remove'&&c.rain===null&&c.durationWeeks===null)change=normalizeChange({kind:'remove',species:c.species});
   else throw new Error('The proposal combines unsupported parameters.');
+  if(question!==undefined){
+    const q=validateQuestion(question).toLowerCase();
+    // Check explicit absolute percentages and numeric weeks, not general language
+    // semantics. Never silently repair a model's different numbers.
+    const percentages=[...q.matchAll(/\b(\d+(?:\.\d+)?)\s*(?:%|percent|per cent)\s+(?:of\s+)?(?:normal|usual|typical)\b/g)].map(m=>Number(m[1])/100);
+    const weeks=[...q.matchAll(/\b(\d+(?:\.\d+)?)\s*(?:weeks?|wks?)\b/g)].map(m=>Number(m[1]));
+    if(percentages.some(n=>change.kind!=='rain'||Math.abs(change.rain-n)>1e-9)||weeks.some(n=>change.kind!=='rain'||change.durationWeeks!==n))
+      return {status:'clarify',change:null,message:'The suggested change does not match the numbers in your question. Choose the rainfall and number of weeks with the manual controls, or rephrase your question.'};
+  }
   return {status:'proposal',message:value.message,change};
 }
