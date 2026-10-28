@@ -1,14 +1,14 @@
 import {FOX_SHEET,foxSpriteRegion,foxWalkFrame} from './sprite-sheet.js';
 
 // Presentation-only playback of locally registered artwork. No model or simulation.
-export async function mountFoxScene(canvas,{paused=false,onReady=()=>{}}={}){
+export async function mountFoxScene(canvas,{paused=false,onReady=()=>{},sheetSrc='/intro/fox-walk.png',posterSrc='/intro/fox-poster.png'}={}){
   let sheet=null;
   try{
-    sheet=new Image();sheet.src='/intro/fox-walk.png';await sheet.decode();
+    sheet=new Image();sheet.src=sheetSrc;await sheet.decode();
     if(sheet.naturalWidth!==2048||sheet.naturalHeight!==1024)throw new Error('Unexpected sheet dimensions.');
   }catch{sheet=null;}
   let poster=null;
-  if(!sheet){poster=new Image();poster.src='/intro/fox-poster.png';await poster.decode();}
+  if(!sheet){poster=new Image();poster.src=posterSrc;await poster.decode();}
   const ctx=canvas.getContext('2d');
   let elapsed=0,last=0,raf=0,visible=false,destroyed=false,journeyTravel=null,movingUntil=0;
   function draw(){

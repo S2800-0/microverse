@@ -20,6 +20,11 @@ test('preview serves browser modules and hides repository internals',async()=>{
     for(const file of ['clean-plate','foreground-left','foreground-right','fox-walk','fox-poster'])assert.equal((await fetch(`${base}/intro/${file}.png`,{method:'HEAD'})).status,200);
     assert.equal((await fetch(base+'/intro/manifest.json')).status,404);
     assert.equal((await fetch(base+'/src/motion/fox-scene.js')).status,200);
+    assert.equal((await fetch(base+'/art-review.html')).status,200);
+    assert.equal((await fetch(base+'/meta-art.css')).status,200);
+    assert.equal((await fetch(base+'/meta-art/manifest.json')).status,200);
+    for(const file of ['guide-atlas','fox-walk-atlas','cat-standing'])assert.equal((await fetch(`${base}/meta-art/${file}.png`,{method:'HEAD'})).status,200);
+    assert.equal((await fetch(base+'/runtime/meta-art-batch-2026-10-28/fox.json')).status,404);
     assert.equal((await fetch(base,{method:'POST'})).status,404);
   }finally{await new Promise(r=>server.close(r));}
 });

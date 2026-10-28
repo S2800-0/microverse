@@ -1,0 +1,688 @@
+{
+  "version": 1,
+  "derived": [
+    {
+      "file": "fox-walk-atlas.png",
+      "sha256": "b0d74d88a07e7fffea516e276f3a1bef3d03c6fdf24e15c60ce08df766b53d0f",
+      "width": 2048,
+      "height": 1024,
+      "source": "fox-walk-wide.png",
+      "processing": "Connected-alpha frame extraction, uniform scaling and shared foot/nose anchors with prepare-walk-sheet.py."
+    },
+    {
+      "file": "fox-poster.png",
+      "sha256": "9cdbe0640f64128cf116b3fbfca790d5abec0b205e07c218a6330503b923b405",
+      "width": 900,
+      "height": 620,
+      "source": "fox-walk-wide.png",
+      "processing": "Connected-alpha frame extraction, uniform scaling and shared foot/nose anchors with prepare-walk-sheet.py."
+    }
+  ],
+  "attempts": [
+    {
+      "id": "cat-standing",
+      "status": "candidate",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "error": null,
+      "width": 1920,
+      "height": 1280
+    },
+    {
+      "id": "cat",
+      "status": "candidate",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "error": null,
+      "width": 1920,
+      "height": 1280
+    },
+    {
+      "id": "clean-plate",
+      "status": "candidate",
+      "imageCalls": 1,
+      "samCalls": 0,
+      "error": null,
+      "width": 2048,
+      "height": 1152
+    },
+    {
+      "id": "deer",
+      "status": "candidate",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "error": null,
+      "width": 1920,
+      "height": 1280
+    },
+    {
+      "id": "doe",
+      "status": "candidate",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "error": null,
+      "width": 1920,
+      "height": 1280
+    },
+    {
+      "id": "dog",
+      "status": "candidate",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "error": null,
+      "width": 1920,
+      "height": 1280
+    },
+    {
+      "id": "fawn",
+      "status": "candidate",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "error": null,
+      "width": 1920,
+      "height": 1280
+    },
+    {
+      "id": "foreground-left",
+      "status": "candidate",
+      "imageCalls": 0,
+      "samCalls": 1,
+      "error": null,
+      "width": 2048,
+      "height": 1152
+    },
+    {
+      "id": "foreground-right",
+      "status": "candidate",
+      "imageCalls": 0,
+      "samCalls": 1,
+      "error": null,
+      "width": 2048,
+      "height": 1152
+    },
+    {
+      "id": "forest",
+      "status": "candidate",
+      "imageCalls": 1,
+      "samCalls": 0,
+      "error": null,
+      "width": 2048,
+      "height": 1152
+    },
+    {
+      "id": "fox-walk-wide",
+      "status": "candidate",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "error": null,
+      "width": 2240,
+      "height": 1120
+    },
+    {
+      "id": "fox-walk",
+      "status": "failed",
+      "imageCalls": 1,
+      "samCalls": 0,
+      "error": "Image dimensions exceed bound.",
+      "width": 2240,
+      "height": 1120
+    },
+    {
+      "id": "fox",
+      "status": "candidate",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "error": null,
+      "width": 1920,
+      "height": 1280
+    },
+    {
+      "id": "game-map",
+      "status": "candidate",
+      "imageCalls": 1,
+      "samCalls": 0,
+      "error": null,
+      "width": 2048,
+      "height": 1152
+    },
+    {
+      "id": "rabbit",
+      "status": "candidate",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "error": null,
+      "width": 1920,
+      "height": 1280
+    },
+    {
+      "id": "wolf",
+      "status": "candidate",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "error": null,
+      "width": 1920,
+      "height": 1280
+    }
+  ],
+  "assets": [
+    {
+      "id": "fox",
+      "label": "Red fox",
+      "kind": "animal",
+      "preview": "/meta-art/fox.png",
+      "original": "/intro/fox.png",
+      "state": "Cutout candidate",
+      "review": "Illustration and cutout candidate. New rig geometry and movement have not been accepted.",
+      "file": "fox.png",
+      "width": 1920,
+      "height": 1280,
+      "sha256": "1cf9aa8d4e786288240a03d03d857a35f996259ff9141bd563aa4905dcd92481",
+      "origin": "Meta API reference edit",
+      "imageModel": "muse-image-1.0",
+      "segmentationModel": "sam-3.1",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "sourceReferences": [
+        {
+          "source": "public/intro/fox.png",
+          "sha256": "b0ff7bb29229a1333cef3779ca1110e584833a59df7802b0192b5dd22a4678e8"
+        },
+        {
+          "source": "public/intro/fox.png",
+          "sha256": "b0ff7bb29229a1333cef3779ca1110e584833a59df7802b0192b5dd22a4678e8"
+        }
+      ],
+      "prompt": "Original watercolor storybook game art for Microverse. Match the species and distinctive markings in reference 1 and the gentle pigment, warm daylight and readable shapes of reference 2. Simplify dense fur into deliberate watercolor strokes. Exactly one complete animal, right-facing side profile, horizontal torso, natural anatomy, all ears, paws and tail fully visible. Four staggered legs with clear gaps (rabbit: natural four-limbed resting stance). Keep feet on a shared horizontal ground line. Leave 10% empty margin on all sides including antlers. Uniform pure white background for separate segmentation. No cast shadow, scenery, text, frame, extra animal, grid or UI. A russet red fox, creamy chest, black lower legs and white tail tip.",
+      "segmentationTarget": "fox",
+      "sourceImageSha256": "67f187ed0aa97be550cde0f569420b1b2cf059f530cb7cf991788abfaa08952f",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "wolf",
+      "label": "Grey wolf",
+      "kind": "animal",
+      "preview": "/meta-art/wolf.png",
+      "original": "/animals/wolf-standing.png",
+      "state": "Cutout candidate",
+      "review": "Illustration and cutout candidate. New rig geometry and movement have not been accepted.",
+      "file": "wolf.png",
+      "width": 1920,
+      "height": 1280,
+      "sha256": "748ab9fefa24f9d4a5059722b54686253308fe128dd74a537c3230afc47f7b7e",
+      "origin": "Meta API reference edit",
+      "imageModel": "muse-image-1.0",
+      "segmentationModel": "sam-3.1",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "sourceReferences": [
+        {
+          "source": "public/animals/wolf-standing.png",
+          "sha256": "77dec4825c4fd88ba05c28eea1030606d48b7d31a48ca41bd588192528625981"
+        },
+        {
+          "source": "public/intro/fox.png",
+          "sha256": "b0ff7bb29229a1333cef3779ca1110e584833a59df7802b0192b5dd22a4678e8"
+        }
+      ],
+      "prompt": "Original watercolor storybook game art for Microverse. Match the species and distinctive markings in reference 1 and the gentle pigment, warm daylight and readable shapes of reference 2. Simplify dense fur into deliberate watercolor strokes. Exactly one complete animal, right-facing side profile, horizontal torso, natural anatomy, all ears, paws and tail fully visible. Four staggered legs with clear gaps (rabbit: natural four-limbed resting stance). Keep feet on a shared horizontal ground line. Leave 10% empty margin on all sides including antlers. Uniform pure white background for separate segmentation. No cast shadow, scenery, text, frame, extra animal, grid or UI. A grey wolf, natural adult proportions.",
+      "segmentationTarget": "wolf",
+      "sourceImageSha256": "dde9209e5821b20facc7625c3037515f489b235ccba4758a8c33306811378e2a",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "deer",
+      "label": "Buck",
+      "kind": "animal",
+      "preview": "/meta-art/deer.png",
+      "original": "/animals/deer-standing.png",
+      "state": "Cutout candidate",
+      "review": "Illustration and cutout candidate. New rig geometry and movement have not been accepted.",
+      "file": "deer.png",
+      "width": 1920,
+      "height": 1280,
+      "sha256": "f7bf3a546916f4fbab08a7ce4afc6ed94c57f03eaf36318eb6a0cfb756138f87",
+      "origin": "Meta API reference edit",
+      "imageModel": "muse-image-1.0",
+      "segmentationModel": "sam-3.1",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "sourceReferences": [
+        {
+          "source": "public/animals/deer-standing.png",
+          "sha256": "45d4eec61fbd1992cebd1f7366a7b2563f15691fe9ae8fcbac93f52462ad7d2d"
+        },
+        {
+          "source": "public/intro/fox.png",
+          "sha256": "b0ff7bb29229a1333cef3779ca1110e584833a59df7802b0192b5dd22a4678e8"
+        }
+      ],
+      "prompt": "Original watercolor storybook game art for Microverse. Match the species and distinctive markings in reference 1 and the gentle pigment, warm daylight and readable shapes of reference 2. Simplify dense fur into deliberate watercolor strokes. Exactly one complete animal, right-facing side profile, horizontal torso, natural anatomy, all ears, paws and tail fully visible. Four staggered legs with clear gaps (rabbit: natural four-limbed resting stance). Keep feet on a shared horizontal ground line. Leave 10% empty margin on all sides including antlers. Uniform pure white background for separate segmentation. No cast shadow, scenery, text, frame, extra animal, grid or UI. One adult male white-tailed deer with complete branching antlers.",
+      "segmentationTarget": "deer",
+      "sourceImageSha256": "7374bc7a824135bab980bfe68ef4ceb553fb7275f601371659cdcd7414a74160",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "doe",
+      "label": "Doe",
+      "kind": "animal",
+      "preview": "/meta-art/doe.png",
+      "original": "/animals/deer-standing.png",
+      "state": "Cutout candidate",
+      "review": "Illustration and cutout candidate. New rig geometry and movement have not been accepted.",
+      "file": "doe.png",
+      "width": 1920,
+      "height": 1280,
+      "sha256": "fff4001ccde0957f37921a7efb3fe57db4c37a64e018f22d449adadaece4466a",
+      "origin": "Meta API reference edit",
+      "imageModel": "muse-image-1.0",
+      "segmentationModel": "sam-3.1",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "sourceReferences": [
+        {
+          "source": "public/animals/deer-standing.png",
+          "sha256": "45d4eec61fbd1992cebd1f7366a7b2563f15691fe9ae8fcbac93f52462ad7d2d"
+        },
+        {
+          "source": "public/intro/fox.png",
+          "sha256": "b0ff7bb29229a1333cef3779ca1110e584833a59df7802b0192b5dd22a4678e8"
+        }
+      ],
+      "prompt": "Original watercolor storybook game art for Microverse. Match the species and distinctive markings in reference 1 and the gentle pigment, warm daylight and readable shapes of reference 2. Simplify dense fur into deliberate watercolor strokes. Exactly one complete animal, right-facing side profile, horizontal torso, natural anatomy, all ears, paws and tail fully visible. Four staggered legs with clear gaps (rabbit: natural four-limbed resting stance). Keep feet on a shared horizontal ground line. Leave 10% empty margin on all sides including antlers. Uniform pure white background for separate segmentation. No cast shadow, scenery, text, frame, extra animal, grid or UI. One adult FEMALE white-tailed deer, absolutely no antlers. Use the source only for coat, species and style, not its antlers.",
+      "segmentationTarget": "deer",
+      "sourceImageSha256": "3c28315b415c14263c77334acf5c86f540e101e60827cd8494b16e5d73f96d0a",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "fawn",
+      "label": "Fawn",
+      "kind": "animal",
+      "preview": "/meta-art/fawn.png",
+      "original": "/animals/fawn-standing.png",
+      "state": "Cutout candidate",
+      "review": "Illustration and cutout candidate. New rig geometry and movement have not been accepted.",
+      "file": "fawn.png",
+      "width": 1920,
+      "height": 1280,
+      "sha256": "e893afc45f986a4892f68cd81e90b66ac0568123ef6697f683a77c851c987a8f",
+      "origin": "Meta API reference edit",
+      "imageModel": "muse-image-1.0",
+      "segmentationModel": "sam-3.1",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "sourceReferences": [
+        {
+          "source": "public/animals/fawn-standing.png",
+          "sha256": "177576b5cdd619cdeef26c2df9cf0e9977712f1b887277e52dae9647b8bc542d"
+        },
+        {
+          "source": "public/intro/fox.png",
+          "sha256": "b0ff7bb29229a1333cef3779ca1110e584833a59df7802b0192b5dd22a4678e8"
+        }
+      ],
+      "prompt": "Original watercolor storybook game art for Microverse. Match the species and distinctive markings in reference 1 and the gentle pigment, warm daylight and readable shapes of reference 2. Simplify dense fur into deliberate watercolor strokes. Exactly one complete animal, right-facing side profile, horizontal torso, natural anatomy, all ears, paws and tail fully visible. Four staggered legs with clear gaps (rabbit: natural four-limbed resting stance). Keep feet on a shared horizontal ground line. Leave 10% empty margin on all sides including antlers. Uniform pure white background for separate segmentation. No cast shadow, scenery, text, frame, extra animal, grid or UI. One young spotted white-tailed fawn, slender young proportions, no antlers.",
+      "segmentationTarget": "deer",
+      "sourceImageSha256": "fedfa5f217e7cf22a40139b9645042a8b11f3f917d542c340b298de54ecf8a81",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "rabbit",
+      "label": "Rabbit",
+      "kind": "animal",
+      "preview": "/meta-art/rabbit.png",
+      "original": "/animals/rabbit-standing.png",
+      "state": "Cutout candidate",
+      "review": "Illustration and cutout candidate. New rig geometry and movement have not been accepted.",
+      "file": "rabbit.png",
+      "width": 1920,
+      "height": 1280,
+      "sha256": "e8afad66e31f72ac6aa17f1be129d594315e9e4509fad61c1b9d12f808a57eb9",
+      "origin": "Meta API reference edit",
+      "imageModel": "muse-image-1.0",
+      "segmentationModel": "sam-3.1",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "sourceReferences": [
+        {
+          "source": "public/animals/rabbit-standing.png",
+          "sha256": "d92a9418696ae9e9ec2a3810a2c1cab58793c195ff39b123ff0db35e7a743951"
+        },
+        {
+          "source": "public/intro/fox.png",
+          "sha256": "b0ff7bb29229a1333cef3779ca1110e584833a59df7802b0192b5dd22a4678e8"
+        }
+      ],
+      "prompt": "Original watercolor storybook game art for Microverse. Match the species and distinctive markings in reference 1 and the gentle pigment, warm daylight and readable shapes of reference 2. Simplify dense fur into deliberate watercolor strokes. Exactly one complete animal, right-facing side profile, horizontal torso, natural anatomy, all ears, paws and tail fully visible. Four staggered legs with clear gaps (rabbit: natural four-limbed resting stance). Keep feet on a shared horizontal ground line. Leave 10% empty margin on all sides including antlers. Uniform pure white background for separate segmentation. No cast shadow, scenery, text, frame, extra animal, grid or UI. One small brown wild rabbit, long ears and white tail.",
+      "segmentationTarget": "rabbit",
+      "sourceImageSha256": "c729aeecda669f82b31b764a6878e902333b4ac0774960265bc4d78bf2eccbc3",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "dog",
+      "label": "Dog companion",
+      "kind": "animal",
+      "preview": "/meta-art/dog.png",
+      "original": "/animals/dog-standing.png",
+      "state": "Cutout candidate",
+      "review": "Illustration and cutout candidate. New rig geometry and movement have not been accepted.",
+      "file": "dog.png",
+      "width": 1920,
+      "height": 1280,
+      "sha256": "a4eacd0b397165a0afa8bef28245eaf5b64d883b993cec51ed0e6d27f4d32581",
+      "origin": "Meta API reference edit",
+      "imageModel": "muse-image-1.0",
+      "segmentationModel": "sam-3.1",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "sourceReferences": [
+        {
+          "source": "public/animals/dog-standing.png",
+          "sha256": "7b71db01ece9ded4269b23e0f0a586f0f213677e1b9499bdbe0274fa36cda1bc"
+        },
+        {
+          "source": "public/intro/fox.png",
+          "sha256": "b0ff7bb29229a1333cef3779ca1110e584833a59df7802b0192b5dd22a4678e8"
+        }
+      ],
+      "prompt": "Original watercolor storybook game art for Microverse. Match the species and distinctive markings in reference 1 and the gentle pigment, warm daylight and readable shapes of reference 2. Simplify dense fur into deliberate watercolor strokes. Exactly one complete animal, right-facing side profile, horizontal torso, natural anatomy, all ears, paws and tail fully visible. Four staggered legs with clear gaps (rabbit: natural four-limbed resting stance). Keep feet on a shared horizontal ground line. Leave 10% empty margin on all sides including antlers. Uniform pure white background for separate segmentation. No cast shadow, scenery, text, frame, extra animal, grid or UI. One friendly golden retriever, golden coat and feathered tail.",
+      "segmentationTarget": "dog",
+      "sourceImageSha256": "fcb98d5b8e27bf87e1b15163b4bb2ea18dabf8718009a422be5d38cbaf42bf52",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "cat",
+      "label": "Cat companion",
+      "kind": "animal",
+      "preview": "/meta-art/cat.png",
+      "original": "/animals/tabby-character-preview.png",
+      "state": "Portrait only",
+      "review": "The model returned a seated cat despite a standing request. Keep as a portrait candidate; compare the separate standing correction.",
+      "file": "cat.png",
+      "width": 1920,
+      "height": 1280,
+      "sha256": "7f0cd066c121d2ecf02ab0c43511fd2674440feb23efbeef83e64f1318b79176",
+      "origin": "Meta API reference edit",
+      "imageModel": "muse-image-1.0",
+      "segmentationModel": "sam-3.1",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "sourceReferences": [
+        {
+          "source": "public/animals/tabby-character-preview.png",
+          "sha256": "69ed92778ffccbb72b1fe08947a6dd4693e0fedc1f470036e6767045cc6ce944"
+        },
+        {
+          "source": "public/intro/fox.png",
+          "sha256": "b0ff7bb29229a1333cef3779ca1110e584833a59df7802b0192b5dd22a4678e8"
+        }
+      ],
+      "prompt": "Original watercolor storybook game art for Microverse. Match the species and distinctive markings in reference 1 and the gentle pigment, warm daylight and readable shapes of reference 2. Simplify dense fur into deliberate watercolor strokes. Exactly one complete animal, right-facing side profile, horizontal torso, natural anatomy, all ears, paws and tail fully visible. Four staggered legs with clear gaps (rabbit: natural four-limbed resting stance). Keep feet on a shared horizontal ground line. Leave 10% empty margin on all sides including antlers. Uniform pure white background for separate segmentation. No cast shadow, scenery, text, frame, extra animal, grid or UI. One orange-brown-and-white tabby cat with a striped tail.",
+      "segmentationTarget": "cat",
+      "sourceImageSha256": "fcfa9c66edfd4c71c6a5780ce3e021aae6a6dadb7db0fdff8e1c8f0d1a823543",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "cat-standing",
+      "label": "Cat standing correction",
+      "kind": "animal",
+      "preview": "/meta-art/cat-standing.png",
+      "original": "/animals/tabby-character-preview.png",
+      "state": "Cutout candidate",
+      "review": "Illustration and cutout candidate. New rig geometry and movement have not been accepted.",
+      "file": "cat-standing.png",
+      "width": 1920,
+      "height": 1280,
+      "sha256": "895320523185a3d9b885d52e0a8bbb7a7a88bc3792a5bb7ab17fce6726477998",
+      "origin": "Meta API reference edit",
+      "imageModel": "muse-image-1.0",
+      "segmentationModel": "sam-3.1",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "sourceReferences": [
+        {
+          "source": "public/animals/tabby-character-preview.png",
+          "sha256": "69ed92778ffccbb72b1fe08947a6dd4693e0fedc1f470036e6767045cc6ce944"
+        },
+        {
+          "source": "@cat",
+          "sha256": "fcfa9c66edfd4c71c6a5780ce3e021aae6a6dadb7db0fdff8e1c8f0d1a823543"
+        }
+      ],
+      "prompt": "Make one full-body STANDING cat sprite. Reference 1 controls the exact pose: horizontal torso with body weight supported on four extended legs, head to the right, tail behind to the left. Reference 2 controls watercolor treatment and facial identity only. The earlier version sat down; deliberately correct that pose. Show the belly clear of the ground and visible gaps between all four legs. Preserve orange-brown tabby stripes, white chest and feet, green eyes, and soft traditional watercolor. A natural adult cat, side profile facing right. Entire ears, all paws and tail visible with 10 percent empty margins. Plain pure white background, no cast shadow, text, UI, borders or second cat. No sitting, crouching, lying down or curled tail around the feet.",
+      "segmentationTarget": "cat",
+      "sourceImageSha256": "9f5b5f54056dc70c5318187f290a24e7f254895e49a1fb4f6b56bd633ccbe2d3",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "game-map",
+      "label": "Ecology map",
+      "kind": "map",
+      "preview": "/meta-art/game-map.png",
+      "original": "/maps/spring.png",
+      "state": "Painting candidate",
+      "review": "Visual candidate. Fixed stream, rock and tree alignment must be checked before game use.",
+      "file": "game-map.png",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "4ca735c37789bf62f10d679e438a8649c258c5f9439de48e36d082c469aa1f26",
+      "origin": "Meta API reference edit",
+      "imageModel": "muse-image-1.0",
+      "segmentationModel": null,
+      "imageCalls": 1,
+      "samCalls": 0,
+      "sourceReferences": [
+        {
+          "source": "public/maps/spring.png",
+          "sha256": "35c6a871f27d923638fc5619117ef4fec788bc1846decb499791caf01a14e0ed"
+        }
+      ],
+      "prompt": "Repaint this exact top-down woodland ecology game map in a coherent translucent storybook watercolor style. Preserve the original full-canvas composition and all geometry: BOTH creek courses, water entry and exit locations, all boulders, tree clusters and open meadow boundaries must stay at exactly the same normalized coordinates. Retain the large walkable central meadow. Improve pigment clarity, soft warm daylight, sage foliage and dusty blue water without moving, adding or deleting obstacles. No perspective change, camera move, animals, buildings, text, grid, UI or border. Full bleed. This is a visual candidate only; fixed collision geometry will be reviewed separately.",
+      "segmentationTarget": null,
+      "sourceImageSha256": "e255d1e1548ba344dc0a341c1a102aa01c8160446e3bebf59a9947e4f90c6ff6",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "forest",
+      "label": "Entrance forest",
+      "kind": "landscape",
+      "preview": "/meta-art/forest.png",
+      "original": "/intro/forest.png",
+      "state": "Painting candidate",
+      "review": "Watercolor composition candidate. Camera crops and registration still need review.",
+      "file": "forest.png",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "7334c0a4fa5aac89f4621c496df19221aa71e462ba3d5ae34d5bcbf7fbe03218",
+      "origin": "Meta API reference edit",
+      "imageModel": "muse-image-1.0",
+      "segmentationModel": null,
+      "imageCalls": 1,
+      "samCalls": 0,
+      "sourceReferences": [
+        {
+          "source": "public/intro/forest.png",
+          "sha256": "21b34bd565dc76bd1e0754e3a09fa45f494b902b4de82ebfddca6fdeb63ec0ad"
+        }
+      ],
+      "prompt": "Repaint this full-bleed woodland panorama as cohesive traditional storybook watercolor for Microverse. Preserve the composition: distant blue hills and lake, quiet pale upper-centre sky for a headline, a sunlit walkable earth path entering the lower centre, tall trees and ferns framing both outer edges. Warm light from upper left, moss and sage foliage, translucent pigment, subtle cold-press paper grain. Keep foreground tree silhouettes well separated at the far left and far right for later segmentation, central path open and mobile centre crop readable. No animals, people, buildings, text, buttons, grid, frame or vignette.",
+      "segmentationTarget": null,
+      "sourceImageSha256": "4b546d4e447351a9c4dd9513a8d916e99a604e3970b556b0e95cb426536fd751",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "clean-plate",
+      "label": "Forest background",
+      "kind": "landscape",
+      "preview": "/meta-art/clean-plate.png",
+      "original": "/meta-art/forest.png",
+      "state": "Painting candidate",
+      "review": "Watercolor composition candidate. Camera crops and registration still need review.",
+      "file": "clean-plate.png",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "3d3b587099cdae752eab00561091cc3ccff94dda50d4ee2dbf0474f8fd983ac7",
+      "origin": "Meta API reference edit",
+      "imageModel": "muse-image-1.0",
+      "segmentationModel": null,
+      "imageCalls": 1,
+      "samCalls": 0,
+      "sourceReferences": [
+        {
+          "source": "@forest",
+          "sha256": "4b546d4e447351a9c4dd9513a8d916e99a604e3970b556b0e95cb426536fd751"
+        }
+      ],
+      "prompt": "Edit ONLY the nearest foreground trees, branches and ferns framing the far left and far right of this panorama: remove those near framing objects and paint the scenery that was hidden behind them. Preserve the remaining central path, lake, distant hills, sky, far treeline, midground foliage, horizon, light and watercolor marks in exactly their current positions. Maintain the full canvas, perspective and composition. Do not zoom, recenter or crop. No animals, people, new focal subjects, text, borders or UI. This is a clean background plate to sit behind cutouts from the unchanged original panorama.",
+      "segmentationTarget": null,
+      "sourceImageSha256": "ccbe81ec934b7337cc3a586408fe5a676d42a8ee68a593da5dea978ce4acf76e",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "fox-walk-wide",
+      "label": "Fox walk \u00b7 wide export",
+      "kind": "walk",
+      "preview": "/meta-art/fox-walk-wide.png",
+      "original": "/intro/fox-walk.png",
+      "state": "Cutout candidate",
+      "review": "Eight SAM cutouts, locally registered for playback. Tail and body shape vary across the poses; review the loop before adopting it.",
+      "file": "fox-walk-wide.png",
+      "width": 1920,
+      "height": 960,
+      "sha256": "c0a36c93a0b020e15a4e61241f38dd8cf4cd416c1736382f71912d8496119f35",
+      "origin": "Meta API reference edit",
+      "imageModel": "muse-image-1.0",
+      "segmentationModel": "sam-3.1",
+      "imageCalls": 1,
+      "samCalls": 1,
+      "sourceReferences": [
+        {
+          "source": "public/intro/fox-walk.png",
+          "sha256": "8cbc252709b983c34adc08bf680ae0f98b218cfe466ddc6a8545c6b55dea64eb"
+        },
+        {
+          "source": "@fox",
+          "sha256": "67f187ed0aa97be550cde0f569420b1b2cf059f530cb7cf991788abfaa08952f"
+        }
+      ],
+      "prompt": "Create one exact 4-column by 2-row, eight-pose side-view walking sprite sheet for the fox in reference 2. Use reference 1 ONLY as the layout and walk-phase reference. Preserve reference 2 fox identity, russet coat, creamy chest, dark legs, white tail tip and watercolor style. Eight sequential phases of ONE natural right-facing four-legged fox walk: contact, down, passing, up, opposite contact, down, passing, up; last leads into first. Same body size, head size, facing, light, tail length and ground line in every equal cell. Separate paw silhouettes, plausible legs. Each whole fox has generous blank margins within its cell; no animals touch another cell or image edge. Uniform pure white background for segmentation, no shadow, labels, numbers, grid lines, scenery or text.",
+      "segmentationTarget": "fox",
+      "sourceImageSha256": "d64d9e91415b99eb2f296cb2f20a0f5229b82e16ff1be1ceb665315e455aad89",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "foreground-left",
+      "label": "Left forest foreground",
+      "kind": "layer",
+      "preview": "/meta-art/foreground-left.png",
+      "original": "/meta-art/forest.png",
+      "state": "Mask needs review",
+      "review": "SAM selected both forest edges rather than isolating the left side. This needs a manual mask review before independent parallax.",
+      "file": "foreground-left.png",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "40b5b744c9fafd00b30afabdd9a4b574673dee9faad816bf3cff5021a8a41755",
+      "origin": "SAM cutout from Meta-generated forest",
+      "imageModel": null,
+      "segmentationModel": "sam-3.1",
+      "imageCalls": 0,
+      "samCalls": 1,
+      "sourceReferences": [
+        {
+          "source": "@forest",
+          "sha256": "4b546d4e447351a9c4dd9513a8d916e99a604e3970b556b0e95cb426536fd751"
+        }
+      ],
+      "prompt": null,
+      "segmentationTarget": "foreground tree, branches and ferns on the far left edge",
+      "sourceImageSha256": "4b546d4e447351a9c4dd9513a8d916e99a604e3970b556b0e95cb426536fd751",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    },
+    {
+      "id": "foreground-right",
+      "label": "Right forest foreground",
+      "kind": "layer",
+      "preview": "/meta-art/foreground-right.png",
+      "original": "/meta-art/forest.png",
+      "state": "Cutout candidate",
+      "review": "SAM foreground candidate. Edge selection and compositing must be checked before parallax use.",
+      "file": "foreground-right.png",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "b80d1d848db7d7867c2f81ba892c0f42ce6f923cab1c35f31077c891b9db9601",
+      "origin": "SAM cutout from Meta-generated forest",
+      "imageModel": null,
+      "segmentationModel": "sam-3.1",
+      "imageCalls": 0,
+      "samCalls": 1,
+      "sourceReferences": [
+        {
+          "source": "@forest",
+          "sha256": "4b546d4e447351a9c4dd9513a8d916e99a604e3970b556b0e95cb426536fd751"
+        }
+      ],
+      "prompt": null,
+      "segmentationTarget": "foreground tree, branches and ferns on the far right edge",
+      "sourceImageSha256": "4b546d4e447351a9c4dd9513a8d916e99a604e3970b556b0e95cb426536fd751",
+      "processing": "Saved source colours, union of bounded SAM masks at their half-open source bounds where available, optional uniform downsize for gallery. Source originals preserved.",
+      "status": "candidate"
+    }
+  ],
+  "guide": {
+    "imageModel": "muse-image-1.0",
+    "segmentationModel": "sam-3.1",
+    "referenceSha256": "b0ff7bb29229a1333cef3779ca1110e584833a59df7802b0192b5dd22a4678e8",
+    "prompt": "Create one 2 by 2 expression sprite sheet for the exact red fox in the reference. The reference is the approved character design, not a pose to copy full-body. Show the same head and upper chest four times, each at the same gentle three-quarter angle facing right. Preserve russet coat, creamy muzzle and chest, dark ear backs, natural fox face, delicate translucent watercolor, lighting and personality. This is for Microverse, a charming storybook ecology game.\nSquare image divided invisibly into four equal square cells. Put exactly one complete head-and-upper-chest portrait in each cell. All four portraits have identical size, head position, eye line, and shoulder line within their cells. Keep every ear, whisker and chest edge inside its cell with at least 8 percent empty margin on every side. No portrait touches another or the image edge. Do not draw a grid.\nReading order: top-left attentive friendly eyes open mouth closed; top-right the identical face with eyes gently closed in a blink; bottom-left subtly curious eyebrows eyes open mouth closed; bottom-right friendly speaking with a slightly open natural fox mouth. Do not change head tilt between expressions. Small controlled facial changes, not four different foxes. No exaggerated grin or human teeth. Paint authentic watercolor shapes rather than photo-real fur.\nUse a perfectly uniform pure white background with no shadows, paper background texture, decorative marks, text, labels, speech bubbles, borders, UI, accessories, or other characters. Background will be removed separately. Keep light fur distinct from the background. This is a reusable expression sheet, not a scene.",
+    "processing": "SAM cutouts, local translation to common upper/right silhouette anchors, then 400px export. Decorative expression switching, not phoneme lip sync.",
+    "frames": [
+      {
+        "file": "guide-attentive.png",
+        "sha256": "f7ead62f88e4d92d77004fc796e607f19a48ce946b7f9ca3d4f16c3de2bcdf27",
+        "width": 400,
+        "height": 400
+      },
+      {
+        "file": "guide-blink.png",
+        "sha256": "bd4fdadb147ffc06a50fef30064be0943a126dfe4c6648f82ac2b36ae102dea5",
+        "width": 400,
+        "height": 400
+      },
+      {
+        "file": "guide-curious.png",
+        "sha256": "2f944a57b54babb1e14abc668f97433df109660e9b4efd5a654dce26f4076c02",
+        "width": 400,
+        "height": 400
+      },
+      {
+        "file": "guide-speaking.png",
+        "sha256": "d87791431620d0b35483486c97925f93f09ababb416a738f54c8da2956bbb161",
+        "width": 400,
+        "height": 400
+      }
+    ],
+    "atlas": {
+      "file": "guide-atlas.png",
+      "sha256": "7ac410085eedddc5b2facbc465c16e28a99898f3ef99b27cff5316440fe1b638",
+      "width": 800,
+      "height": 800,
+      "columns": 2,
+      "rows": 2,
+      "cellSize": 400
+    }
+  },
+  "billingNote": "Published-price estimates are not billing receipts or proof of individual credit debits.",
+  "reviewNote": "Gallery candidates are not automatically installed as game maps or articulated species."
+}

@@ -1,0 +1,151 @@
+{
+  "version": 1,
+  "sourceFile": "fox-walk-wide.png",
+  "sourceSha256": "c0a36c93a0b020e15a4e61241f38dd8cf4cd416c1736382f71912d8496119f35",
+  "sourceSize": [
+    1920,
+    960
+  ],
+  "atlasSha256": "b0d74d88a07e7fffea516e276f3a1bef3d03c6fdf24e15c60ce08df766b53d0f",
+  "atlasSize": [
+    2048,
+    1024
+  ],
+  "columns": 4,
+  "rows": 2,
+  "cellSize": 512,
+  "scale": 0.95,
+  "anchorRight": 460,
+  "targetBaseline": 425,
+  "frames": [
+    {
+      "index": 0,
+      "sourceBounds": [
+        35,
+        147,
+        433,
+        396
+      ],
+      "occupiedBounds": [
+        82,
+        190,
+        462,
+        427
+      ],
+      "baseline": 426
+    },
+    {
+      "index": 1,
+      "sourceBounds": [
+        523,
+        156,
+        906,
+        395
+      ],
+      "occupiedBounds": [
+        97,
+        198,
+        461,
+        425
+      ],
+      "baseline": 424
+    },
+    {
+      "index": 2,
+      "sourceBounds": [
+        985,
+        161,
+        1392,
+        391
+      ],
+      "occupiedBounds": [
+        75,
+        207,
+        462,
+        427
+      ],
+      "baseline": 426
+    },
+    {
+      "index": 3,
+      "sourceBounds": [
+        1477,
+        109,
+        1867,
+        398
+      ],
+      "occupiedBounds": [
+        91,
+        152,
+        462,
+        427
+      ],
+      "baseline": 426
+    },
+    {
+      "index": 4,
+      "sourceBounds": [
+        28,
+        643,
+        435,
+        891
+      ],
+      "occupiedBounds": [
+        74,
+        190,
+        461,
+        426
+      ],
+      "baseline": 425
+    },
+    {
+      "index": 5,
+      "sourceBounds": [
+        512,
+        648,
+        905,
+        889
+      ],
+      "occupiedBounds": [
+        88,
+        196,
+        462,
+        425
+      ],
+      "baseline": 424
+    },
+    {
+      "index": 6,
+      "sourceBounds": [
+        986,
+        648,
+        1386,
+        889
+      ],
+      "occupiedBounds": [
+        81,
+        196,
+        461,
+        426
+      ],
+      "baseline": 425
+    },
+    {
+      "index": 7,
+      "sourceBounds": [
+        1477,
+        602,
+        1867,
+        890
+      ],
+      "occupiedBounds": [
+        91,
+        153,
+        462,
+        427
+      ],
+      "baseline": 426
+    }
+  ],
+  "processing": "Connected alpha silhouettes, edge-preserving local cutout, uniform scale and foot/nose registration. No generated or reconstructed poses."
+}
