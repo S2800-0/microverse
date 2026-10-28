@@ -6,6 +6,8 @@ Start with **A dry spell begins**, the replayable guided investigation, or visit
 
 This public repository is being assembled one feature at a time. The living forest supports complete snapshots, paired experiments and downloadable replay with creature images and learner notes. Prepared ecology questions, manual changes, a traceable evidence guide and a printable classroom activity work without AI calls. Optional Meta creature and Spark bridges are disabled by default. The classroom activity follows **predict → experiment → inspect → explain** to explore indirect ecological effects; teacher/learner usability sessions remain pending.
 
+![Microverse software architecture](docs/architecture.svg)
+
 ## Development
 
 Use Node.js 24 or newer. The browser/simulation has no package runtime dependencies; the optional local server uses the pinned official SAM parser and Kokoro runtime for neural narration.
