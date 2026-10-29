@@ -49,8 +49,10 @@ fill=Image.open(folder/'clean-plate.png').convert('RGBA').resize(size,Image.Resa
 # Keep original centre/distant pixels. Only hidden foreground-mask regions use
 # the generated fill, so recomposition at rest is pixel-identical to the master.
 background=Image.composite(fill,paint,union)
-layer_left=paint.copy();layer_left.putalpha(left)
-layer_right=paint.copy();layer_right.putalpha(right)
+# Clear RGB behind fully transparent pixels to avoid encoding hidden painting
+# detail in each foreground PNG. Visible pixels and alpha remain identical.
+layer_left=Image.new('RGBA',size);layer_left.paste(paint,(0,0),left)
+layer_right=Image.new('RGBA',size);layer_right.paste(paint,(0,0),right)
 for name,im in [('entrance-background',background),('entrance-left',layer_left),('entrance-right',layer_right)]:
  im.save(folder/f'{name}.png',optimize=True)
  record(f'{name}.png',['forest.png','clean-plate.png','foreground-left.png','foreground-right.png'],'Subtract right SAM mask from combined mask, retain left-edge connected regions and manually reviewed edge-tree polygons excluding the central walking corridor; place source-painting pixels over generated fill only inside removed foreground regions. All exports share the same canvas.')

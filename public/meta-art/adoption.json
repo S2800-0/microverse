@@ -261,7 +261,7 @@
     },
     {
       "file": "entrance-left.png",
-      "sha256": "ffa3e8f93c14cc8abd1e4942d04948be0694ec2a6e4df1945f58b11833605be9",
+      "sha256": "178a4a556b74d300bd9d88d7face46563bff87f795e09469694ed02cc421a86a",
       "width": 1672,
       "height": 941,
       "sources": [
@@ -286,7 +286,7 @@
     },
     {
       "file": "entrance-right.png",
-      "sha256": "325c2d5cc15d9f2490a0154f369447050a3db0ae830f5f523933cad7651a1a7c",
+      "sha256": "49c19559591ab477fbb91ec6a58c469e5f40f4e90066350a18f9c5ad772b1595",
       "width": 1672,
       "height": 941,
       "sources": [
