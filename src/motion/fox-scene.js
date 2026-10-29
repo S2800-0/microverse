@@ -1,24 +1,30 @@
 import {FOX_SHEET,foxSpriteRegion,foxWalkFrame} from './sprite-sheet.js';
+import {buildRig,GAITS} from './rig.js';
+import {assessRig} from './rig-analysis.js';
+import {prepareJointPieces,drawPuppet} from './puppet-motion.js';
+import {getMotion} from './motion-library.js';
 
 // Presentation-only playback of locally registered artwork. No model or simulation.
-export async function mountFoxScene(canvas,{paused=false,onReady=()=>{},sheetSrc='/intro/fox-walk.png',posterSrc='/intro/fox-poster.png'}={}){
-  let sheet=null;
-  try{
+export async function mountFoxScene(canvas,{paused=false,onReady=()=>{},sheetSrc='/intro/fox-walk.png',posterSrc='/intro/fox-poster.png',rigSource=null,rigConfig=null}={}){
+  let sheet=null,rig=null;
+  if(rigSource&&rigConfig){try{const candidate=await buildRig(rigSource,rigConfig);if(!assessRig(candidate).warnings.length)rig=prepareJointPieces(candidate);}catch{/* Static poster remains available. */}}
+  if(!rigSource)try{
     sheet=new Image();sheet.src=sheetSrc;await sheet.decode();
     if(sheet.naturalWidth!==2048||sheet.naturalHeight!==1024)throw new Error('Unexpected sheet dimensions.');
   }catch{sheet=null;}
   let poster=null;
-  if(!sheet){poster=new Image();poster.src=posterSrc;await poster.decode();}
+  if(!sheet&&!rig){poster=new Image();poster.src=posterSrc;await poster.decode();}
   const ctx=canvas.getContext('2d');
   let elapsed=0,last=0,raf=0,visible=false,destroyed=false,journeyTravel=null,movingUntil=0;
   function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(rig){ctx.save();ctx.translate(450,470);drawPuppet(ctx,rig,{size:720,phase:journeyTravel===null?Math.min(elapsed,3.125)*.8:journeyTravel/150,moving:journeyTravel!==null||elapsed<3.125,preset:getMotion('dog'),phases:GAITS.walk.phase,clock:elapsed});ctx.restore();return;}
     if(!sheet){ctx.drawImage(poster,0,0,canvas.width,canvas.height);return;}
     const index=journeyTravel===null?Math.floor(Math.min(elapsed,3.125)*8)%8:foxWalkFrame(journeyTravel);
     const region=foxSpriteRegion(index),size=720,scale=size/FOX_SHEET.cell;
     ctx.drawImage(sheet,region.x,region.y,region.width,region.height,90,500-425*scale,size,size);
   }
-  function canPlay(){return sheet&&!destroyed&&!paused&&visible&&!document.hidden&&(journeyTravel===null?elapsed<3.125:elapsed<movingUntil);}
+  function canPlay(){return (sheet||rig)&&!destroyed&&!paused&&visible&&!document.hidden&&(journeyTravel===null?elapsed<3.125:elapsed<movingUntil);}
   function frame(now){
     raf=0;if(destroyed||paused||!visible||document.hidden)return;
     if(last){const dt=(now-last)/1000;if(dt<1/30){raf=requestAnimationFrame(frame);return;}elapsed+=Math.min(dt,.075);}
@@ -27,7 +33,7 @@ export async function mountFoxScene(canvas,{paused=false,onReady=()=>{},sheetSrc
   function sync(){cancelAnimationFrame(raf);raf=0;last=0;draw();if(canPlay())raf=requestAnimationFrame(frame);}
   const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;sync();},{threshold:.05});observer.observe(canvas);
   document.addEventListener('visibilitychange',sync);
-  canvas.hidden=false;draw();onReady({mode:sheet?'sprite':'still'});
+  canvas.hidden=false;draw();onReady({mode:rig?'rig':sheet?'sprite':'still'});
   return {
     setPaused(value){paused=!!value;sync();},
     setJourney(distance){if(!Number.isFinite(distance)||destroyed)return;if(journeyTravel===null||Math.abs(distance-journeyTravel)>.2)movingUntil=elapsed+.22;journeyTravel=distance;if(paused)draw();else if(!raf&&visible&&!document.hidden){last=0;raf=requestAnimationFrame(frame);}},

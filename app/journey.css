@@ -174,3 +174,8 @@ body.entering-world[data-motion=paused] .painted-world { transform: scale(var(--
   .painted-world, .entering-world .painted-world { transform: none; transition: none; will-change: auto; }
   .forest-layer { transform: none; transition: none; }
 }
+body[data-forest-layers=meta] .painted-world{background-image:url('/meta-art/entrance-background.png')}
+body[data-forest-layers=meta] .forest-layer{display:block}
+body[data-forest-layers=meta] .forest-left{background-image:url('/meta-art/entrance-left.png')}
+body[data-forest-layers=meta] .forest-right{background-image:url('/meta-art/entrance-right.png')}
+.weather-map{background-image:url('/meta-art/forest.png')}

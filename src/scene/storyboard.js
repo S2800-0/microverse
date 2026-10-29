@@ -1,5 +1,6 @@
 import {mountFoxScene} from '../motion/fox-scene.js';
 import {journeyFrame} from './journey.js';
+import {ART} from './art.js';
 import {mountFoxGuide} from './fox-guide.js';
 
 const el=id=>document.getElementById(id),reduced=matchMedia('(prefers-reduced-motion: reduce)');
@@ -8,8 +9,9 @@ const guide=mountFoxGuide(el('entry-guide'),{paused});
 function motionState(){document.body.dataset.motion=paused?'paused':'playing';el('motion-toggle').textContent=paused?'Play motion':'Pause motion';el('motion-toggle').setAttribute('aria-pressed',String(paused));fox?.setPaused(paused);guide.setPaused(paused);updateJourney(false);}
 el('motion-toggle').onclick=()=>{paused=!paused;motionState();};
 reduced.addEventListener('change',()=>{paused=reduced.matches;motionState();});motionState();
-mountFoxScene(el('fox-canvas'),{paused,onReady:({mode})=>{el('fox-still').hidden=true;if(mode==='still')el('art-status').append(' The still fox is shown while the walk sheet is unavailable.');}}).then(value=>{if(disposed)value.destroy();else{fox=value;fox.setPaused(paused);}}).catch(()=>{el('art-status').append(' The still fox is shown while motion is unavailable.');el('fox-walk').disabled=true;});
-Promise.all(['/intro/clean-plate.png','/intro/foreground-left.png','/intro/foreground-right.png'].map(async src=>{const image=new Image();image.src=src;await image.decode();if(image.naturalWidth!==1672||image.naturalHeight!==941)throw new Error('Layer registration mismatch.');})).then(()=>{document.body.dataset.forestLayers='ready';}).catch(()=>{el('art-status').append(' The original forest is shown while scenery layers are unavailable.');});
+mountFoxScene(el('fox-canvas'),{paused,rigSource:ART.fox.image,rigConfig:ART.fox.cut,posterSrc:'/meta-art/entrance-fox-poster.png',onReady:({mode})=>{el('fox-still').hidden=true;if(mode==='still'){el('art-status').append(' The still fox is shown while movement is unavailable.');el('fox-walk').disabled=true;}}}).then(value=>{if(disposed)value.destroy();else{fox=value;fox.setPaused(paused);}}).catch(()=>{el('art-status').append(' The still fox is shown while motion is unavailable.');el('fox-walk').disabled=true;});
+async function loadLayers(paths){await Promise.all(paths.map(async src=>{const image=new Image();image.src=src;await image.decode();if(image.naturalWidth!==1672||image.naturalHeight!==941)throw new Error('Layer registration mismatch.');}));}
+loadLayers(['/meta-art/entrance-background.png','/meta-art/entrance-left.png','/meta-art/entrance-right.png']).then(()=>{document.body.dataset.forestLayers='meta';}).catch(async()=>{try{await loadLayers(['/intro/clean-plate.png','/intro/foreground-left.png','/intro/foreground-right.png']);document.body.dataset.forestLayers='ready';el('art-status').append(' Original scenery is shown while Meta layers are unavailable.');}catch{el('art-status').append(' The original forest is shown while scenery layers are unavailable.');}});
 el('fox-walk').onclick=()=>{if(!fox)return;if(paused&&!reduced.matches){paused=false;motionState();}fox.replay();};
 function updateJourney(moveFox=true){
   const region=el('journey'),box=region.getBoundingClientRect(),frame=journeyFrame(-box.top/Math.max(1,region.offsetHeight-innerHeight));

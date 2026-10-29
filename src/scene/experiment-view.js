@@ -2,7 +2,7 @@ import {createExperiment,experimentFromReplay,validateReplay,runContinuation} fr
 import {createForestController} from './controller.ts';
 import {guideLocal,guideReply,narrowGuide} from '../investigation/guide.js';
 import {nearestAnimal,animalRecord,GUIDE_CHANGE,worldLabels,discoverySummary,compareFood,closerLook,intervalRecord,relatedInvestigations,guideContent,plural,populationStory,describeForPeople} from './discovery.js';
-import {ART,DOE_FROM_BUCK,variantKey,sizeJitter,makeDoeUrl} from './art.js';
+import {ART,SCENE_MAP,artForAnimal,sizeJitter} from './art.js';
 import {buildRig,GAITS} from '../motion/rig.js';
 import {assessRig} from '../motion/rig-analysis.js';
 import {prepareJointPieces,drawPuppet} from '../motion/puppet-motion.js';
@@ -44,11 +44,11 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
   function renderWorld(canvas,state){
     const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
     ctx.clearRect(0,0,w,h);ctx.fillStyle='#c6c79c';ctx.fillRect(0,0,w,h);
-    const map=images.get('/maps/spring.png');if(map)ctx.drawImage(map,0,0,w,h);
+    const map=images.get(SCENE_MAP);if(map)ctx.drawImage(map,0,0,w,h);
     ctx.fillStyle=`rgba(151,114,68,${Math.max(0,.8-state.grass)*.35})`;ctx.fillRect(0,0,w,h);
     if(el('food-layer').checked){const {width,height}=state.world.params;for(let i=0;i<state.world.grass.length;i++){if(!state.world.open[i])continue;const food=state.world.grass[i];ctx.fillStyle=`rgba(${food>.5?'73,117,48':'166,112,48'},.26)`;ctx.fillRect((i%width)/width*w,Math.floor(i/width)/height*h,w/width+1,h/height+1);}}
     for(const a of [...state.animals].sort((a,b)=>a.y-b.y)){
-      const custom=state.appearances.get(a.id),vkey=variantKey(a),art=vkey==='doe'?DOE_FROM_BUCK:ART[vkey]||ART[a.species],src=custom?.image||(vkey==='doe'?'doe':art?.image);
+      const custom=state.appearances.get(a.id),art=artForAnimal(a),src=custom?.image||art?.image;
       const image=images.get(src),rig=rigs.get(src),x=a.x/state.world.params.width*w,y=a.y/state.world.params.height*h;
       const size=44*(art?.size||1)*sizeJitter(a.id);
       ctx.save();ctx.translate(x,y);
@@ -63,7 +63,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
   }
   async function prepareArt(initial){
     const current=++revision;images.clear();rigs.clear();
-    const sources=new Map([['/maps/spring.png',null]]);
+    const sources=new Map([[SCENE_MAP,null]]);
     for(const art of Object.values(ART))if(art.image)sources.set(art.image,art.cut||null);
     for(const a of initial.appearances)if(a.image)sources.set(a.image,a.rigConfig||null);
     let unavailable=0,rigFallbacks=0;
@@ -73,7 +73,6 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
         if(cut){try{const candidate=await buildRig(src,cut);if(current!==revision)return;if(assessRig(candidate).warnings.length)throw new Error();rigs.set(src,prepareJointPieces(candidate));}catch{rigFallbacks++;}}
       }catch{unavailable++;}
     }));
-    try{const url=await makeDoeUrl();const image=new Image();image.src=url;await image.decode();if(current!==revision)return;images.set('doe',image);try{const candidate=await buildRig(url,DOE_FROM_BUCK.cut);if(!assessRig(candidate).warnings.length)rigs.set('doe',prepareJointPieces(candidate));}catch{}}catch{/* bucks stand in for does */}
     if(current===revision&&dialog.open){render();message(unavailable?`${unavailable} image(s) unavailable. Model records remain intact.`:rigFallbacks?`${rigFallbacks} illustration(s) use whole-image display.`:'Ready. Watch this forest change, then explore what you notice.');}
   }
   function render(){
@@ -219,7 +218,7 @@ export function installExperimentView({snapshot,eventText,onStatus=()=>{},narrat
   };
   // Tap-to-ask: local and free. Shows only what the model recorded about one animal in the forest that was tapped.
   let asked=null;
-  const drawnSize=a=>{const vkey=variantKey(a),art=vkey==='doe'?DOE_FROM_BUCK:ART[vkey]||ART[a.species];return 44*(art?.size||1)*sizeJitter(a.id);};
+  const drawnSize=a=>{const art=artForAnimal(a);return 44*(art?.size||1)*sizeJitter(a.id);};
   function openAnimal(branch,id){
     if(!experiment)return;
     const record=animalRecord(experiment.getState()[branch],id,initial.world.events.length);

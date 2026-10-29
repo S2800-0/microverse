@@ -1,0 +1,408 @@
+{
+  "version": 1,
+  "scope": "Developer inspection of still plus quarter-cycle walk/trot samples, not an anatomical or species-motion validation.",
+  "records": [
+    {
+      "id": "fox",
+      "status": "geometry-ready",
+      "config": {
+        "knee": 0.7221875,
+        "hindMaxX": 0.5166875,
+        "minX": 0,
+        "splitX": [],
+        "gait": "walk",
+        "groundOnly": true
+      },
+      "legs": [
+        {
+          "hind": true,
+          "x": 0.20078125,
+          "length": 0.1140625,
+          "pivot": [
+            0.21953125,
+            0.721875
+          ]
+        },
+        {
+          "hind": true,
+          "x": 0.384375,
+          "length": 0.1609375,
+          "pivot": [
+            0.3912109375,
+            0.721875
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.52578125,
+          "length": 0.1453125,
+          "pivot": [
+            0.50078125,
+            0.721875
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.7703125,
+          "length": 0.1671875,
+          "pivot": [
+            0.7265625,
+            0.721875
+          ]
+        }
+      ],
+      "warnings": [],
+      "image": "/meta-art/game-fox.png",
+      "sha256": "3d59669ebf5250ecf383e72cb41888fa38ae81afe9fb2d0372fd9fb9b4c12d7a",
+      "visualDecision": "articulated",
+      "visualNote": "Still and quarter-cycle walk/trot frames visually inspected; no detached limb seen in these samples. Wider pose validation remains pending."
+    },
+    {
+      "id": "wolf",
+      "status": "geometry-ready",
+      "config": {
+        "knee": 0.7015625,
+        "hindMaxX": 0.5166875,
+        "minX": 0,
+        "splitX": [],
+        "gait": "walk",
+        "groundOnly": true
+      },
+      "legs": [
+        {
+          "hind": true,
+          "x": 0.19296875,
+          "length": 0.1828125,
+          "pivot": [
+            0.20661892361111112,
+            0.7015625
+          ]
+        },
+        {
+          "hind": true,
+          "x": 0.36796875,
+          "length": 0.1640625,
+          "pivot": [
+            0.35558792372881354,
+            0.7015625
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.66875,
+          "length": 0.1875,
+          "pivot": [
+            0.6665401785714286,
+            0.7015625
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.76015625,
+          "length": 0.1734375,
+          "pivot": [
+            0.721875,
+            0.7015625
+          ]
+        }
+      ],
+      "warnings": [],
+      "image": "/meta-art/game-wolf.png",
+      "sha256": "978df5e6becd1f2bee4c51d6f7d04e9f83e92839d688f6fcd9f73f277bebae57",
+      "visualDecision": "articulated",
+      "visualNote": "Still and quarter-cycle walk/trot frames visually inspected; no detached limb seen in these samples. Wider pose validation remains pending."
+    },
+    {
+      "id": "deer",
+      "status": "geometry-ready",
+      "config": {
+        "knee": 0.6410937499999999,
+        "hindMaxX": 0.5151875,
+        "minX": 0,
+        "splitX": [],
+        "gait": "walk",
+        "groundOnly": true,
+        "kneeHind": 0.6710937499999999,
+        "kneeFore": 0.6710937499999999
+      },
+      "legs": [
+        {
+          "hind": true,
+          "x": 0.15625,
+          "length": 0.2078125,
+          "pivot": [
+            0.17421875,
+            0.6703125
+          ]
+        },
+        {
+          "hind": true,
+          "x": 0.309375,
+          "length": 0.2171875,
+          "pivot": [
+            0.284375,
+            0.6703125
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.59296875,
+          "length": 0.21875,
+          "pivot": [
+            0.5859375,
+            0.6703125
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.68125,
+          "length": 0.2078125,
+          "pivot": [
+            0.65078125,
+            0.6703125
+          ]
+        }
+      ],
+      "warnings": [],
+      "image": "/meta-art/game-deer.png",
+      "sha256": "7dd9e7ba8fc5620dedf4c5b891d42c0469c450ec39b049de79648c77b1868593",
+      "visualDecision": "articulated",
+      "visualNote": "Still and quarter-cycle walk/trot frames visually inspected; no detached limb seen in these samples. Wider pose validation remains pending."
+    },
+    {
+      "id": "doe",
+      "status": "geometry-ready",
+      "config": {
+        "knee": 0.6668749999999999,
+        "hindMaxX": 0.5166875,
+        "minX": 0,
+        "splitX": [],
+        "gait": "walk",
+        "groundOnly": true
+      },
+      "legs": [
+        {
+          "hind": true,
+          "x": 0.1359375,
+          "length": 0.209375,
+          "pivot": [
+            0.1546875,
+            0.6671875
+          ]
+        },
+        {
+          "hind": true,
+          "x": 0.31171875,
+          "length": 0.2203125,
+          "pivot": [
+            0.2734375,
+            0.6671875
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.621875,
+          "length": 0.221875,
+          "pivot": [
+            0.61328125,
+            0.6671875
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.71953125,
+          "length": 0.2109375,
+          "pivot": [
+            0.68671875,
+            0.6671875
+          ]
+        }
+      ],
+      "warnings": [],
+      "image": "/meta-art/game-doe.png",
+      "sha256": "772954138751b3abb4b0321585a37ec62e191875dd23d18da462bf142d3fa4d2",
+      "visualDecision": "articulated",
+      "visualNote": "Still and quarter-cycle walk/trot frames visually inspected; no detached limb seen in these samples. Wider pose validation remains pending."
+    },
+    {
+      "id": "fawn",
+      "status": "geometry-ready",
+      "config": {
+        "knee": 0.64296875,
+        "hindMaxX": 0.5166875,
+        "minX": 0,
+        "splitX": [],
+        "gait": "walk",
+        "groundOnly": true
+      },
+      "legs": [
+        {
+          "hind": true,
+          "x": 0.11640625,
+          "length": 0.2328125,
+          "pivot": [
+            0.1390625,
+            0.64375
+          ]
+        },
+        {
+          "hind": true,
+          "x": 0.321875,
+          "length": 0.24375,
+          "pivot": [
+            0.2671875,
+            0.64375
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.640625,
+          "length": 0.2453125,
+          "pivot": [
+            0.6393489583333334,
+            0.64375
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.7328125,
+          "length": 0.2265625,
+          "pivot": [
+            0.6859375,
+            0.64375
+          ]
+        }
+      ],
+      "warnings": [],
+      "image": "/meta-art/game-fawn.png",
+      "sha256": "d416a6c49dea720ca3dd1bbc127a8cdf3ab26777a87aa8682bebc15c611b8f74",
+      "visualDecision": "articulated",
+      "visualNote": "Still and quarter-cycle walk/trot frames visually inspected; no detached limb seen in these samples. Wider pose validation remains pending."
+    },
+    {
+      "id": "dog",
+      "status": "geometry-ready",
+      "config": {
+        "knee": 0.7109375,
+        "hindMaxX": 0.5166875,
+        "minX": 0,
+        "splitX": [],
+        "gait": "walk",
+        "groundOnly": true,
+        "kneeHind": 0.7409375,
+        "kneeFore": 0.7409375
+      },
+      "legs": [
+        {
+          "hind": true,
+          "x": 0.2921875,
+          "length": 0.1421875,
+          "pivot": [
+            0.30625,
+            0.740625
+          ]
+        },
+        {
+          "hind": true,
+          "x": 0.4109375,
+          "length": 0.121875,
+          "pivot": [
+            0.403125,
+            0.740625
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.69375,
+          "length": 0.1484375,
+          "pivot": [
+            0.691497564935065,
+            0.740625
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.796875,
+          "length": 0.1296875,
+          "pivot": [
+            0.7640625,
+            0.740625
+          ]
+        }
+      ],
+      "warnings": [],
+      "image": "/meta-art/game-dog.png",
+      "sha256": "78f56556ca2179bbb6cef58ef6b4b652c4753301a9a15bd7ca8632e40db42d16",
+      "visualDecision": "articulated",
+      "visualNote": "Still and quarter-cycle walk/trot frames visually inspected; no detached limb seen in these samples. Wider pose validation remains pending."
+    },
+    {
+      "id": "cat-standing",
+      "status": "geometry-ready",
+      "config": {
+        "knee": 0.71140625,
+        "hindMaxX": 0.5166875,
+        "minX": 0,
+        "splitX": [],
+        "gait": "walk",
+        "groundOnly": true,
+        "kneeHind": 0.74140625,
+        "kneeFore": 0.74140625
+      },
+      "legs": [
+        {
+          "hind": true,
+          "x": 0.2984375,
+          "length": 0.1453125,
+          "pivot": [
+            0.30078125,
+            0.7421875
+          ]
+        },
+        {
+          "hind": true,
+          "x": 0.428125,
+          "length": 0.1375,
+          "pivot": [
+            0.4131138392857143,
+            0.7421875
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.7125,
+          "length": 0.146875,
+          "pivot": [
+            0.7033405172413792,
+            0.7421875
+          ]
+        },
+        {
+          "hind": false,
+          "x": 0.8328125,
+          "length": 0.1375,
+          "pivot": [
+            0.79765625,
+            0.7421875
+          ]
+        }
+      ],
+      "warnings": [],
+      "image": "/meta-art/game-cat-standing.png",
+      "sha256": "fd0997d2324e3fb4f62f3af6916037cdd9cb09173a7ad5853238cb4b2fee4d43",
+      "visualDecision": "whole-image",
+      "visualNote": "The cat still shows a visible ankle discontinuity in swing samples; retain whole-image movement."
+    },
+    {
+      "id": "rabbit",
+      "status": "whole-image",
+      "config": null,
+      "legs": [],
+      "warnings": [],
+      "image": "/meta-art/game-rabbit.png",
+      "sha256": "bf332e98a8ffa73423e6337c6cd0de59ef71e5cbad0ab35016830b820c399dc1",
+      "visualDecision": "whole-image",
+      "visualNote": "Hopper does not use the quadruped fitter."
+    }
+  ]
+}

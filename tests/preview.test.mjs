@@ -23,6 +23,7 @@ test('preview serves browser modules and hides repository internals',async()=>{
     assert.equal((await fetch(base+'/art-review.html')).status,200);
     assert.equal((await fetch(base+'/meta-art.css')).status,200);
     assert.equal((await fetch(base+'/meta-art/manifest.json')).status,200);
+    for(const name of ['adoption','rig-review'])assert.equal((await fetch(`${base}/meta-art/${name}.json`)).status,200);
     for(const file of ['guide-atlas','fox-walk-atlas','cat-standing'])assert.equal((await fetch(`${base}/meta-art/${file}.png`,{method:'HEAD'})).status,200);
     assert.equal((await fetch(base+'/runtime/meta-art-batch-2026-10-28/fox.json')).status,404);
     assert.equal((await fetch(base,{method:'POST'})).status,404);

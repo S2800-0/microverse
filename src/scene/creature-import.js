@@ -1,3 +1,4 @@
+import {ART} from './art.js';
 import { createRigReview } from '../motion/rig-review.js';
 import { fitQuadruped } from '../motion/rig-fitting.js';
 import { suggestRig } from '../motion/rig-analysis.js';
@@ -66,8 +67,8 @@ export function installCreatureImport({ onAdd, onPause }) {
   }
   function close(){invalidate();cancelAnimationFrame(raf);raf=0;last=0;el('import-file').value='';el('import-camera').value='';motion.getContext('2d').clearRect(0,0,320,320);}
   for(const id of ['import-file','import-camera'])el(id).onchange=()=>{const f=el(id).files[0];if(f)readFile(f);};
-  el('sample-dog').onclick=()=>{el('import-species').value='dog';load('/animals/dog-standing.png');};
-  el('sample-cat').onclick=()=>{el('import-species').value='cat';load('/animals/tabby-character-preview.png');};
+  el('sample-dog').onclick=()=>{el('import-species').value='dog';load(ART.dog.image);};
+  el('sample-cat').onclick=()=>{el('import-species').value='cat';load(ART.cat.image);};
   el('import-species').onchange=()=>{if(original){const src=original;load(src);}else review.reset();};
   el('import-consent').onchange=()=>updateControls();
   el('import-paint').onclick=async()=>{

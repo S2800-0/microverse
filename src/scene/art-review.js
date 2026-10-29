@@ -10,7 +10,9 @@ el('replay-meta-walk').onclick=()=>walk?.replay();
 function node(tag,text,className){const n=document.createElement(tag);if(text)n.textContent=text;if(className)n.className=className;return n;}
 try{
  const response=await fetch('/meta-art/manifest.json');if(!response.ok)throw new Error('Art manifest unavailable.');const manifest=await response.json();
- for(const art of manifest.assets){
+ let active=[];try{const adoption=await fetch('/meta-art/adoption.json');if(adoption.ok)active=(await adoption.json()).active||[];}catch{/* Keep source candidates readable. */}
+ for(const source of manifest.assets){
+  const adopted=active.find(item=>item.id===source.id),art=adopted?{...source,preview:adopted.image,state:adopted.mode==='articulated'?'In game · local rig':adopted.mode==='fixed-terrain'?'In game · fixed terrain':'In game · whole-image',review:adopted.mode==='articulated'?'Geometry and sampled walk/trot frames reviewed. This uses a local artistic gait, not measured animal motion.':adopted.mode==='fixed-terrain'?'Visually reviewed against the curated obstacle overlay. Presentation changes only; terrain rules and replay remain the same.':'Saved illustration with whole-image movement. No articulated gait is claimed.'}:source;
   const card=node('article',null,'art-card'),picture=node('div',null,'art-image'),copy=node('div',null,'art-copy');
   const image=node('img');image.src=art.preview;image.alt=art.label;image.loading='lazy';picture.append(image);
   copy.append(node('span',art.state,'art-badge'),node('h2',art.label),node('p',art.review));

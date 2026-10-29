@@ -20,6 +20,8 @@ export function createPreviewServer({ motion=false, testSprite=process.env.MICRO
     else if(path==='/art-review.html')file='app/art-review.html';
     else if(path==='/meta-art.css')file='app/meta-art.css';
     else if(path==='/meta-art/manifest.json')file='public/meta-art/manifest.json';
+    else if(path==='/meta-art/adoption.json')file='public/meta-art/adoption.json';
+    else if(path==='/meta-art/rig-review.json')file='public/meta-art/rig-review.json';
     else if(/^\/meta-art\/[a-z-]+\.png$/.test(path))file=`public${path}`;
     else if(path==='/storyboard.css')file='app/storyboard.css';
     else if(path==='/journey.css')file='app/journey.css';
