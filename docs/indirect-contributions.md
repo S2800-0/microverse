@@ -51,3 +51,9 @@ Documentation/examples are part of each feature's definition of done. Package pu
 - Delivered question fixture: [20 synthetic labelled examples](../examples/questions/README.md), exercised for local routing. Intended custom-provider answers are separate labels, not a completed model benchmark. One live Meta parameterized-rainfall proposal was validated.
 - Existing engine, motion and replay modules retain their tests and guides. Separate package publishing, a standalone JSON Schema/examples bundle and external developer usability checks are not claimed as completed outputs.
 - Participant sessions: **zero**. Teacher adoption, reasoning gains and transferable learning remain untested. No conservation decision, institutional partnership or deployment is claimed. The first real participant observation should determine the next UI revision.
+
+## Reusable source delivery · October 29, 2026
+
+The owner approved MIT licensing for original code. Three public independent repositories now contain source, provenance, limitations, CI, tests and runnable no-key examples: [ecosystem](https://github.com/S2800-0/microverse-ecosystem), [puppets](https://github.com/S2800-0/microverse-puppets), and [commands](https://github.com/S2800-0/microverse-commands). Fresh GitHub checkouts passed 30, 16 and 3 tests respectively and their documented headless examples. The puppet repository also includes a browser demo using synthetic art or a local transparent PNG.
+
+This supersedes the earlier separate-publication exclusion for these three owner-approved source repositories. No npm registry release, external adoption, standalone schema bundle or independent developer usability result is claimed. Participant sessions remain zero. See [the entrance/open-tools record](entrance-polish.md).

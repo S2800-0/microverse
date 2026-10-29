@@ -1,29 +1,18 @@
-import {mountFoxScene} from '../motion/fox-scene.js';
-import {journeyFrame} from './journey.js';
-import {ART} from './art.js';
+import {mountCachedWalk} from '../motion/cached-walk.js';
+import {entranceFrame} from './entrance-motion.js';
+import {mountPaintedRain} from './painted-rain.js';
 import {mountFoxGuide} from './fox-guide.js';
-
 const el=id=>document.getElementById(id),reduced=matchMedia('(prefers-reduced-motion: reduce)');
-let paused=reduced.matches,fox=null,disposed=false,scrollRaf=0,chapter=-1;
-const guide=mountFoxGuide(el('entry-guide'),{paused});
-function motionState(){document.body.dataset.motion=paused?'paused':'playing';el('motion-toggle').textContent=paused?'Play motion':'Pause motion';el('motion-toggle').setAttribute('aria-pressed',String(paused));fox?.setPaused(paused);guide.setPaused(paused);updateJourney(false);}
-el('motion-toggle').onclick=()=>{paused=!paused;motionState();};
-reduced.addEventListener('change',()=>{paused=reduced.matches;motionState();});motionState();
-mountFoxScene(el('fox-canvas'),{paused,rigSource:ART.fox.image,rigConfig:ART.fox.cut,posterSrc:'/meta-art/entrance-fox-poster.png',onReady:({mode})=>{el('fox-still').hidden=true;if(mode==='still'){el('art-status').append(' The still fox is shown while movement is unavailable.');el('fox-walk').disabled=true;}}}).then(value=>{if(disposed)value.destroy();else{fox=value;fox.setPaused(paused);}}).catch(()=>{el('art-status').append(' The still fox is shown while motion is unavailable.');el('fox-walk').disabled=true;});
-async function loadLayers(paths){await Promise.all(paths.map(async src=>{const image=new Image();image.src=src;await image.decode();if(image.naturalWidth!==1672||image.naturalHeight!==941)throw new Error('Layer registration mismatch.');}));}
-loadLayers(['/meta-art/entrance-background.png','/meta-art/entrance-left.png','/meta-art/entrance-right.png']).then(()=>{document.body.dataset.forestLayers='meta';}).catch(async()=>{try{await loadLayers(['/intro/clean-plate.png','/intro/foreground-left.png','/intro/foreground-right.png']);document.body.dataset.forestLayers='ready';el('art-status').append(' Original scenery is shown while Meta layers are unavailable.');}catch{el('art-status').append(' The original forest is shown while scenery layers are unavailable.');}});
-el('fox-walk').onclick=()=>{if(!fox)return;if(paused&&!reduced.matches){paused=false;motionState();}fox.replay();};
-function updateJourney(moveFox=true){
-  const region=el('journey'),box=region.getBoundingClientRect(),frame=journeyFrame(-box.top/Math.max(1,region.offsetHeight-innerHeight));
-  const scene=el('fox-scene');region.style.setProperty('--journey',String(frame.progress));
-  if(!paused){region.style.setProperty('--camera',String(frame.camera));region.style.setProperty('--foreground-camera',String(frame.foregroundCamera));region.style.setProperty('--foreground-shift',`${frame.foregroundShift}%`);region.style.setProperty('--fox-left',`${frame.foxLeft}%`);}
-  document.body.dataset.beyondIntro=String(box.bottom<=100);
-  if(chapter!==frame.chapter){chapter=frame.chapter;for(const [i,id]of ['opening-copy','question-copy','invitation-copy'].entries())el(id).hidden=i!==chapter;el('journey-chapter').textContent=['01 / A LITTLE WORLD','02 / ONE SMALL CHANGE','03 / YOUR OWN ADVENTURE'][chapter];scene.dataset.weather=frame.weather;}
-  if(moveFox&&box.top<0&&box.bottom>0&&!paused){const canvas=el('fox-canvas');fox?.setJourney((frame.foxLeft-48)/100*region.clientWidth*canvas.width/Math.max(1,canvas.clientWidth));}
-}
-function scheduleJourney(){if(!scrollRaf)scrollRaf=requestAnimationFrame(()=>{scrollRaf=0;updateJourney();});}
-window.addEventListener('scroll',scheduleJourney,{passive:true});window.addEventListener('resize',scheduleJourney);updateJourney(false);
-const stories={spring:{title:'Every story starts somewhere.',copy:'Meet the plants, grazers, and hunters that share this little world.',status:'Choose a question, then explore it in the game.'},rain:{title:'What could more rain change?',copy:'Start with the plants. Then follow the animals that depend on them.',status:'Illustration only. Run an experiment in the game to see model results.'},dry:{title:'What happens when the rain slows?',copy:'Less water. A question about food. Where would you look first?',status:'Illustration only. The first adventure explores a dry spell.'}};
-for(const button of document.querySelectorAll('[data-weather-choice]'))button.onclick=()=>{const key=button.dataset.weatherChoice,story=stories[key];el('weather-picture').dataset.weather=key;el('fox-scene').dataset.weather=key;el('weather-title').textContent=story.title;el('weather-copy').textContent=story.copy;el('weather-status').textContent=story.status;for(const other of document.querySelectorAll('[data-weather-choice]'))other.setAttribute('aria-pressed',String(button===other));};
-const entry=el('entry-dialog');for(const button of document.querySelectorAll('[data-enter]'))button.onclick=()=>{document.body.classList.add('entering-world');entry.showModal();guide.say('Every forest starts with a question. Let’s follow yours.');};el('entry-close').onclick=()=>entry.close();entry.addEventListener('close',()=>document.body.classList.remove('entering-world'));
-window.addEventListener('pagehide',event=>{if(!event.persisted){disposed=true;fox?.destroy();guide.destroy();}});
+let paused=reduced.matches,fox=null,fawn=null,disposed=false,raf=0;
+const guide=mountFoxGuide(el('entry-guide'),{paused}),rain=mountPaintedRain(el('rain-canvas'),{paused});
+function motion(){document.body.dataset.motion=paused?'paused':'playing';el('motion-toggle').textContent=paused?'Play motion':'Pause motion';el('motion-toggle').setAttribute('aria-pressed',String(paused));fox?.setPaused(paused);fawn?.setPaused(paused);guide.setPaused(paused);rain.setPaused(paused);update();}
+el('motion-toggle').onclick=()=>{paused=!paused;motion();};reduced.addEventListener('change',()=>{paused=reduced.matches;motion();});
+function update(){raf=0;const region=el('journey'),box=region.getBoundingClientRect(),frame=entranceFrame(-box.top/Math.max(1,region.offsetHeight-innerHeight));document.querySelector('.site-header').dataset.solid=String(box.bottom<100);if(paused)return;region.style.setProperty('--camera',String(frame.camera));region.style.setProperty('--edge-camera',String(frame.foreground));region.style.setProperty('--edge-shift',`${frame.edgeShift}%`);region.style.setProperty('--fox-offset',`${(frame.foxPercent-45)/100*region.clientWidth}px`);region.style.setProperty('--title-opacity',String(frame.titleOpacity));}
+function schedule(){if(!raf)raf=requestAnimationFrame(update);}addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);motion();
+mountCachedWalk(el('fox-canvas'),{source:'/entrance/fox-walk.webp',paused,continuous:true,onReady:()=>{el('fox-still').hidden=true;}}).then(player=>{if(disposed)player.destroy();else{fox=player;fox.setPaused(paused);}}).catch(()=>{el('fox-walk').disabled=true;el('art-status').textContent='The still fox is shown while movement is unavailable.';});
+mountCachedWalk(el('fawn-canvas'),{source:'/entrance/fawn-walk.webp',paused,continuous:true,onReady:()=>{el('fawn-still').hidden=true;}}).then(player=>{if(disposed)player.destroy();else{fawn=player;fawn.setPaused(paused);}}).catch(()=>{});
+el('fox-walk').onclick=()=>fox?.replay();
+const stories={spring:{title:'What if the rain slows down?',copy:'Start with the plants. Who depends on them?',note:'A little illustrated preview. The lesson runs the experiment.'},rain:{title:'What could more rain change?',copy:'A drink for the plants. A question about the animals.',note:'This changes the illustration. Explore the model to see its results.'},dry:{title:'What if the rain slows down?',copy:'Less water for the plants. What might happen next?',note:'Follow the first story to explore a dry spell.'}};
+for(const button of document.querySelectorAll('[data-weather-choice]'))button.onclick=()=>{const key=button.dataset.weatherChoice,story=stories[key];el('weather-picture').dataset.weather=key;el('rain-title').textContent=story.title;el('weather-copy').textContent=story.copy;el('weather-status').textContent=story.note;rain.setMode(key);fawn?.replay();for(const other of document.querySelectorAll('[data-weather-choice]'))other.setAttribute('aria-pressed',String(other===button));};
+const entry=el('entry-dialog');for(const button of document.querySelectorAll('[data-enter]'))button.onclick=()=>{entry.showModal();guide.say('Every forest starts with a question. Let’s follow yours.');};el('entry-close').onclick=()=>entry.close();
+addEventListener('pagehide',event=>{if(!event.persisted){disposed=true;cancelAnimationFrame(raf);fox?.destroy();fawn?.destroy();guide.destroy();rain.destroy();}});

@@ -36,13 +36,25 @@ The [Meta creature bridge guide](docs/meta-creature.md) describes `npm run previ
 
 The [four-photo pilot](docs/image-pilot.md) records actual Meta outputs, a corrected harness-mask failure, geometry checks and remaining likeness/motion/replay work. Photo-derived outputs stay private; this is a small pilot, not a reliability benchmark.
 
-Choose **Ask “what if?”** for six prepared questions or a supported manual change. The [investigation guide](docs/investigation.md) documents the optional Spark proposal/evidence adapters, exact change approval, funding settings, live verification and limits. Meta Spark has passed one live custom-proposal check; Baseten is configured separately and has not been tested live. Open `/teacher.html` for the printable activity and observation sheet.
+Choose **Ask “what if?”** for six prepared questions or a supported manual change. The [investigation guide](docs/investigation.md) documents the optional Spark proposal/evidence adapters, exact change approval, funding settings, live verification and limits. Meta Spark has passed a live custom-proposal check. Baseten transport was tested; a later numeric interpretation error keeps that optional provider paused pending correction and revalidation. Open `/teacher.html` for the printable activity and observation sheet.
 
 **Narration: On** adds model-derived captions. Read aloud separately opts into local Kokoro Heart neural speech, with no hosted inference charge or device-voice fallback. **Speak a question** adds review-before-send Meta dictation and an editable transcript; it never runs an experiment automatically. See [voice setup, costs and verified limits](docs/narration.md).
 
 The [resource-use guide](docs/resource-use.md) records where inference is optional, existing reuse limits, and environmental claims we cannot yet support. The teacher guide includes an optional discussion connecting the experiment to a familiar place and examining the tool’s own resource use.
 
 Choose **Place photo** to inspect reviewed SAM image shares and explicitly choose starting food while retaining your creatures and fixed map. A labelled recorded example needs no inference. See [place measurements and limits](docs/places.md) and the [short demo/evidence checklist](docs/demo.md).
+
+## Entrance and reusable tools
+
+Open `/storyboard.html` for the layered watercolor entrance, then `/behind.html` for the craft/resource explanation and `/build-with.html` for reusable source. The entrance uses cached local fox/fawn poses and a licensed photo with its actual Meta illustration; see [verification and art notes](docs/entrance-polish.md).
+
+The original project code is [MIT-licensed](LICENSE). Artwork, model services and upstream dependencies retain their own terms; see [THIRD_PARTY.md](THIRD_PARTY.md). Three independent MIT source repositories have examples and tests that run without API keys:
+
+- [microverse-ecosystem](https://github.com/S2800-0/microverse-ecosystem): deterministic model, complete state and experiment replay.
+- [microverse-puppets](https://github.com/S2800-0/microverse-puppets): local cutout fitting, procedural motion and rig review, with a browser example.
+- [microverse-commands](https://github.com/S2800-0/microverse-commands): prepared questions and bounded, reviewable experiment proposals.
+
+These are extracted prototypes, not npm registry releases or externally validated tools.
 
 ## Provenance and event contributions
 

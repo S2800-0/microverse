@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "file": "fox-walk.webp",
+      "source": "public/meta-art/game-fox.png",
+      "sourceSha256": "3d59669ebf5250ecf383e72cb41888fa38ae81afe9fb2d0372fd9fb9b4c12d7a",
+      "sha256": "baab4b5bb6f48a582795786d36e6d6224d9d3b9932c3509ab9fe2dc51b8f2738",
+      "width": 2304,
+      "height": 1280,
+      "frames": 24,
+      "columns": 6,
+      "rows": 4,
+      "cellWidth": 384,
+      "cellHeight": 320,
+      "processing": "24 frames locally rendered with the reviewed rig and existing artistic walk preset; no inference."
+    },
+    {
+      "file": "fawn-walk.webp",
+      "source": "public/meta-art/game-fawn.png",
+      "sourceSha256": "d416a6c49dea720ca3dd1bbc127a8cdf3ab26777a87aa8682bebc15c611b8f74",
+      "sha256": "6be0346d0636e873b80e635150dd1d332a25398508568b3afd7e73da890bf61c",
+      "width": 2304,
+      "height": 1280,
+      "frames": 24,
+      "columns": 6,
+      "rows": 4,
+      "cellWidth": 384,
+      "cellHeight": 320,
+      "processing": "24 frames locally rendered with the reviewed rig and existing artistic walk preset; no inference."
+    },
+    {
+      "file": "forest-background.webp",
+      "source": "public/meta-art/entrance-background.png",
+      "sourceSha256": "dd1d8946b99e0781b2ac4fe3f0eac648b0ea6858e5a03894a8097335220dffd6",
+      "sha256": "52beec3cef6522389b41f60d06e652582c6b58cf5873dfce377276dedb7e4ed8",
+      "width": 1672,
+      "height": 941,
+      "processing": "Local WebP presentation export; original retained."
+    },
+    {
+      "file": "forest-left.webp",
+      "source": "public/meta-art/entrance-left.png",
+      "sourceSha256": "178a4a556b74d300bd9d88d7face46563bff87f795e09469694ed02cc421a86a",
+      "sha256": "31dd8eeeaf23cd905746e1246c2795a3f4a3bd2c0b3dd01395515c7f2b707486",
+      "width": 1672,
+      "height": 941,
+      "processing": "Local WebP presentation export; original retained."
+    },
+    {
+      "file": "forest-right.webp",
+      "source": "public/meta-art/entrance-right.png",
+      "sourceSha256": "49c19559591ab477fbb91ec6a58c469e5f40f4e90066350a18f9c5ad772b1595",
+      "sha256": "4dd0e85c3295be09e5559da605fdc6b36e7c32dd7c2766b96f878afae42021fb",
+      "width": 1672,
+      "height": 941,
+      "processing": "Local WebP presentation export; original retained."
+    },
+    {
+      "file": "forest-master.webp",
+      "source": "public/meta-art/forest.png",
+      "sourceSha256": "7334c0a4fa5aac89f4621c496df19221aa71e462ba3d5ae34d5bcbf7fbe03218",
+      "sha256": "e6a411dbb37e29351e49e0222e34511f6db3ee176b4542e05c4deb52a1c01478",
+      "width": 1920,
+      "height": 1080,
+      "processing": "Local WebP presentation export; original retained."
+    },
+    {
+      "file": "word-mountains.webp",
+      "source": "public/meta-art/forest.png",
+      "sourceSha256": "7334c0a4fa5aac89f4621c496df19221aa71e462ba3d5ae34d5bcbf7fbe03218",
+      "sha256": "55a4cebe344e396eb8c63b112f2dbd74f087097e99af2e34e42824cf941d6414",
+      "width": 400,
+      "height": 125,
+      "processing": "Local ridge crop with traced/feathered alpha for headline overlap; no generation."
+    },
+    {
+      "file": "dog-photo.jpg",
+      "sha256": "91b3250da493ca6f3328c6af30cf9aaacc2b6a675c37608a7bac2f7eb9e5d89f",
+      "width": 330,
+      "height": 385,
+      "processing": "Metadata-free crop of licensed source photo.",
+      "source": "https://commons.wikimedia.org/wiki/File:Golden_Retriever_88.JPG",
+      "author": "Mtlchung",
+      "sourceLicense": "CC0 1.0",
+      "model": null
+    },
+    {
+      "file": "dog-watercolor.webp",
+      "sha256": "5feb2f456a612e7d7087c6c3cbea6b6dc17da8beb6f4b9e0c32dcb385115176d",
+      "width": 940,
+      "height": 740,
+      "processing": "Actual Muse Image edit of the licensed dog photo; SAM cutout composed locally, cropped and resized.",
+      "source": "https://commons.wikimedia.org/wiki/File:Golden_Retriever_88.JPG",
+      "author": "Mtlchung",
+      "sourceLicense": "CC0 1.0",
+      "model": "muse-image-1.0 + sam-3.1"
+    }
+  ]
+}
