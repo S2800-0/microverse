@@ -1,6 +1,6 @@
 import { createForestController } from './controller.ts';
 import { createCreatureLibrary } from './creature-library.js';
-import { ART, DOE_FROM_BUCK, variantKey, sizeJitter, makeDoeUrl } from './art.js';
+import { ART, artForAnimal, variantKey, sizeJitter } from './art.js';
 import { buildRig, GAITS } from '../motion/rig.js';
 import { assessRig } from '../motion/rig-analysis.js';
 import { prepareJointPieces, drawPuppet } from '../motion/puppet-motion.js';
@@ -36,16 +36,11 @@ async function loadArt(){
       assets.set(species,{image,rig});
     }catch{failures++;}
   }));
-  try{
-    const url=await makeDoeUrl(),image=new Image();image.src=url;await image.decode();let rig=null;
-    try{const candidate=await buildRig(url,DOE_FROM_BUCK.cut);if(!assessRig(candidate).warnings.length)rig=prepareJointPieces(candidate);}catch{}
-    assets.set('doe',{image,rig});
-  }catch{/* bucks stand in for does if the derived sprite cannot be made */}
   el('loading').hidden=true;
   needsDraw=true;
   status(failures?`${failures} image(s) unavailable; model creatures still work. Click a creature to inspect its record.`:'Meet a creature, follow a connection, ask a question.');
 }
-function nameOf(a){return forest.getState().appearances.get(a.id)?.name||a.name||`${ART[a.species]?.label||a.species} ${a.id}`;}
+function nameOf(a){return forest.getState().appearances.get(a.id)?.name||a.name||`${artForAnimal(a)?.label||a.species} ${a.id}`;}
 function actorFor(animal){
   let actor=actors.get(animal.id);if(actor)return actor;
   const button=document.createElement('button');button.className='animal';button.dataset.id=animal.id;
@@ -59,14 +54,14 @@ function actorFor(animal){
     if(sx<30||sx>v.clientWidth-30||sy<125||sy>v.clientHeight-170){cam.x=v.clientWidth/2-animal.x/100*cam.width*cam.zoom;cam.y=v.clientHeight/2-animal.y/forest.getState().world.params.height*cam.height*cam.zoom;clampCamera();}
   };
   el('animals').append(button);
-  actor={button,canvas,x:animal.x,y:animal.y,fromX:animal.x,fromY:animal.y,toX:animal.x,toY:animal.y,phase:animal.id*.37,dir:1};
+  actor={button,canvas,label,x:animal.x,y:animal.y,fromX:animal.x,fromY:animal.y,toX:animal.x,toY:animal.y,phase:animal.id*.37,dir:1};
   actors.set(animal.id,actor);return actor;
 }
 function sync(animate=false){
   needsDraw=true;
   const state=forest.getState(),live=new Set(state.animals.map(a=>a.id));
   for(const [id,actor]of actors)if(!live.has(id)){actor.button.remove();actors.delete(id);}
-  for(const a of state.animals){const actor=actorFor(a);actor.fromX=actor.x;actor.fromY=actor.y;actor.toX=a.x;actor.toY=a.y;if(!animate){actor.x=a.x;actor.y=a.y;actor.fromX=a.x;actor.fromY=a.y;}}
+  for(const a of state.animals){const actor=actorFor(a),name=nameOf(a);if(actor.label.textContent!==name){actor.label.textContent=name;actor.button.setAttribute('aria-label',`${name}, ${a.species}`);}actor.fromX=actor.x;actor.fromY=actor.y;actor.toX=a.x;actor.toY=a.y;if(!animate){actor.x=a.x;actor.y=a.y;actor.fromX=a.x;actor.fromY=a.y;}}
   el('empty').hidden=state.animals.length>0;
   el('calendar').textContent=`${state.season[0].toUpperCase()+state.season.slice(1)} · year ${Math.floor(state.week/52)+1}`;
   el('week').textContent=`Week ${state.week}`;
@@ -92,7 +87,7 @@ function eventText(e){
 function updateCard(){
   const state=forest.getState(),a=state.world.animals.find(a=>a.id===state.selectedId);
   el('creature-card').hidden=!a;if(!a)return;
-  const art=ART[a.species],custom=state.appearances.get(a.id);
+  const art=artForAnimal(a),custom=state.appearances.get(a.id);
   const src=custom?.image||art?.image;
   el('portrait').hidden=!src;if(src)el('portrait').src=src;
   el('creature-name').textContent=nameOf(a);
@@ -190,7 +185,7 @@ function render(now){
     const moved=Math.hypot(x-actor.x,(y-actor.y)*1.7);
     if(Math.abs(x-actor.x)>.001)actor.dir=x<actor.x?-1:1;
     actor.x=x;actor.y=y;
-    const vkey=variantKey(animal),vart=vkey==='doe'?DOE_FROM_BUCK:ART[vkey]||art;
+    const vkey=variantKey(animal),vart=artForAnimal(animal);
     const size=Math.max(38,Math.min(105,cam.width*.045))*(vart?.size||1)*sizeJitter(animal.id);
     actor.button.style.left=`${x}%`;actor.button.style.top=`${y/state.world.params.height*100}%`;
     actor.button.style.setProperty('--size',`${size}px`);actor.button.style.zIndex=String(Math.round(y*10));

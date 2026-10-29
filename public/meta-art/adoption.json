@@ -1,0 +1,407 @@
+{
+  "version": 1,
+  "active": [
+    {
+      "id": "fox",
+      "image": "/meta-art/game-fox.png",
+      "mode": "articulated"
+    },
+    {
+      "id": "wolf",
+      "image": "/meta-art/game-wolf.png",
+      "mode": "articulated"
+    },
+    {
+      "id": "deer",
+      "image": "/meta-art/game-deer.png",
+      "mode": "articulated"
+    },
+    {
+      "id": "doe",
+      "image": "/meta-art/game-doe.png",
+      "mode": "articulated"
+    },
+    {
+      "id": "fawn",
+      "image": "/meta-art/game-fawn.png",
+      "mode": "articulated"
+    },
+    {
+      "id": "rabbit",
+      "image": "/meta-art/game-rabbit.png",
+      "mode": "whole-image"
+    },
+    {
+      "id": "dog",
+      "image": "/meta-art/game-dog.png",
+      "mode": "articulated"
+    },
+    {
+      "id": "cat-standing",
+      "image": "/meta-art/game-cat-standing.png",
+      "mode": "whole-image"
+    },
+    {
+      "id": "game-map",
+      "image": "/meta-art/game-map-live.png",
+      "mode": "fixed-terrain"
+    }
+  ],
+  "assets": [
+    {
+      "file": "game-fox.png",
+      "sha256": "3d59669ebf5250ecf383e72cb41888fa38ae81afe9fb2d0372fd9fb9b4c12d7a",
+      "width": 640,
+      "height": 640,
+      "sources": [
+        {
+          "file": "fox.png",
+          "sha256": "1cf9aa8d4e786288240a03d03d857a35f996259ff9141bd563aa4905dcd92481"
+        }
+      ],
+      "processing": "Opaque bounds, uniform scale, 640-square canvas with common foot baseline. Source colour and alpha retained.",
+      "occupiedBounds": [
+        40,
+        213,
+        600,
+        570
+      ],
+      "baseline": 569
+    },
+    {
+      "file": "game-wolf.png",
+      "sha256": "978df5e6becd1f2bee4c51d6f7d04e9f83e92839d688f6fcd9f73f277bebae57",
+      "width": 640,
+      "height": 640,
+      "sources": [
+        {
+          "file": "wolf.png",
+          "sha256": "748ab9fefa24f9d4a5059722b54686253308fe128dd74a537c3230afc47f7b7e"
+        }
+      ],
+      "processing": "Opaque bounds, uniform scale, 640-square canvas with common foot baseline. Source colour and alpha retained.",
+      "occupiedBounds": [
+        40,
+        169,
+        600,
+        570
+      ],
+      "baseline": 569
+    },
+    {
+      "file": "game-deer.png",
+      "sha256": "7dd9e7ba8fc5620dedf4c5b891d42c0469c450ec39b049de79648c77b1868593",
+      "width": 640,
+      "height": 640,
+      "sources": [
+        {
+          "file": "deer.png",
+          "sha256": "f7bf3a546916f4fbab08a7ce4afc6ed94c57f03eaf36318eb6a0cfb756138f87"
+        }
+      ],
+      "processing": "Opaque bounds, uniform scale, 640-square canvas with common foot baseline. Source colour and alpha retained.",
+      "occupiedBounds": [
+        64,
+        40,
+        576,
+        570
+      ],
+      "baseline": 569
+    },
+    {
+      "file": "game-doe.png",
+      "sha256": "772954138751b3abb4b0321585a37ec62e191875dd23d18da462bf142d3fa4d2",
+      "width": 640,
+      "height": 640,
+      "sources": [
+        {
+          "file": "doe.png",
+          "sha256": "fff4001ccde0957f37921a7efb3fe57db4c37a64e018f22d449adadaece4466a"
+        }
+      ],
+      "processing": "Opaque bounds, uniform scale, 640-square canvas with common foot baseline. Source colour and alpha retained.",
+      "occupiedBounds": [
+        40,
+        95,
+        600,
+        570
+      ],
+      "baseline": 569
+    },
+    {
+      "file": "game-fawn.png",
+      "sha256": "d416a6c49dea720ca3dd1bbc127a8cdf3ab26777a87aa8682bebc15c611b8f74",
+      "width": 640,
+      "height": 640,
+      "sources": [
+        {
+          "file": "fawn.png",
+          "sha256": "e893afc45f986a4892f68cd81e90b66ac0568123ef6697f683a77c851c987a8f"
+        }
+      ],
+      "processing": "Opaque bounds, uniform scale, 640-square canvas with common foot baseline. Source colour and alpha retained.",
+      "occupiedBounds": [
+        40,
+        44,
+        600,
+        570
+      ],
+      "baseline": 569
+    },
+    {
+      "file": "game-rabbit.png",
+      "sha256": "bf332e98a8ffa73423e6337c6cd0de59ef71e5cbad0ab35016830b820c399dc1",
+      "width": 640,
+      "height": 640,
+      "sources": [
+        {
+          "file": "rabbit.png",
+          "sha256": "e8afad66e31f72ac6aa17f1be129d594315e9e4509fad61c1b9d12f808a57eb9"
+        }
+      ],
+      "processing": "Opaque bounds, uniform scale, 640-square canvas with common foot baseline. Source colour and alpha retained.",
+      "occupiedBounds": [
+        54,
+        40,
+        585,
+        570
+      ],
+      "baseline": 569
+    },
+    {
+      "file": "game-dog.png",
+      "sha256": "78f56556ca2179bbb6cef58ef6b4b652c4753301a9a15bd7ca8632e40db42d16",
+      "width": 640,
+      "height": 640,
+      "sources": [
+        {
+          "file": "dog.png",
+          "sha256": "a4eacd0b397165a0afa8bef28245eaf5b64d883b993cec51ed0e6d27f4d32581"
+        }
+      ],
+      "processing": "Opaque bounds, uniform scale, 640-square canvas with common foot baseline. Source colour and alpha retained.",
+      "occupiedBounds": [
+        40,
+        189,
+        600,
+        570
+      ],
+      "baseline": 569
+    },
+    {
+      "file": "game-cat-standing.png",
+      "sha256": "fd0997d2324e3fb4f62f3af6916037cdd9cb09173a7ad5853238cb4b2fee4d43",
+      "width": 640,
+      "height": 640,
+      "sources": [
+        {
+          "file": "cat-standing.png",
+          "sha256": "895320523185a3d9b885d52e0a8bbb7a7a88bc3792a5bb7ab17fce6726477998"
+        }
+      ],
+      "processing": "Opaque bounds, uniform scale, 640-square canvas with common foot baseline. Source colour and alpha retained.",
+      "occupiedBounds": [
+        40,
+        190,
+        600,
+        570
+      ],
+      "baseline": 569
+    },
+    {
+      "file": "entrance-fox-poster.png",
+      "sha256": "f54bef13ac6df455511f5f492e2a4f44a532bc705ac40c3124a6bf6a4993cb2a",
+      "width": 900,
+      "height": 620,
+      "sources": [
+        {
+          "file": "game-fox.png",
+          "sha256": "3d59669ebf5250ecf383e72cb41888fa38ae81afe9fb2d0372fd9fb9b4c12d7a"
+        }
+      ],
+      "processing": "Static poster in the same presentation canvas and anchor as the local rig."
+    },
+    {
+      "file": "game-map-live.png",
+      "sha256": "3c427309e057eef0a5bf8cc6956b64af01afabe74e8a7d793ad16638d55fb3bb",
+      "width": 1672,
+      "height": 941,
+      "sources": [
+        {
+          "file": "game-map.png",
+          "sha256": "4ca735c37789bf62f10d679e438a8649c258c5f9439de48e36d082c469aa1f26"
+        }
+      ],
+      "processing": "Uniform export to existing canvas dimensions. Fixed terrain remains unchanged; manually inspected against its overlay."
+    },
+    {
+      "file": "entrance-background.png",
+      "sha256": "dd1d8946b99e0781b2ac4fe3f0eac648b0ea6858e5a03894a8097335220dffd6",
+      "width": 1672,
+      "height": 941,
+      "sources": [
+        {
+          "file": "forest.png",
+          "sha256": "7334c0a4fa5aac89f4621c496df19221aa71e462ba3d5ae34d5bcbf7fbe03218"
+        },
+        {
+          "file": "clean-plate.png",
+          "sha256": "3d3b587099cdae752eab00561091cc3ccff94dda50d4ee2dbf0474f8fd983ac7"
+        },
+        {
+          "file": "foreground-left.png",
+          "sha256": "40b5b744c9fafd00b30afabdd9a4b574673dee9faad816bf3cff5021a8a41755"
+        },
+        {
+          "file": "foreground-right.png",
+          "sha256": "b80d1d848db7d7867c2f81ba892c0f42ce6f923cab1c35f31077c891b9db9601"
+        }
+      ],
+      "processing": "Subtract right SAM mask from combined mask, retain left-edge connected regions and manually reviewed edge-tree polygons excluding the central walking corridor; place source-painting pixels over generated fill only inside removed foreground regions. All exports share the same canvas."
+    },
+    {
+      "file": "entrance-left.png",
+      "sha256": "178a4a556b74d300bd9d88d7face46563bff87f795e09469694ed02cc421a86a",
+      "width": 1672,
+      "height": 941,
+      "sources": [
+        {
+          "file": "forest.png",
+          "sha256": "7334c0a4fa5aac89f4621c496df19221aa71e462ba3d5ae34d5bcbf7fbe03218"
+        },
+        {
+          "file": "clean-plate.png",
+          "sha256": "3d3b587099cdae752eab00561091cc3ccff94dda50d4ee2dbf0474f8fd983ac7"
+        },
+        {
+          "file": "foreground-left.png",
+          "sha256": "40b5b744c9fafd00b30afabdd9a4b574673dee9faad816bf3cff5021a8a41755"
+        },
+        {
+          "file": "foreground-right.png",
+          "sha256": "b80d1d848db7d7867c2f81ba892c0f42ce6f923cab1c35f31077c891b9db9601"
+        }
+      ],
+      "processing": "Subtract right SAM mask from combined mask, retain left-edge connected regions and manually reviewed edge-tree polygons excluding the central walking corridor; place source-painting pixels over generated fill only inside removed foreground regions. All exports share the same canvas."
+    },
+    {
+      "file": "entrance-right.png",
+      "sha256": "49c19559591ab477fbb91ec6a58c469e5f40f4e90066350a18f9c5ad772b1595",
+      "width": 1672,
+      "height": 941,
+      "sources": [
+        {
+          "file": "forest.png",
+          "sha256": "7334c0a4fa5aac89f4621c496df19221aa71e462ba3d5ae34d5bcbf7fbe03218"
+        },
+        {
+          "file": "clean-plate.png",
+          "sha256": "3d3b587099cdae752eab00561091cc3ccff94dda50d4ee2dbf0474f8fd983ac7"
+        },
+        {
+          "file": "foreground-left.png",
+          "sha256": "40b5b744c9fafd00b30afabdd9a4b574673dee9faad816bf3cff5021a8a41755"
+        },
+        {
+          "file": "foreground-right.png",
+          "sha256": "b80d1d848db7d7867c2f81ba892c0f42ce6f923cab1c35f31077c891b9db9601"
+        }
+      ],
+      "processing": "Subtract right SAM mask from combined mask, retain left-edge connected regions and manually reviewed edge-tree polygons excluding the central walking corridor; place source-painting pixels over generated fill only inside removed foreground regions. All exports share the same canvas."
+    }
+  ],
+  "forest": {
+    "size": [
+      1672,
+      941
+    ],
+    "restCompositeExact": true,
+    "leftBounds": [
+      0,
+      0,
+      603,
+      941
+    ],
+    "rightBounds": [
+      1237,
+      0,
+      1672,
+      941
+    ],
+    "changedCentrePixels": 0,
+    "walkCorridorClear": true,
+    "leftOutline": [
+      [
+        0,
+        0
+      ],
+      [
+        0.19,
+        0
+      ],
+      [
+        0.17,
+        0.18
+      ],
+      [
+        0.21,
+        0.3
+      ],
+      [
+        0.2,
+        0.5
+      ],
+      [
+        0.3,
+        0.68
+      ],
+      [
+        0.36,
+        0.88
+      ],
+      [
+        0.34,
+        1
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "rightOutline": [
+      [
+        1,
+        0
+      ],
+      [
+        0.83,
+        0
+      ],
+      [
+        0.81,
+        0.22
+      ],
+      [
+        0.81,
+        0.48
+      ],
+      [
+        0.79,
+        0.62
+      ],
+      [
+        0.75,
+        0.77
+      ],
+      [
+        0.74,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "note": "Exact rest composition does not establish natural-looking disocclusion during motion; browser motion review still required."
+  }
+}
