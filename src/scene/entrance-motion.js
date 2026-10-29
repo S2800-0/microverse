@@ -1,0 +1,1 @@
+export function entranceFrame(value){const progress=Math.max(0,Math.min(1,Number.isFinite(value)?value:0));return {progress,camera:1.018+progress*.065,foreground:1.018+progress*.13,edgeShift:progress*1.6,foxPercent:45+progress*17,titleOpacity:1-progress*.55};}

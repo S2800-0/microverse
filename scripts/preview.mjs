@@ -16,6 +16,10 @@ export function createPreviewServer({ motion=false, testSprite=process.env.MICRO
     if(!['GET','HEAD'].includes(req.method)){res.writeHead(404);res.end('Not found');return;}
     let file;
     if(path==='/')file=motion?'examples/motion/index.html':'app/index.html';
+    else if(/^\/entrance\/[a-z-]+\.(png|webp|jpg|json)$/.test(path))file=`public${path}`;
+    else if(path==='/entrance.css')file='app/entrance.css';
+    else if(path==='/behind.html')file='app/behind.html';
+    else if(path==='/build-with.html')file='app/build-with.html';
     else if(path==='/storyboard.html')file='app/storyboard.html';
     else if(path==='/art-review.html')file='app/art-review.html';
     else if(path==='/meta-art.css')file='app/meta-art.css';
@@ -37,7 +41,7 @@ export function createPreviewServer({ motion=false, testSprite=process.env.MICRO
       let data=await readFile(resolve(root,file));
       const extension=extname(file);
       if(extension==='.ts')data=stripTypeScriptTypes(data.toString());
-      const contentType={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.ts':'text/javascript; charset=utf-8','.png':'image/png','.json':'application/json'}[extension];
+      const contentType={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.ts':'text/javascript; charset=utf-8','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.json':'application/json'}[extension];
       res.writeHead(200,{'Content-Type':contentType,'Cache-Control':'no-store'});res.end(req.method==='HEAD'?undefined:data);
     }catch{res.writeHead(404);res.end('Not found');}
   });
