@@ -44,6 +44,10 @@ The [resource-use guide](docs/resource-use.md) records where inference is option
 
 Choose **Place photo** to inspect reviewed SAM image shares and explicitly choose starting food while retaining your creatures and fixed map. A labelled recorded example needs no inference. See [place measurements and limits](docs/places.md) and the [short demo/evidence checklist](docs/demo.md).
 
+## Focused game experience study
+
+Open `/forest-story.html` to try the four-scene lesson prototype: meet a rabbit, predict, watch a real model-food change and reflect. `/examples/forest/story-frames.html` shows the four frames together; `/examples/forest/animal-acting.html` reviews grounded fox motion. These are separate review surfaces; the existing forest remains available. See [the prototype scope and checks](docs/forest-story-prototype.md).
+
 ## Entrance and reusable tools
 
 Open `/storyboard.html` for the layered watercolor entrance, then `/behind.html` for the craft/resource explanation and `/build-with.html` for reusable source. The entrance uses cached local fox/fawn poses and a licensed photo with its actual Meta illustration; see [verification and art notes](docs/entrance-polish.md).

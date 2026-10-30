@@ -14,6 +14,8 @@ test('preview serves browser modules and hides repository internals',async()=>{
     assert.equal((await fetch(base+'/animals/dog-standing.png',{method:'HEAD'})).status,200);
     const storyboard=await fetch(base+'/storyboard.html');assert.equal(storyboard.status,200);assert.match(await storyboard.text(),/big consequences/);
     for(const page of ['/behind.html','/build-with.html'])assert.equal((await fetch(base+page)).status,200);
+    for(const page of ['/forest-story.html','/examples/forest/story-frames.html','/examples/forest/animal-acting.html'])assert.equal((await fetch(base+page)).status,200);
+    assert.match((await fetch(base+'/forest-story.css')).headers.get('content-type'),/text\/css/);
     assert.match((await fetch(base+'/entrance.css')).headers.get('content-type'),/text\/css/);
     assert.match((await fetch(base+'/entrance/fox-walk.webp',{method:'HEAD'})).headers.get('content-type'),/image\/webp/);
     assert.match((await fetch(base+'/entrance/dog-photo.jpg',{method:'HEAD'})).headers.get('content-type'),/image\/jpeg/);

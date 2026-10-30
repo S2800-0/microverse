@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Microverse · A little less rain</title><link rel="stylesheet" href="/forest-story.css"></head>
+<body>
+  <main class="story" aria-label="A little less rain">
+    <canvas id="story-world" aria-label="A close view of the model meadow"></canvas><div class="story-wash" aria-hidden="true"></div><div class="story-edge" aria-hidden="true"></div>
+    <header class="story-header"><a class="brand" href="/storyboard.html" aria-label="Microverse home">microverse<span aria-hidden="true">✳</span></a><p id="step-label">Meet · 1 of 4</p><div class="header-controls"><button id="pause-motion" aria-pressed="false">Pause</button><button id="story-menu" aria-label="Story options">•••</button></div></header>
+    <section class="story-heading"><p class="eyebrow">A LITTLE LESS RAIN</p><h1 id="story-title" tabindex="-1">A small neighbour.<br>A big connection.</h1><p id="story-subtitle">Meet one rabbit in the meadow.</p></section>
+    <button id="rabbit-hello" class="rabbit-hit" aria-label="Say hello to the rabbit"><span>Say hello</span><i aria-hidden="true"></i></button>
+    <div id="time-marker" class="time-marker" hidden><span id="weather-symbol" aria-hidden="true">☁</span><span id="time-label">Week 0</span><span id="condition-label">Less rain</span></div>
+    <section class="story-dock" aria-live="polite" aria-atomic="false">
+      <div class="fox-line"><img src="/meta-art/guide-attentive.png" alt="" id="guide-face"><p id="guide-line">Tap the rabbit to say hello.</p></div>
+      <div id="prediction-choices" class="picture-choices" role="group" aria-label="Your prediction" hidden><button data-predict="Plant food"><svg class="grass-icon" aria-hidden="true" viewBox="0 0 56 43" width="56" height="43"><g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M28 39Q17 19 10 16M28 39Q25 14 19 8M28 39Q30 9 35 5M28 39Q41 15 46 17M28 39Q14 31 7 31"/></g></svg>Plant food</button><button data-predict="Animal numbers"><img src="/meta-art/game-rabbit.png" alt="">The animals</button><button data-predict="Not sure"><span class="question-icon" aria-hidden="true">?</span>Not sure</button></div>
+      <div id="reflection-choices" class="picture-choices" role="group" aria-label="What you noticed" hidden><button data-reflect="Less grass food">Less food</button><button data-reflect="About the same food">About the same</button><button data-reflect="More grass food">More food</button><button data-reflect="Not sure">Not sure</button></div>
+      <div id="connection" class="connection" hidden><span>Less rain</span><b aria-hidden="true">→</b><span>Slower plant growth</span><b aria-hidden="true">→</b><span>Different food</span></div>
+      <label id="why-field" class="why-field" hidden>Why do you think that?<textarea id="reflection-note" rows="2" maxlength="1000" placeholder="A few words, if you like…"></textarea></label>
+      <div class="dock-actions"><button id="story-back" class="quiet" hidden>Back</button><button id="compare-weather" class="quiet" hidden>See usual rain</button><button id="story-next" class="primary" hidden>What if it rains less? <span aria-hidden="true">↗</span></button></div>
+      <p id="story-status" class="story-status" role="status"></p>
+    </section>
+    <p id="loading" class="loading" role="status">Waking up the meadow…</p>
+  </main>
+  <dialog id="options"><button class="close" id="options-close" aria-label="Close story options">×</button><p class="eyebrow">YOUR LITTLE WORLD</p><h2>A quieter moment?</h2><label class="setting"><input type="checkbox" id="reduce-motion"> Use less motion</label><button id="restart-story">Start this story again</button><button id="save-story" disabled>Save this experiment</button><details><summary>About this story preview</summary><p>This focused view shows one rabbit; all the other creatures still run in both model forests. It is a selective illustration, not a view for counting animals. Painted grass strokes illustrate the model’s food scale. They are not measured plants. The rabbit’s whole-image hop is an artistic interpretation.</p><p>Rainfall is halved for one model year. This short preview watches the first 13 weeks. The comparison keeps the same starting forest. It makes no AI calls.</p><a href="/examples/forest/story-frames.html">See the four design frames</a><a href="/examples/forest/animal-acting.html">Review the fox’s movement</a></details><a href="/">Open the existing forest</a></dialog>
+  <script type="module" src="/src/scene/forest-story.js"></script>
+</body></html>
