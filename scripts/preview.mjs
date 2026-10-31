@@ -16,6 +16,8 @@ export function createPreviewServer({ motion=false, testSprite=process.env.MICRO
     if(!['GET','HEAD'].includes(req.method)){res.writeHead(404);res.end('Not found');return;}
     let file;
     if(path==='/')file=motion?'examples/motion/index.html':'app/index.html';
+    else if(path==='/discovery.html')file='app/discovery.html';
+    else if(path==='/discovery.css')file='app/discovery.css';
     else if(path==='/forest-story.html')file='app/forest-story.html';
     else if(path==='/forest-story.css')file='app/forest-story.css';
     else if(/^\/entrance\/[a-z-]+\.(png|webp|jpg|json)$/.test(path))file=`public${path}`;

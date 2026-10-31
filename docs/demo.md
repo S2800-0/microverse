@@ -3,10 +3,10 @@
 ## Three-minute spine
 
 1. Show **My creatures** with a cleared sample or owner-approved image. Reveal the reviewed creature and one clearly labelled imagined moment, then a sourced species fact. Painting/cutout is live only if actually requested; a saved illustration is labelled as saved. Use the fact's forest-connection invitation to enter the guide. The guided forest is a fresh ecosystem, not a reconstruction of the pet's home.
-2. Predict what changes first when rainfall is halved. Watch the first model week; one forest is visible, with its usual-rainfall reference shown in food bars. Open the meadow close-up and explain the model rule. The visual layer represents simulated food, not measured biomass.
-3. Continue to week 13. Inspect a real animal event or rabbit population record. Write an explanation before revealing curated connections. Do not imply that lower rain always produces fewer animals or that a model event proves a real-world cause.
+2. Predict what changes first when rainfall is halved. Watch the focused meadow through 13 model weeks, then switch the same patch between usual rainfall and the changed condition. Record the learner response before opening the model connection. The visual layer represents simulated food, not measured biomass.
+3. After the learner response, optionally inspect a saved rabbit-birth state or open the precise food/population record. Do not imply that lower rain always produces fewer animals or that a model event proves a real-world cause.
 4. Connect the investigation to plants near a home/school and the outdoor evidence one would need. Show the optional reference/both-forests control or a supported related question, without turning the demo into a feature tour.
-5. End on **Save discovery card** and reproducible model-only rerun. The complete experiment file may retain personal pictures/notes; the embedded model-only rerun strips them. The optional reviewed place-photo feature can be shown separately if time permits, with its fixed-map/proxy limits.
+5. End on **Open my discovery**, its print/download controls and reproducible model-only rerun. The complete experiment file may retain personal pictures/notes; the embedded model-only rerun strips them. The optional reviewed place-photo feature can be shown separately if time permits, with its fixed-map/proxy limits.
 
 **Show Meta's role explicitly (25% of judging).** The default guide makes no AI call, and its explanation is a local evidence guide, so say so. Add one short, attributable Meta segment: a creature illustration/cutout made with Muse Image and SAM (labelled live or saved, whichever it is), or an enabled Spark evidence selection. Then show the deterministic comparison and replay as the technical depth. Never imply the local explanation came from Spark or that a saved result was generated live.
 
@@ -27,3 +27,7 @@ Ask one participant to attempt the activity without coaching through every contr
 **Participant sessions remain zero.** Do not turn developer QA into classroom findings or claim learning gains/conservation outcomes. If nobody is available, submit the implemented activity and protocol with usability/learning outcomes labelled untested. Use [the pilot observation sheet](../app/teacher.html) in the running preview.
 
 Confirm the event's reuse/eligibility requirements and disclose pre-event engine/art imports via `PROVENANCE.md`. Choose only cleared/public/owner-approved assets for a public video. Do not expose private photos, keys, local billing receipts or learner notes. Place-photo measurements are image estimates and selected model proxies; generated map skins, calibrated ecology and real-place forecasts remain future work.
+
+## Focused lesson integration · October 31, 2026
+
+The website and game lesson entry now use the focused classroom flow. It preserves the exploring forest while open, keeps responses across closing/reopening, and links a card preview with local downloads. The [integration record](focused-classroom-flow.md) distinguishes browser/model verification from pending participant findings. The default story and prepared wetter question make no hosted inference calls.

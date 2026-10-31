@@ -2,7 +2,7 @@
 
 An illustrated ecosystem playground: bring a creature to life, predict what an environmental change will do, and compare repeatable model experiments.
 
-Start with **A dry spell begins**, the replayable guided investigation, or visit **My creatures** to save a reviewed companion on this browser. Investigations now show one forest with an optional reference/split view, plain-language food comparisons, recorded-event close-ups and an everyday reflection. See [the experience guide](docs/guided-discovery.md) and [initial curriculum correspondence check](docs/curriculum-review.md).
+Start with **A little less rain**, the focused forest story, or visit **My creatures** to save a reviewed companion on this browser. Investigations now show one forest with an optional reference/split view, plain-language food comparisons, recorded-event close-ups and an everyday reflection. See [the experience guide](docs/guided-discovery.md) and [initial curriculum correspondence check](docs/curriculum-review.md).
 
 This public repository is being assembled one feature at a time. The living forest supports complete snapshots, paired experiments and downloadable replay with creature images and learner notes. Prepared ecology questions, manual changes, a traceable evidence guide and a printable classroom activity work without AI calls. Optional Meta creature and Spark bridges are disabled by default. The classroom activity follows **predict → experiment → inspect → explain** to explore indirect ecological effects; teacher/learner usability sessions remain pending.
 
@@ -44,9 +44,13 @@ The [resource-use guide](docs/resource-use.md) records where inference is option
 
 Choose **Place photo** to inspect reviewed SAM image shares and explicitly choose starting food while retaining your creatures and fixed map. A labelled recorded example needs no inference. See [place measurements and limits](docs/places.md) and the [short demo/evidence checklist](docs/demo.md).
 
-## Focused game experience study
+## Focused classroom flow
 
-Open `/forest-story.html` to try the four-scene lesson prototype: meet a rabbit, predict, watch a real model-food change and reflect. `/examples/forest/story-frames.html` shows the four frames together; `/examples/forest/animal-acting.html` reviews grounded fox motion. These are separate review surfaces; the existing forest remains available. See [the prototype scope and checks](docs/forest-story-prototype.md).
+Choose **Start a forest story** in the game or open `/?entry=lesson`. Meet → predict → watch → reflect leads into an optional recorded moment/evidence view, an outdoor question and a discovery card. Closing the story preserves the exploring forest; reopening retains the story and notes while that page stays open. A second prepared rain question needs no AI call.
+
+**Open my discovery** opens a validated local preview with print and HTML/JSON download controls. Natural read-aloud remains optional through the configured local voice; captions always remain available. See [flow, exports and verification](docs/focused-classroom-flow.md).
+
+The [four-frame study](docs/forest-story-prototype.md) and `/examples/forest/animal-acting.html` remain available for visual/movement review. The first lesson is integrated; the wider forest and creature studio are still being redesigned.
 
 ## Entrance and reusable tools
 

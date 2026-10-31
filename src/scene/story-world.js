@@ -3,15 +3,17 @@ import {drawStoryActor} from '../motion/story-actors.js';
 export function createStoryWorld(canvas,images,session){
   const ctx=canvas.getContext('2d'),first=session.frameAt(0).changed;
   const subject=first.animals.find(a=>a.id===session.subjectId);
-  const tracks=new Map();let width=1,height=1,projection=null;
-  function resize(){const box=canvas.getBoundingClientRect();width=box.width;height=box.height;const ratio=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(width*ratio);canvas.height=Math.round(height*ratio);ctx.setTransform(ratio,0,0,ratio,0,0);}
+  const tracks=new Map();let width=1,height=1,projection=null,cameraNow=null;
+  function resize(){const box=canvas.getBoundingClientRect();if(box.width<=0||box.height<=0)return;width=box.width;height=box.height;const ratio=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(width*ratio);canvas.height=Math.round(height*ratio);ctx.setTransform(ratio,0,0,ratio,0,0);}
   const observer=new ResizeObserver(resize);observer.observe(canvas);resize();
-  function draw(from,to,amount,{branch='changed',clock=0,reduced=false,showFood=false,emphasize=false,greeting=0}={}){
+  function draw(from,to,amount,{branch='changed',clock=0,reduced=false,showFood=false,emphasize=false,greeting=0,focusId=session.subjectId,dt=0}={}){
     const a=from[branch],b=to[branch],scale=Math.max(width/a.width,height/a.height)*(width<700?1.4:2.15);
-    const camera={x:subject.x-(width<700?0:6),y:subject.y+(width<700?4:-6)};
+    const anchor=focusId===session.subjectId?subject:a.animals.find(animal=>animal.id===focusId)||subject;
+    const camera={x:anchor.x-(width<700?0:6),y:anchor.y+(width<700?4:-6)};
     camera.x=Math.max(width/scale/2,Math.min(a.width-width/scale/2,camera.x));
     camera.y=Math.max(height/scale/2,Math.min(a.height-height/scale/2,camera.y));
-    const project=(x,y)=>({x:width/2+(x-camera.x)*scale,y:height/2+(y-camera.y)*scale});
+    if(!cameraNow||!Number.isFinite(cameraNow.x)||!Number.isFinite(cameraNow.y)||reduced)cameraNow={...camera};else{const blend=1-Math.exp(-Math.min(dt,.1)*7);cameraNow.x+=(camera.x-cameraNow.x)*blend;cameraNow.y+=(camera.y-cameraNow.y)*blend;}
+    const project=(x,y)=>({x:width/2+(x-cameraNow.x)*scale,y:height/2+(y-cameraNow.y)*scale});
     projection={project,scale};ctx.clearRect(0,0,width,height);ctx.fillStyle='#d5d8bd';ctx.fillRect(0,0,width,height);
     const origin=project(0,0);ctx.drawImage(images.map,origin.x,origin.y,a.width*scale,a.height*scale);
     if(showFood){
@@ -33,13 +35,13 @@ export function createStoryWorld(canvas,images,session){
     for(const animal of animals){
       // This is an explicitly selective close-up, not an overview/count display.
       // Every animal still participates in both model branches and saved replay.
-      if(animal.id!==session.subjectId)continue;
-      const p=project(animal.x,animal.y),size=(animal.species==='rabbit'?4.4:animal.species==='deer'?7.5:6)*scale;
+      if(animal.id!==focusId)continue;
+      const p=project(animal.x,animal.y),size=4.4*scale*(animal.age<13?.72:1);
       if(p.x<-size||p.x>width+size||p.y<0||p.y>height+size)continue;
       const key=`${branch}.${animal.id}`,old=tracks.get(key)||{x:animal.x,y:animal.y,distance:0,direction:1};
       const moved=Math.hypot(animal.x-old.x,animal.y-old.y)*scale;
       const track={x:animal.x,y:animal.y,distance:old.distance+(moved<scale*3?moved:0),direction:Math.abs(animal.x-old.x)>.001?Math.sign(animal.x-old.x):old.direction};tracks.set(key,track);
-      const focused=animal.id===session.subjectId;ctx.globalAlpha=1;
+      const focused=animal.id===focusId;ctx.globalAlpha=1;
       const species=animal.species==='deer'?(animal.age<52?'fawn':animal.sex==='f'?'doe':'deer'):animal.species;
       drawStoryActor(ctx,images,{species,...p,y:p.y-(focused&&!reduced?greeting*10:0),size,distance:track.distance,moving:moved>.02&&moved<scale*3,direction:track.direction,clock,reduced});
       ctx.globalAlpha=1;

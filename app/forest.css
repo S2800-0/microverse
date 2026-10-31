@@ -167,3 +167,5 @@ body:has(#experiment-dialog[open]) .bottom{display:none}
   #comparison-dialog.game #baseline-summary,#comparison-dialog.game #changed-summary{display:none}
   #comparison-dialog.game #baseline-panel h3,#comparison-dialog.game #changed-panel h3{bottom:auto;top:8px;left:auto;right:8px}
 }
+
+#lesson-shell{position:fixed;inset:0;width:100vw;height:100svh;max-width:none;max-height:none;margin:0;padding:0;border:0;border-radius:0;overflow:hidden;background:#f7f2e6}#lesson-shell::backdrop{background:#f7f2e6}#lesson-frame{display:block;width:100%;height:100%;border:0}
