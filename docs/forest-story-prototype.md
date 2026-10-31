@@ -1,5 +1,7 @@
 # Forest story and movement study · October 30, 2026
 
+**October 31 update:** the first story has since been integrated into the main game, with optional records, an outdoor reflection, discovery preview and a related rain question. See [the classroom-flow record](focused-classroom-flow.md). The notes below describe the original October 30 prototype.
+
 This is a separate review surface. It does not replace the existing forest or change its rules. The owner requested four lesson frames and one convincing movement prototype before a broad simulation-UI rebuild.
 
 ## Review
