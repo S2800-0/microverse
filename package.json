@@ -11,7 +11,7 @@
     "preview:meta": "node --env-file-if-exists=.env scripts/creature-server.mjs",
     "preview:motion": "node scripts/preview.mjs --motion",
     "build": "node scripts/build.mjs",
-    "test": "node --test",
+    "test": "node --test \"tests/**/*.test.mjs\"",
     "check": "node scripts/check-syntax.mjs",
     "setup:voice": "node scripts/setup-natural-voice.mjs"
   },
