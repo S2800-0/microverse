@@ -14,8 +14,14 @@ test('entrance motion stays bounded and reversing scroll restores the same compo
     assert(frame.camera>=start.camera&&frame.camera<=end.camera);
     assert(frame.foreground>=frame.camera);
     assert(frame.titleOpacity>=end.titleOpacity&&frame.titleOpacity<=1);
-    assert(frame.foxPercent>=45&&frame.foxPercent<=62);
+    assert(frame.foxPercent>=45&&frame.foxPercent<=118);
   }
+  // The fox leaves the stage: it ambles early, then clears the right edge.
+  const travel=entranceFrame(1).foxPercent-45;
+  assert(entranceFrame(.5).foxPercent-45<travel*.35,'ambles early, most of the travel comes late');
+  assert(entranceFrame(1).foxPercent>=115,'walks clear of the frame by the end');
+  let previous=-1;
+  for(let i=0;i<=20;i++){const current=entranceFrame(i/20).foxPercent;assert(current>previous,'fox drift never reverses');previous=current;}
   assert.equal(cachedPose(0),cachedPose(.8));
   assert.equal(cachedPose(-.1),cachedPose(.7));
   for(let i=-100;i<100;i++)assert(cachedPose(i/37)>=0&&cachedPose(i/37)<24);

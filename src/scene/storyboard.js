@@ -1,5 +1,5 @@
 import {mountCachedWalk} from '../motion/cached-walk.js';
-import {entranceFrame} from './entrance-motion.js';
+import {entranceFrame,foxDrift} from './entrance-motion.js';
 import {mountPaintedRain} from './painted-rain.js';
 import {mountFoxGuide} from './fox-guide.js';
 const el=id=>document.getElementById(id),reduced=matchMedia('(prefers-reduced-motion: reduce)');
@@ -7,7 +7,14 @@ let paused=reduced.matches,fox=null,fawn=null,disposed=false,raf=0;
 const guide=mountFoxGuide(el('entry-guide'),{paused}),rain=mountPaintedRain(el('rain-canvas'),{paused});
 function motion(){document.body.dataset.motion=paused?'paused':'playing';el('motion-toggle').textContent=paused?'Play motion':'Pause motion';el('motion-toggle').setAttribute('aria-pressed',String(paused));fox?.setPaused(paused);fawn?.setPaused(paused);guide.setPaused(paused);rain.setPaused(paused);update();}
 el('motion-toggle').onclick=()=>{paused=!paused;motion();};reduced.addEventListener('change',()=>{paused=reduced.matches;motion();});
-function update(){raf=0;const region=el('journey'),box=region.getBoundingClientRect(),frame=entranceFrame(-box.top/Math.max(1,region.offsetHeight-innerHeight));document.querySelector('.site-header').dataset.solid=String(box.bottom<100);if(paused)return;region.style.setProperty('--camera',String(frame.camera));region.style.setProperty('--edge-camera',String(frame.foreground));region.style.setProperty('--edge-shift',`${frame.edgeShift}%`);region.style.setProperty('--fox-offset',`${(frame.foxPercent-45)/100*region.clientWidth}px`);region.style.setProperty('--title-opacity',String(frame.titleOpacity));}
+// The fox is clamped to 300px wide, so a share of the viewport is not enough
+// travel on a phone. Measure the distance that actually clears the stage.
+function setFoxOffset(region,progress){
+  const fox=el('fox-canvas').hidden?el('fox-still'):el('fox-canvas');
+  const clear=region.clientWidth-fox.offsetLeft+fox.offsetWidth/2+8;
+  region.style.setProperty('--fox-offset',`${foxDrift(progress)/foxDrift(1)*clear}px`);
+}
+function update(){raf=0;const region=el('journey'),box=region.getBoundingClientRect(),frame=entranceFrame(-box.top/Math.max(1,region.offsetHeight-innerHeight));document.querySelector('.site-header').dataset.solid=String(box.bottom<100);if(paused)return;region.style.setProperty('--camera',String(frame.camera));region.style.setProperty('--edge-camera',String(frame.foreground));region.style.setProperty('--edge-shift',`${frame.edgeShift}%`);setFoxOffset(region,frame.progress);region.style.setProperty('--title-opacity',String(frame.titleOpacity));}
 function schedule(){if(!raf)raf=requestAnimationFrame(update);}addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);motion();
 mountCachedWalk(el('fox-canvas'),{source:'/entrance/fox-walk.webp',paused,continuous:true,onReady:()=>{el('fox-still').hidden=true;}}).then(player=>{if(disposed)player.destroy();else{fox=player;fox.setPaused(paused);}}).catch(()=>{el('fox-walk').disabled=true;el('art-status').textContent='The still fox is shown while movement is unavailable.';});
 mountCachedWalk(el('fawn-canvas'),{source:'/entrance/fawn-walk.webp',paused,continuous:true,onReady:()=>{el('fawn-still').hidden=true;}}).then(player=>{if(disposed)player.destroy();else{fawn=player;fawn.setPaused(paused);}}).catch(()=>{});
