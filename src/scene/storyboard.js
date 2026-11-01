@@ -23,3 +23,20 @@ const stories={spring:{title:'What if the rain slows down?',copy:'Start with the
 for(const button of document.querySelectorAll('[data-weather-choice]'))button.onclick=()=>{const key=button.dataset.weatherChoice,story=stories[key];el('weather-picture').dataset.weather=key;el('rain-title').textContent=story.title;el('weather-copy').textContent=story.copy;el('weather-status').textContent=story.note;rain.setMode(key);fawn?.replay();for(const other of document.querySelectorAll('[data-weather-choice]'))other.setAttribute('aria-pressed',String(other===button));};
 const entry=el('entry-dialog');for(const button of document.querySelectorAll('[data-enter]'))button.onclick=()=>{entry.showModal();guide.say('Every forest starts with a question. Let’s follow yours.');};el('entry-close').onclick=()=>entry.close();
 addEventListener('pagehide',event=>{if(!event.persisted){disposed=true;cancelAnimationFrame(raf);fox?.destroy();fawn?.destroy();guide.destroy();rain.destroy();}});
+
+// Scroll-staged reveals: each block arrives as it scrolls into view instead of
+// the whole page landing at once. Script adds the hidden state, so the page is
+// fully readable if this never runs, and reduced motion opts out entirely.
+if('IntersectionObserver' in window&&!reduced.matches){
+  const targets=[...document.querySelectorAll('[data-reveal]')];
+  if(targets.length){
+    const seen=new Map();
+    for(const node of targets){const index=seen.get(node.parentElement)??0;seen.set(node.parentElement,index+1);node.style.setProperty('--reveal-delay',`${Math.min(index,4)*100}ms`);}
+    document.documentElement.classList.add('reveal-ready');
+    const show=node=>node.classList.add('is-revealed');
+    const observer=new IntersectionObserver((entries,self)=>{for(const entry of entries)if(entry.isIntersecting){show(entry.target);self.unobserve(entry.target);}},{rootMargin:'0px',threshold:0.01});
+    for(const node of targets)observer.observe(node);
+    // Safety net: never leave something hidden that is already on screen.
+    setTimeout(()=>{for(const node of targets){const box=node.getBoundingClientRect();if(box.top<innerHeight&&box.bottom>0)show(node);}},1500);
+  }
+}

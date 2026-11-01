@@ -19,3 +19,11 @@ body[data-motion=paused] *,body[data-motion=paused] *::before,body[data-motion=p
 .creature-copy>p.quiet-note{font-size:12px}.creature-copy>p.photo-credit{font-size:10px}
 
 .creature-section{overflow:clip}
+
+/* Scroll-staged reveals. The hidden state applies only once the script adds
+   .reveal-ready, so the page stays readable with no JavaScript, and only under
+   prefers-reduced-motion: no-preference. */
+@media (prefers-reduced-motion: no-preference){
+.reveal-ready [data-reveal]{opacity:0;filter:blur(4px);transform:translateY(12px);transition-property:opacity,filter,transform;transition-duration:300ms;transition-timing-function:ease-out;transition-delay:var(--reveal-delay,0ms)}
+.reveal-ready [data-reveal].is-revealed{opacity:1;filter:blur(0);transform:none}
+}
