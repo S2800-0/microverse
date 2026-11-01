@@ -56,3 +56,14 @@ details details{margin-top:10px}
 #place-dialog h3{font:600 14px system-ui;margin:18px 0 8px;color:var(--moss)}
 #place-dialog .lede{margin:0 0 4px}
 #place-preview{max-height:30svh}
+#import-dialog h3{font:600 14px system-ui;margin:18px 0 8px;color:var(--moss)}
+#import-dialog .lede{margin:0 0 4px}
+#import-dialog .row{margin:10px 0}
+/* The footer and its popovers sit above the camera controls; on phones the
+   controls also move right so they never cover the Add panel. */
+.bottom{z-index:2002}
+@media(max-width:720px){.camera-controls{left:auto;right:12px}}
+/* An opaque sticky action bar: content scrolls cleanly under it rather than
+   showing through, and the review buttons stay on one line on phones. */
+.dialog-actions{background:var(--paper);border-top:1px solid #d3c9b0}
+@media(max-width:720px){#import-dialog .row{gap:6px}#import-dialog .row button{flex:1;font-size:13px;padding:8px 6px}}
