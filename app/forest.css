@@ -44,7 +44,6 @@ details details{margin-top:10px}
   .actions .big{flex:1}
   .prepared-questions{grid-template-columns:1fr}
   .dialog-actions{margin:0 -18px;padding:12px 18px;bottom:-18px}
-  .camera-controls{display:none}
 }
 .bottom{flex-direction:column;align-items:center;flex-wrap:nowrap}
 #status{flex-basis:auto;width:fit-content;padding:3px 12px}

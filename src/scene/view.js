@@ -20,7 +20,7 @@ let playing=false,speed=1,accumulator=0,progress=1,last=0,clock=0;
 let needsDraw=true;
 const cam={x:0,y:0,zoom:1,minZoom:1,width:0,height:0};
 const status=message=>{el('status').textContent=message;};
-function setPlaying(value){playing=value;if(!value)narrator.stop();el('play').textContent=value?'Pause':'Play';el('play').setAttribute('aria-pressed',String(value));}
+function setPlaying(value){playing=value;if(!value){narrator.stop();for(const a of actors.values())a.runUntil=0;needsDraw=true;}el('play').textContent=value?'Pause':'Play';el('play').setAttribute('aria-pressed',String(value));}
 
 async function loadArt(){
   let failures=0;
@@ -33,7 +33,7 @@ async function loadArt(){
       assets.set(species,{image,rig});
     }catch{failures++;}
   }));
-  await Promise.all(Object.entries(POSES).map(async([key,src])=>{try{const image=new Image();image.src=src;await image.decode();poses.set(key,image);}catch{/* The standard sprite stays in use. */}}));
+  for(const [key,src]of Object.entries(POSES))new Promise(async resolve=>{try{const image=new Image();image.src=src;await image.decode();poses.set(key,image);needsDraw=true;}catch{/* The standard sprite stays in use. */}resolve();});
   el('loading').hidden=true;
   needsDraw=true;
   status(failures?`${failures} image(s) unavailable; model creatures still work. Click a creature to inspect its record.`:'Ready. Click a creature, or bring someone into the clearing.');
@@ -89,7 +89,7 @@ function updateCard(){
   el('portrait').hidden=!src;if(src)el('portrait').src=src;
   el('creature-name').textContent=nameOf(a);
   el('creature-kind').textContent=`${art?.label||a.species} · ${['dog','cat','penguin'].includes(a.species)?'cared-for companion rules':'curated model role'}${custom?.source?' · Meta artwork':''}`;
-  el('creature-facts').textContent=`In this model: ${a.sex==='f'?'female':'male'}, ${a.age} weeks old, ${Math.max(0,Math.round(a.energy/state.world.params.species[a.species].energyMax*100))}% energy. ${a.alive?'Living in the forest.':'No longer alive.'} `;
+  el('creature-facts').textContent=`In this model: ${a.sex==='f'?'female':'male'}, ${a.age} weeks old, ${Math.max(0,Math.round(a.energy/state.world.params.species[a.species].energyMax*100))}% energy. ${a.alive?'Living in the forest.':'No longer alive.'}`;
   const list=el('life-events');list.replaceChildren();
   const events=state.world.events.filter(e=>e.id===a.id||e.parent===a.id||e.by===a.id||e.prey===a.id||e.other===a.id).slice(-10);
   if(!events.length){const li=document.createElement('li');li.textContent='No events recorded yet.';list.append(li);}

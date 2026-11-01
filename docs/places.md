@@ -1,6 +1,6 @@
 # A reviewed place-inspired starting point
 
-Choose **Place photo**. A JPEG/PNG/WebP file or phone capture is resized locally to at most 640 pixels on the long side and re-encoded without source EXIF/GPS. No camera permission is requested automatically. The optional Meta action sends this processed image for three SAM labels: **grass**, **tree**, **water**. The photo stays local until explicit consent and Analyse with Meta. Manual review and the recorded example work without inference.
+Choose **Menu → Start from a place photo**. A JPEG/PNG/WebP file or phone capture is resized locally to at most 640 pixels on the long side and re-encoded without source EXIF/GPS. No camera permission is requested automatically. The optional Meta action sends this processed image for three SAM labels: **grass**, **tree**, **water**. The photo stays local until explicit consent and Analyse with Meta. Manual review and the recorded example work without inference.
 
 **Try recorded place example · no API call** loads a public-domain garden photo and its actual saved SAM result, clearly labelled as recorded. Source: [Garden pond in park, Jon Sullivan](https://commons.wikimedia.org/wiki/File:Garden_pond_in_park.jpg), author's public-domain dedication verified October 27, 2026. The 288 × 384 derivative has metadata removed. `public/places/manifest.json` records attribution, processing and file hashes. This is the only new photo committed; personal creature photos/results remain ignored.
 
