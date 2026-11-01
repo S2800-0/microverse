@@ -1,11 +1,12 @@
 import{createQuestionRecorder}from'./recorder.js';
+import{readAiResult}from'../creature/public-job.js';
 export function installSpeechInput({dialog,onUse,onBeforeRecord=()=>{}}){
   const el=id=>document.getElementById(id);let service={enabled:false},audioRef=null,url=null;
   const supported=!!navigator.mediaDevices?.getUserMedia&&!!window.MediaRecorder&&!!window.AudioContext&&!!window.OfflineAudioContext;
   const controller=createQuestionRecorder({capture:()=>navigator.mediaDevices.getUserMedia({audio:{channelCount:1,echoCancellation:true,noiseSuppression:true},video:false}),makeRecorder:stream=>new MediaRecorder(stream),
     send:async(bytes,signal)=>{
       let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));
-      const response=await fetch('/api/speech/run',{method:'POST',signal,headers:{'Content-Type':'application/json','X-Microverse-Session':service.session},body:JSON.stringify({audio:btoa(binary),consent:true})});const result=await response.json();if(!response.ok)throw new Error(result.error||'Transcription failed. No automatic retry.');return result;
+      const response=await fetch('/api/speech/run',{method:'POST',signal,headers:{'Content-Type':'application/json','X-Microverse-Session':service.session},body:JSON.stringify({audio:btoa(binary),consent:true})});return readAiResult(response,{signal,session:service.session});
     },onChange:s=>{
       const busy=['requesting','recording','preparing','sending'].includes(s.phase);
       el('speech-record').disabled=!supported||!service.enabled||busy;el('speech-stop').disabled=s.phase!=='recording';el('speech-cancel').disabled=s.phase==='idle';el('speech-send').disabled=s.phase!=='ready'||!service.enabled;

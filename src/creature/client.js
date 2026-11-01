@@ -1,4 +1,5 @@
 import {PROMPT_VERSION,pngDimensions,applyCutoutMask} from './contract.js';
+import {readAiResult} from './public-job.js';
 
 export async function composeCreatureCutout(result){
   const {width,height}=pngDimensions(result.image);
@@ -22,7 +23,7 @@ export async function readCreatureService(){
 export async function generateCreature(input,service,signal){
   if(!service?.enabled)throw new Error('Meta generation is paused.');
   const response=await fetch('/api/creature/generate',{method:'POST',headers:{'Content-Type':'application/json','X-Microverse-Session':service.session},body:JSON.stringify(input),signal});
-  const result=await response.json();if(!response.ok)throw new Error(result.error||'Creature generation failed.');
+  const result=await readAiResult(response,{signal,session:service.session});
   if(result.provider!=='Meta · Muse Image + SAM 3.1'||result.promptVersion!==PROMPT_VERSION)throw new Error('The creature response version does not match this app.');
   const image=await composeCreatureCutout(result);
   return {image,cached:result.cached===true,source:{provider:'Meta',imageModel:'muse-image-1.0',maskModel:'sam-3.1',promptVersion:result.promptVersion}};

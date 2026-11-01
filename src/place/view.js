@@ -1,5 +1,6 @@
 import{PLACE_LABELS,decodePlaceLayers,validatePlaceRecord}from'./contract.js';
 import{validatePhotoFile}from'../scene/creature-import.js';
+import {readAiResult} from '../creature/public-job.js';
 const percentage=n=>Math.floor(n*1000)/10;
 export function installPlaceReview({onPause,getState,onApply}){
   const el=id=>document.getElementById(id),dialog=el('place-dialog'),canvas=el('place-preview');
@@ -35,7 +36,7 @@ export function installPlaceReview({onPause,getState,onApply}){
   el('place-copy-grass').onclick=()=>{el('place-grass-model').value=el('place-grass').value;el('place-reviewed').checked=false;controls();};
   el('place-analyse').onclick=async()=>{
     if(!image||busy||!service.enabled||!el('place-consent').checked)return;invalidate();const current=token;busy=true;request=new AbortController();controls();message('Asking SAM for grass, tree and water masks. Three checks, no automatic retry. Closing discards the result, but an already-sent job may finish.');
-    try{const response=await fetch('/api/place/run',{method:'POST',signal:request.signal,headers:{'Content-Type':'application/json','X-Microverse-Session':service.session},body:JSON.stringify({image,consent:true})});const result=await response.json();if(!response.ok)throw new Error(result.error||'Place analysis failed.');if(current!==token||!dialog.open)return;
+    try{const response=await fetch('/api/place/run',{method:'POST',signal:request.signal,headers:{'Content-Type':'application/json','X-Microverse-Session':service.session},body:JSON.stringify({image,consent:true})});const result=await readAiResult(response,{signal:request.signal,session:service.session});if(current!==token||!dialog.open)return;
       acceptAnalysis(result);message(result.cached?'Reused the cached masks. No new provider calls.':'SAM estimates ready for your review. Nothing in the forest has changed.');
     }catch(error){if(current===token)message(error.message);}finally{if(current===token){busy=false;request=null;controls();}}
   };

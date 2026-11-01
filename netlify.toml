@@ -1,0 +1,26 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(self), microphone=(self), geolocation=()"
+
+[[headers]]
+  for = "/discovery.html"
+  [headers.values]
+    Referrer-Policy = "no-referrer"
+    Cache-Control = "no-store"
+
+# Current browser routes retain / as the game. Share /storyboard.html as the
+# website entrance, or /?entry=lesson for a direct classroom invitation.

@@ -1,5 +1,7 @@
 # Microverse
 
+Try the [public website](https://microverse-shahesta.vercel.app/storyboard.html) or [first forest story](https://microverse-shahesta.vercel.app/?entry=lesson). Public pilot hosting, private API configuration and verification status are recorded in [docs/public-deployment.md](docs/public-deployment.md).
+
 An illustrated ecosystem playground: bring a creature to life, predict what an environmental change will do, and compare repeatable model experiments.
 
 Start with **A little less rain**, the focused forest story, or visit **My creatures** to save a reviewed companion on this browser. Investigations now show one forest with an optional reference/split view, plain-language food comparisons, recorded-event close-ups and an everyday reflection. See [the experience guide](docs/guided-discovery.md) and [initial curriculum correspondence check](docs/curriculum-review.md).
