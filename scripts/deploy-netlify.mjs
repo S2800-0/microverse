@@ -26,6 +26,7 @@ if(enabled&&!process.env.MICROVERSE_PUBLIC_SESSION_SECRET){
 const provider=process.env.MICROVERSE_SPARK_PROVIDER||'baseten';
 if(!['meta','baseten'].includes(provider))throw new Error('Choose one funded reasoning provider.');
 const secrets=enabled?['MODEL_API_KEY',...(provider==='baseten'?['BASETEN_API_KEY']:[]),'MICROVERSE_PUBLIC_SESSION_SECRET']:[];
+if(process.env.MICROVERSE_PROXY_SECRET)secrets.push('MICROVERSE_PROXY_SECRET');
 if(secrets.some(key=>!process.env[key]))throw new Error('A required backend key is missing from the private environment.');
 for(const stream of [process.stdout,process.stderr]){
   const write=stream.write.bind(stream);

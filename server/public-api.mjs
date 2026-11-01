@@ -2,6 +2,7 @@ import {randomBytes} from 'node:crypto';
 import {createPublicSecurity,publicError} from './public-security.mjs';
 import {createPublicLedger} from './public-ledger.mjs';
 import {PUBLIC_COSTS,publicServiceStatus,validatePublicInput,preparedPublicResult,createPublicService} from './public-services.mjs';
+import {verifiedRelayIp} from './public-relay.mjs';
 
 const headers={'Content-Type':'application/json','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
 function json(value,status=200,extra={}){
@@ -50,6 +51,7 @@ export function createPublicApi({env,store,now=Date.now,fetchImpl=fetch}){
       if(!route||route[2]==='status'||request.method!=='POST'||(route[1]==='creature')!==(route[2]==='generate'))throw publicError('Unknown action.',404);
       const name=route[1],session=security.authorize(request,origin);
       if(!publicServiceStatus(name,env).enabled)throw publicError(publicServiceStatus(name,env).reason,503);
+      ip=verifiedRelayIp(request,env.MICROVERSE_PROXY_SECRET,{now})||ip;
       if(typeof ip!=='string'||!ip)throw publicError('The hosting network could not verify this request. No AI call was sent.',503);
       const input=validatePublicInput(name,await boundedJson(request,name==='speech'?1000000:2900000));
       const prepared=preparedPublicResult(name,input);if(prepared)return json(prepared);

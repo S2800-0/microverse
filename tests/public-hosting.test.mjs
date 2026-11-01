@@ -6,6 +6,7 @@ import {createPublicApi,runPublicJob,cleanPublicJobs} from '../server/public-api
 import {validatePublicInput,publicServiceStatus} from '../server/public-services.mjs';
 import {readAiResult} from '../src/creature/public-job.js';
 import {createStorySession} from '../src/scene/story-session.ts';
+import {signRelay,verifiedRelayIp,createVercelRelay} from '../server/public-relay.mjs';
 
 // In-memory adapter implements the documented Netlify ETag/conditional-write
 // contract. Each get returns a defensive copy so races are real in the tests.
@@ -96,4 +97,28 @@ test('browser polls an existing job only, supports local responses and aborts wi
   assert.deepEqual(result,{done:true});assert(paths.every(x=>x.path==='/api/jobs/'+job&&!x.options.method));
   const controller=new AbortController();controller.abort();let polls=0;
   await assert.rejects(readAiResult(Response.json({job},{status:202}),{signal:controller.signal,wait:async()=>{},fetchImpl:async()=>{polls++;}}),{name:'AbortError'});assert.equal(polls,0);
+});
+
+test('only a fresh server-signed relay can supply the visitor network for shared limits',()=>{
+  const secret='relay-fixture-'.repeat(8),at=1800000000000;
+  const headers=signRelay(secret,{method:'POST',path:'/api/spark/run',ip:'192.0.2.15',at});
+  const req=new Request(env.URL+'/api/spark/run',{method:'POST',headers});
+  assert.equal(verifiedRelayIp(req,secret,{now:()=>at}),'192.0.2.15');
+  assert.equal(verifiedRelayIp(req,'wrong-secret',{now:()=>at}),null);
+  assert.equal(verifiedRelayIp(req,secret,{now:()=>at+60001}),null);
+  assert.equal(verifiedRelayIp(new Request(env.URL+'/api/place/run',{method:'POST',headers}),secret,{now:()=>at}),null);
+  assert.equal(verifiedRelayIp(new Request(env.URL+'/api/spark/run',{method:'POST',headers:{...headers,'x-microverse-relay-ip':'192.0.2.16'}}),secret,{now:()=>at}),null);
+});
+
+test('Vercel relay is bounded to the existing API and preserves session cookies and streamed results',async()=>{
+  const secret='relay-fixture-'.repeat(8),at=1800000000000;let sent,calls=0;
+  const relay=createVercelRelay({secret,now:()=>at,fetchImpl:async(url,options)=>{calls++;sent={url,...options};return new Response('fixture-stream',{status:202,headers:{'Set-Cookie':'__Host-microverse=fixture; Secure; HttpOnly; Path=/; SameSite=Strict','Content-Type':'application/json'}});}});
+  const origin='https://microverse-example.vercel.app';
+  const response=await relay(new Request(origin+'/api?route=creature/generate',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json','x-vercel-forwarded-for':'192.0.2.15',Cookie:'__vercel_sso=private; __Host-microverse=fixture-cookie','X-Microverse-Session':'fixture-token'},body:JSON.stringify(input())}));
+  assert.equal(response.status,202);assert.equal(await response.text(),'fixture-stream');assert(response.headers.get('Set-Cookie').includes('HttpOnly'));
+  assert.equal(sent.url,'https://microverse-shahesta.netlify.app/api/creature/generate');assert.equal(sent.headers.get('origin'),'https://microverse-shahesta.netlify.app');assert.equal(sent.headers.get('cookie'),'__Host-microverse=fixture-cookie');
+  assert.equal(verifiedRelayIp(new Request(sent.url,{method:'POST',headers:sent.headers}),secret,{now:()=>at}),'192.0.2.15');
+  assert.equal((await relay(new Request(origin+'/api?route=../../.env'))).status,404);
+  assert.equal((await relay(new Request(origin+'/api/spark/run',{method:'POST',headers:{Origin:'https://evil.example'}}))).status,403);
+  assert.equal((await relay(new Request(origin+'/api/spark/status'))).status,503);assert.equal(calls,1);
 });

@@ -6,10 +6,16 @@ import {getStore} from '@netlify/blobs';
 export default async function(){
   if(process.env.MICROVERSE_PUBLIC_VERIFY_ONCE!=='1')return;
   const store=getStore({name:'microverse-public-ai',consistency:'strong'}),key='verification/public-launch-v1';
-  const claim=await store.setJSON(key,{phase:'running',at:new Date().toISOString()},{onlyIfNew:true});if(!claim.modified)return;
-  const report={phase:'running',at:new Date().toISOString(),pages:[],ai:null};
+  const previous=await store.getWithMetadata(key,{type:'json',consistency:'strong'});
+  // A single access-only retry is safe after fixing the initial login gate:
+  // the failed report proves no AI submission occurred. Never retry AI work.
+  const accessRetry=previous?.data.phase==='failed'&&previous.data.ai===null&&previous.data.pages?.some(page=>page.status===401)&&!previous.data.accessRetry&&typeof previous.etag==='string';
+  if(previous&&!accessRetry)return;
+  const report={phase:'running',at:new Date().toISOString(),pages:[],ai:null,accessRetry};
+  const claim=await store.setJSON(key,report,accessRetry?{onlyIfMatch:previous.etag}:{onlyIfNew:true});if(!claim.modified)return;
   try{
     const origin=new URL(process.env.URL).origin;
+    report.origin=origin;
     for(const path of ['/storyboard.html','/forest-story.html','/src/scene/story-session.js','/privacy.html','/.env','/server/meta-provider.mjs']){
       const response=await fetch(origin+path,{redirect:'error',signal:AbortSignal.timeout(6000)});report.pages.push({path,status:response.status});await response.body?.cancel();
     }
