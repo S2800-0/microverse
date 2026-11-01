@@ -45,6 +45,11 @@ Retained: mesh/IK approach, leg extraction, artistic movement parameters and edg
 - Five further sprites (`fawn-standing/grazing/running.png`, `rabbit-grazing/running.png`) were supplied by the project owner during UI work. Their generator, creation date and reuse eligibility are not recorded in this repository; the owner must confirm them (and whether they count as event contributions) before submission. Pixels are unchanged from the supplied transparent images.
 - New engineering work: view-independent scene commands, terrain-safe movement/predation, deterministic open-cell spawn recovery, actual-model cards and event projection, local review import, responsive view, browser build/preview support, tests and documentation. The original local prototype remains unchanged.
 
+### Third-party development skill
+
+- `.claude/skills/better-ui/` is a verbatim copy of `skills/better-ui` from the public marketplace repository `https://github.com/23jmo/jmo-skills` at commit `6082bf2c472857d6cfda48995ab985b69345aac6`. That repository is itself a redistribution: its `UPSTREAM.json` names the original as `https://github.com/jakubkrehel/skills` at commit `d574cc8a576dc24256ad38268b8d03d86724a1b3`, MIT licensed, copyright 2026 Jakub Krehel. The upstream `LICENSE` is included beside the skill as the MIT terms require.
+- This is a development-time guide for UI polish. It ships no runtime code, is not referenced by `src/`, `app/` or any build step, and is excluded from `npm run build` output. It is not event work and must not be presented as such.
+
 ### Complete snapshots and paired replay
 
 New modules `src/sim/snapshot.ts`, `src/scene/snapshot.ts`, `experiment.ts` and `experiment-view.js` add explicit RNG-state capture, complete world restoration, full-scene forks, local replay files, learner notes and bounded future-randomness replicates. They use the migrated engine, terrain and art described above; no new image generation or Meta inference is represented by this feature. `tests/replay.test.mjs` verifies continuation, independent state, import identity, validation and repeatability. Browser QA used the existing generated dog sample, not a new personal photograph. The original prototype and its paid-image pause remain unchanged.
