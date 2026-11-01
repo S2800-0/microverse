@@ -1,116 +1,91 @@
 # UI/UX feedback backlog
 
-Owner feedback captured 2026-11-01, split by which build each item belongs to.
+Owner feedback captured 2026-11-01, verified against the running pages.
 
-**Important:** most of this describes a scrolling landing page with a fox hero,
-"Play now"/"Explore world" buttons, a "Create my creature" flow and a tutorial.
-None of that exists in this repository. `app/` holds two pages: `index.html`
-(one non-scrolling screen, `overflow:hidden`) and `teacher.html` (print guide).
-Searches for "Play now", "Explore world", "Welcome to your little world",
-"Create my creature", "little fox", "tutorial" and "snow" return nothing here.
-Those items are therefore recorded, not actionable, until that build is reachable.
+## Correction to the first version of this file
 
----
+The first version said the landing page was not in this repository. That was
+wrong. It is here, on feature branches that had not been fetched:
+`app/storyboard.html`, `storyboard.css`, `src/scene/storyboard.js`, plus
+`discovery.html`, `forest-story.html`, `behind.html`, `build-with.html`,
+`art-review.html` and `privacy.html`. The newest copy is on
+`feat/public-netlify-pilot` (2026-11-01, 30 commits ahead of `main`) and is what
+`https://microverse-shahesta.vercel.app/storyboard.html` serves.
 
-## A. Actionable in this repository
+Every item below was checked against that branch, served locally and
+screenshotted at 1440x900. The page is 3893px tall, about 4.3 screens.
 
-### A1. Drop the forced review step before a pet enters the forest — HIGH
-"Don't let the kids decide if it's right or not from the get-go. Make it an
-option afterwards. Why so complicated? It'll make it harder."
+## The branch problem — decide this first
 
-Today `app/index.html` step 2 makes every learner judge "Use the moving legs"
-vs "Move as one picture" before **Add to the forest** enables
-(`src/scene/creature-import.js`, `review.getState().approved`). Proposal: accept
-the best automatic result and add the creature immediately; move the rig choice
-behind "Not moving right?" for whoever wants it. Keeps `assessRig` as the
-automatic gate.
+Two lines of work have diverged from a common ancestor dated 2026-10-27:
 
-### A2. One path in: library, upload, or camera — MEDIUM
-"Go straight to create my creature, and either choose from library or upload or
-take a picture."
+| | `claude/great-fermi-ol5fi9` (this one) | `feat/public-netlify-pilot` (deployed) |
+| --- | --- | --- |
+| Commits ahead of `main` | 12 | 30 |
+| `app/index.html` | rewritten | rewritten, differently |
+| `app/forest.css` | rewritten | +159 lines of its own |
+| `src/scene/view.js` | rewritten | +58 lines of its own |
+| Menu / Add popovers | yes | absent |
+| Landing page | absent | yes |
 
-The Add popover splits wild species (dropdown) from pets (separate dialog), and
-the import dialog has no camera input, though `place-dialog` already uses
-`capture="environment"`. Proposal: one "Add a creature" surface with three equal
-choices, each an icon tile.
+Both branches rewrote the same three files independently, so merging them will
+conflict. The feedback below is almost entirely about the landing page, which
+exists only on the deployed branch. Continuing on this branch means the work
+does not reach the demo.
 
-### A3. One thing at a time, with icons — MEDIUM
-"Create my creature is overload. Make stuff one at a time with icons."
+## A. Landing page (`app/storyboard.html`, deployed branch)
 
-Applies to the import and place dialogs, which still present every field at once
-inside their step headings.
+Each item confirmed on screen.
 
-### A4. The forest is static until Play — MEDIUM
-"When you go back to the forest there's like animals already, static animals."
+| # | Item | What is there now |
+| --- | --- | --- |
+| A1 | Hero fox is static; make it run out of frame on scroll | Fox stands on the path, fixed, while the hero scrolls past it |
+| A2 | "Hello, little fox" does nothing | Bottom-right label with an arrow glyph, no target |
+| A3 | "Play now" and "Explore the world" look generic | Dark green pill plus outlined pill, no art relationship to the scene |
+| A4 | "Let's play" is generic and weird | Same pill again, third instance of the same shape |
+| A5 | "CURIOUS IS ENOUGH" far too small | ~11px letterspaced eyebrow above a ~56px headline |
+| A6 | "ONE SMALL QUESTION" too small; make it big or remove | Same eyebrow treatment, same problem |
+| A7 | Fawn is static and stands on a rock | Right of the rain section, fixed, hooves on stone |
+| A8 | Rain looks generic | Three text tabs, Usual / More / Less rain; no weather visual |
+| A9 | Too much text, all at once | Six sections, each a headline plus prose, all visible on load |
+| A10 | Reveal content on scroll, one block at a time | No scroll-triggered reveals |
+| A11 | Scale inconsistent; "where do I look?" | Eyebrows ~11px against ~56px headlines, nothing between |
+| A12 | Pet section is good — polish it | Phone plus watercolor dog, "Someone you already love" |
+| A13 | "Someone you already love" should read clearer, nearer the dog | Eyebrow sits top-right, far from the illustration |
+| A14 | Bunny looks generic, does nothing | Not seen in the four captures; needs locating |
 
-Animals hold a single frame until Play is pressed. Options: idle motion
-(breathing, ear flicks) under `prefers-reduced-motion: no-preference`, or
-auto-play on first load with the existing pause control.
+## B. Flow and product
 
-### A5. Weather reads as nothing — MEDIUM
-"The rain also looks very generic and is weird... maybe add some snow."
+| # | Item | Where it bites |
+| --- | --- | --- |
+| B1 | Do not make kids approve the generated art up front; offer it afterwards | Both branches. In this one, `creature-import.js` blocks **Add to the forest** until a rig is accepted |
+| B2 | Go straight to create a creature: library, upload, or camera | Import dialog has no camera; `place-dialog` already uses `capture="environment"` |
+| B3 | One thing at a time, with icons | Import and place dialogs still show every field at once |
+| B4 | There is no real tutorial; make it point-and-click | Neither branch has an in-app tutorial |
+| B5 | Forest animals are static until Play | Both branches |
+| B6 | Rain static; consider snow | No weather art in either |
+| B7 | Kid-friendly, education-friendly throughout | Cross-cutting |
 
-A drought currently renders only as `#resource-tint` opacity. Rain and winter
-have no visual at all. Needs art, not just CSS.
+## C. Repository presentation
 
-### A6. No tutorial — MEDIUM
-"The tutorial was really bad. There's no tutorial basically. It should be more
-dynamic, like a point and click."
+| # | Item |
+| --- | --- |
+| C1 | `README.md` needs an open-source shape: hero screenshot, quick start, how it works, badges, topic tags |
 
-Nothing here teaches the predict -> experiment -> inspect -> explain loop in the
-app itself; `teacher.html` is a printable sheet. Proposal: a 4-step coach-mark
-tour on first visit, dismissible, replayable from Menu.
+## D. Known
 
-### A7. Make the repository look open source — MEDIUM
-"GitHub repos need to look open source, with tags, how to use, how it works,
-with screenshots."
+| # | Item |
+| --- | --- |
+| D1 | Natural voices not ready (`docs/narration.md`) |
 
-`README.md` is dense prose with no screenshot, no badges, no quick start above
-the fold. Proposal: hero screenshot, 3-line what-it-is, install/run block, a
-"how it works" diagram, CI and licence badges, topic tags on the repo.
+## E. Open questions
 
-### A8. Text too small and too much of it — MEDIUM
-Partly confirmed by the interface review: status line 12px, dialog measure
-~77 characters, inputs 13-15px (which also zooms iOS on focus). Tracked in the
-review findings table.
-
-### A9. Natural voices not ready — LOW
-Known; see `docs/narration.md`.
-
----
-
-## B. Belongs to the landing-page build (not in this repository)
-
-Recorded verbatim so nothing is lost. Needs that codebase to action.
-
-1. Visuals are loved overall — keep the direction.
-2. Hero fox is weird and static; make it run out of frame as the page scrolls.
-3. "Play now" and "Explore world" buttons look generic.
-4. "Hello little fox" at the end does nothing — give it a job or remove it.
-5. The fawn is static and appears to run on a rock.
-6. The small question element: make it big or remove it.
-7. Scale is inconsistent throughout — things are too small or too big.
-8. Too much body copy; move text into the images as designed visuals.
-9. Copy is bland and generic.
-10. The page is hard to read and boring; no focal point ("where do I look?").
-11. Reveal content on scroll, one block at a time, not all at once.
-12. The "create your own creature" art and visualisation are good — polish further.
-13. "Someone you already love" needs to read clearer, closer to the dog graphic.
-14. "Curious is enough" is far too small.
-15. "Let's play" is generic; consider making Play part of the scroll.
-16. "Welcome to your little world" is too small.
-17. The bunny looks generic and does nothing.
-
----
-
-## C. Decisions needed from the owner
-
-- **C1. Which build is the demo?** If the landing page is what judges see, the
-  work in this repository is secondary and section B should lead.
-- **C2. Generation provider.** "Use API to generate, or ChatGPT, I don't care."
-  This repo wires Meta Muse Image and keeps generation off by default; a change
-  of provider affects `server/meta-provider.mjs` and the cost and consent copy.
-- **C3. A1 versus the project's stated caution.** `docs/ui-boundaries.md` and the
-  consent copy deliberately make a person approve generated art before use.
-  Accepting automatically is the right call for kids, but it is a deliberate
-  reversal and should be recorded in `PROVENANCE.md`.
+- **E1.** Which branch continues? Recommendation: branch from
+  `feat/public-netlify-pilot`, since it is deployed and holds the pages the
+  feedback is about.
+- **E2.** Does the forest work on `claude/great-fermi-ol5fi9` get ported, dropped,
+  or left for later? B1 applies to both and is worth porting whatever is decided.
+- **E3.** Generation provider: the owner said any API is fine. Changing it touches
+  `server/meta-provider.mjs` and all cost and consent copy.
+- **E4.** B1 reverses the deliberate review-before-use stance in
+  `docs/ui-boundaries.md`; record the reversal in `PROVENANCE.md`.
