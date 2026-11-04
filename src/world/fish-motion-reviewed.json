@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "source": "loading-fish-v8.png",
+  "sourceSha256": "5a5e9a1119ca60ce628464e97322558c4d7e6f356ab68f52a453fe20691863d4",
+  "review": "Fin, mouth and eye accepted visually. Tail not distinctly visible; proposed tail region disabled. Artistic 2D motion hints, not measured anatomy.",
+  "rig": {
+    "eye": {
+      "rx": 0.075,
+      "ry": 0.105,
+      "visible": true,
+      "x": 0.797,
+      "y": 0.375
+    },
+    "fin": {
+      "rx": 0.085,
+      "ry": 0.075,
+      "visible": true,
+      "x": 0.542,
+      "y": 0.667
+    },
+    "mouth": {
+      "rx": 0.05,
+      "ry": 0.05,
+      "visible": true,
+      "x": 0.95,
+      "y": 0.435
+    },
+    "tail": {
+      "rx": 0.085,
+      "ry": 0.155,
+      "visible": false,
+      "x": 0.085,
+      "y": 0.155
+    }
+  }
+}

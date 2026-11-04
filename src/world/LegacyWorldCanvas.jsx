@@ -1,0 +1,63 @@
+import {plantPatchVisual} from './plant-visuals.js';
+import {motionForSprite} from './motion-points.js';
+import {useEffect,useRef,useState} from 'react';
+import {prepareSpriteMotion,drawSprite} from './sprite-motion.js';
+import {drawEnvironment} from './environment-motion.js';
+import {MakingScene} from '../components/MakingScene.jsx';
+import {cutAtlas} from './sprites.js';
+import {Plus,Minus,Crosshair,Drop,Plant} from '@phosphor-icons/react';
+import {boundView,panView,pondView,initialWorldView} from './exploration-camera.js';
+import {drawHabitat,treeSize,drawFlight} from './habitat-layers.js';
+export function LegacyWorldCanvas({world,frame,paused,reduced=false,focus,onPick}){
+ const manual=useRef(null),cameraRef=useRef({zoom:1,x:.5,y:.5}),geometry=useRef({width:1,height:1}),drag=useRef(null),[viewName,setViewName]=useState('Drag to explore');
+ useEffect(()=>{manual.current=null;setViewName('Drag to explore')},[focus]);
+ const canvas=useRef(null),latest=useRef({world,frame,paused,reduced,focus,onPick}),hits=useRef([]),[ready,setReady]=useState(false),[error,setError]=useState('');latest.current={world,frame,paused,reduced,focus,onPick};
+ useEffect(()=>{
+  let dead=false,raf=0,img,sprites,motions={},leaves=[],props=[],flight=[],old=latest.current.frame,seen=old,blend=1,last=0,clock=0,changedAt=0,lastPaint=null,lastFocus=null;manual.current=null;const camera=cameraRef.current={zoom:1,x:.5,y:.5};const openingView=initialWorldView(old);Object.assign(camera,openingView);const turns=new Map(),c=canvas.current,ctx=c.getContext('2d');setReady(false);setError('');
+  async function load(){img=new Image();img.src=world.background;await img.decode();sprites=await cutAtlas(world.atlas,world.plan.inhabitants.length);if(dead)return;setReady(true);raf=requestAnimationFrame(draw);if(world.props)Promise.all([0,1,2,3].map(async i=>{const im=new Image();im.src='/assets/woodland-props-'+i+'-v11.png';await im.decode();return im})).then(v=>{if(!dead)props=v}).catch(()=>{});if(world.flightType!==undefined)Promise.all([0,1,2,3].map(async i=>{const im=new Image();im.src='/assets/owl-flight-'+i+'-v11.png';await im.decode();return im})).then(v=>{if(!dead)flight=v}).catch(()=>{});for(const type of world.plan.inhabitants)prepareSpriteMotion(sprites[type.id],{rig:motionForSprite(world,type.id,sprites[type.id]),rooted:type.role==='producer'}).then(m=>{if(!dead)motions[type.id]=m}).catch(()=>{});for(let i=0;i<4;i++){const leaf=new Image();leaf.src='/assets/leaf-v7-'+i+'.webp';leaf.decode().then(()=>{if(!dead)leaves.push(leaf)}).catch(()=>{})}}
+  function draw(now){
+   if(dead)return;raf=requestAnimationFrame(draw);if(document.hidden){last=0;return}const dt=last?Math.min(.05,(now-last)/1000):0;last=now;const p=latest.current,f=p.frame,plan=p.world.plan;
+   if(f!==seen){old=seen;seen=f;blend=p.reduced?1:0;changedAt=clock}blend=Math.min(1,blend+dt/.6);if(!p.paused)clock+=dt;
+   const w=c.clientWidth,h=c.clientHeight,d=Math.min(devicePixelRatio||1,1.5),selected=f.agents.find(a=>a.id===p.focus)||f.patches.find(a=>'plant:'+a.id===p.focus),goal=manual.current||(selected?{zoom:1.55,x:selected.x,y:selected.y}:(w<701&&plan.water.y>.6?{...openingView,zoom:1.55}:openingView)),cameraMoving=Math.abs(camera.zoom-goal.zoom)+Math.abs(camera.x-goal.x)+Math.abs(camera.y-goal.y)>.001;const easeCamera=p.reduced?1:1-Math.exp(-dt*5);for(const k of ['zoom','x','y'])camera[k]+=(goal[k]-camera[k])*easeCamera;if(p.paused&&!cameraMoving&&blend>=1&&lastPaint===f&&lastFocus===p.focus&&c.width===Math.round(w*d)&&c.height===Math.round(h*d))return;lastPaint=f;lastFocus=p.focus;
+   if(c.width!==Math.round(w*d)||c.height!==Math.round(h*d)){c.width=Math.round(w*d);c.height=Math.round(h*d)}ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,w,h);
+   // Crop source paper margins before installing assets; only the world is scaled here.
+   const size=Math.max(w,h*img.width/img.height)*1.12*camera.zoom,mapHeight=size*img.height/img.width,ox=size<=w?(w-size)/2:Math.max(w-size+size*.05,Math.min(-size*.05,w/2-camera.x*size)),oy=mapHeight<=h?(h-mapHeight)/2:Math.max(h-mapHeight+mapHeight*.05,Math.min(-mapHeight*.05,h/2-camera.y*mapHeight));geometry.current={width:size,height:mapHeight};ctx.fillStyle='#dceae2';ctx.fillRect(0,0,w,h);ctx.drawImage(img,ox,oy,size,mapHeight);
+   if(f.heat>.3){ctx.fillStyle=`rgba(255,239,196,${(f.heat-.3)*.14})`;ctx.fillRect(ox,oy,size,mapHeight)}
+   const wet=plan.water;if(wet.w&&wet.h&&!p.paused){ctx.save();ctx.beginPath();ctx.rect(ox+wet.x*size,oy+wet.y*mapHeight,wet.w*size,wet.h*mapHeight);ctx.clip();const y0=oy+wet.y*mapHeight,y1=y0+wet.h*mapHeight;for(let y=y0;y<y1;y+=12){const sy=(y-oy)/mapHeight*img.height,shift=Math.sin(y*.045+clock*1.5)*1.5;ctx.globalAlpha=.4;ctx.drawImage(img,wet.x*img.width,sy,wet.w*img.width,12/mapHeight*img.height,ox+wet.x*size+shift,y,wet.w*size,12.3)}ctx.restore()}
+   drawEnvironment(ctx,{x:ox,y:oy,width:size,height:mapHeight,clock,habitat:plan.habitat,condition:f.condition,paused:p.paused});
+   const project=(x,y)=>({x:ox+x*size,y:oy+y*mapHeight});drawHabitat(ctx,{plan,props,project,mapWidth:size,clock,paused:p.paused});
+   hits.current=[];const plant=plan.inhabitants.find(a=>a.role==='producer'),plantImage=sprites[plant.id],oldPatches=new Map(old.patches.map(v=>[v.id,v]));
+   for(const patch of f.patches){const before=oldPatches.get(patch.id)||patch,biomass=before.biomass+(patch.biomass-before.biomass)*blend,visual=plantPatchVisual(biomass),px=ox+patch.x*size,py=oy+patch.y*mapHeight;
+    hits.current.push({id:'plant:'+patch.id,x:px,y:py,size:size*.045,label:plant.name});
+    for(let stem=0;stem<visual.count;stem++){const angle=stem*2.4+patch.phase,spread=stem?size*.058:0,s=size*.047*visual.scale,hh=s*plantImage.height/plantImage.width,growing=patch.grown>.001&&clock-changedAt<.8;
+     ctx.save();ctx.translate(px+Math.cos(angle)*spread,py+Math.sin(angle)*spread*.4);ctx.globalAlpha=.85;ctx.rotate(!p.paused?Math.sin(clock+patch.phase+stem)*.035:0);if(growing){ctx.shadowColor='#d1ef8c';ctx.shadowBlur=6}drawSprite(ctx,plantImage,motions[plant.id],{x:-s/2,y:-hh,width:s,height:hh,clock,phase:patch.phase+stem,paused:p.paused});ctx.restore();
+    }
+    if(p.focus==='plant:'+patch.id){ctx.strokeStyle='#fff4bb';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(px,py-size*.055,size*.055,size*.04,0,0,Math.PI*2);ctx.stroke()}
+   }
+   const positions=new Map(old.agents.map(a=>[a.id,a])),placed=[];
+   for(const a of [...f.agents].sort((a,b)=>a.y-b.y)){
+    const before=positions.get(a.id)||a,x=ox+(before.x+(a.x-before.x)*blend)*size,baseY=oy+(before.y+(a.y-before.y)*blend)*mapHeight,type=plan.inhabitants[a.type],im=sprites[a.type],s=size*(type.role==='predator'?.095:type.role==='companion'?.09:.08),hh=s*im.height/im.width,tree=a.perchId!==null?plan.objects.find(o=>o.id===a.perchId):null,y=baseY-(tree&&props.length?treeSize(tree,size,props[0],props[1]).perchHeight:0);if(x<-s*2||x>w+s*2||y<-hh*2||y>h+hh)continue;
+    const desired=a.direction===1?0:Math.PI,turn=turns.get(a.id)??desired,angle=p.paused?desired:turn+(desired-turn)*(1-Math.exp(-dt*8));turns.set(a.id,angle);const facing=Math.cos(angle),eating=a.activity==='eating'&&!!a.bite;
+    const bob=p.paused?0:Math.sin(clock*(type.motion==='hop'?5:2.3)+a.phase)*(type.motion==='fly'?5:type.motion==='hop'?2:1);
+    ctx.save();ctx.translate(x,y-bob);ctx.scale(Math.sign(facing||1)*Math.max(.14,Math.abs(facing)),1);if(!p.paused)ctx.rotate(type.motion==='swim'?Math.sin(clock*3+a.phase)*.025:eating?Math.sin(clock*8+a.phase)*.045:0);if(a.type===world.flightType&&flight.length&&a.perchId===null)drawFlight(ctx,flight,{x:0,y:0,size:s,clock,phase:a.phase,paused:p.paused});else drawSprite(ctx,im,motions[a.type],{x:-s/2,y:-hh,width:s,height:hh,clock,phase:a.phase,paused:p.paused});ctx.restore();
+    hits.current.push({id:a.id,x,y,size:s,label:type.name});placed.push({a,type,x,y,s,hh});
+    if(a.id===p.focus){ctx.strokeStyle='#fff8e9';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(x,y-hh*.45,s*.7,hh*.7,0,0,Math.PI*2);ctx.stroke()}
+    if(eating){const patch=f.patches.find(v=>v.id===a.bite.patchId);if(patch&&!p.paused){const progress=(clock*1.4+a.phase)%1,px=ox+patch.x*size,py=oy+patch.y*mapHeight;ctx.save();ctx.globalAlpha=1-progress*.6;ctx.drawImage(plantImage,px+(x-px)*progress-5,py+(y-hh*.5-py)*progress-5,10,10);ctx.restore()}}
+   }
+   drawHabitat(ctx,{plan,props,project,mapWidth:size,clock,paused:p.paused,foreground:true});
+   // Perched birds sit in front of their branch/canopy, while ground animals pass behind it.
+   for(const item of placed.filter(v=>v.a.perchId!==null)){ctx.save();ctx.translate(item.x,item.y);ctx.scale(item.a.direction,1);drawSprite(ctx,sprites[item.a.type],motions[item.a.type],{x:-item.s/2,y:-item.hh,width:item.s,height:item.hh,clock,paused:true});ctx.restore()}
+   drawEnvironment(ctx,{x:ox,y:oy,width:size,height:mapHeight,clock,habitat:plan.habitat,condition:f.condition,paused:p.paused,foreground:true,leaves});
+   const eater=placed.find(v=>v.a.id===p.focus&&v.a.bite&&v.x>0&&v.x<w&&v.y>0&&v.y<h)||placed.find(v=>v.a.bite&&v.x>0&&v.x<w&&v.y>0&&v.y<h);if(eater){const text=eater.type.name+' · nibble!',font=Math.max(12,Math.min(16,w/42));ctx.font='700 '+font+'px "Atkinson Hyperlegible"';const bw=Math.min(w-24,ctx.measureText(text).width+26),bx=Math.max(8,Math.min(w-bw-8,eater.x-bw/2)),by=Math.max(8,eater.y-eater.hh-39);ctx.fillStyle='#fff8e9f2';ctx.beginPath();ctx.roundRect(bx,by,bw,29,14);ctx.fill();ctx.fillStyle='#1f4b49';ctx.fillText(text,bx+13,by+20)}
+  }
+  load().catch(()=>{if(!dead)setError('A layer could not load. Try another saved world.')});return()=>{dead=true;cancelAnimationFrame(raf)};
+ },[world]);
+ function changeZoom(delta){manual.current=boundView({...cameraRef.current,zoom:cameraRef.current.zoom+delta});setViewName('A closer look · drag to explore')}
+ function beginDrag(e){if(!ready)return;drag.current={x:e.clientX,y:e.clientY,view:{...cameraRef.current},moved:false};e.currentTarget.setPointerCapture(e.pointerId)}
+ function moveDrag(e){if(!drag.current)return;const dx=e.clientX-drag.current.x,dy=e.clientY-drag.current.y;if(Math.hypot(dx,dy)>6){drag.current.moved=true;manual.current=panView(drag.current.view,dx,dy,geometry.current.width,geometry.current.height)}}
+ function endDrag(e){if(!drag.current)return;const moved=drag.current.moved;drag.current=null;if(moved){setViewName('Exploring · Find the animals to return');return}const b=canvas.current.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top,a=[...hits.current].reverse().find(a=>Math.hypot(x-a.x,y-a.y)<a.size);manual.current=null;onPick(a?.id??null)}
+ function resetView(){manual.current=null;onPick(null);setViewName('Drag to explore')}
+ return <><canvas ref={canvas} className="living-canvas" role="img" tabIndex={0} aria-label={`${world.plan.title}. Day ${frame.tick}. ${frame.agents.length} neighbours. ${frame.agents.filter(a=>a.bite).length} eating. Drag or use arrow keys to explore; plus and minus zoom; Escape returns to the animals.`} onPointerDown={beginDrag} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={()=>{drag.current=null}} onKeyDown={e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();manual.current=panView(cameraRef.current,e.key==='ArrowLeft'?55:e.key==='ArrowRight'?-55:0,e.key==='ArrowUp'?55:e.key==='ArrowDown'?-55:0,geometry.current.width,geometry.current.height);setViewName('Exploring · Find the animals to return')}else if(e.key==='+'||e.key==='=')changeZoom(.25);else if(e.key==='-')changeZoom(-.25);else if(e.key==='Escape')resetView()}}/>
+ <div className="map-explore-controls" aria-label="Explore the map"><button disabled={!ready} aria-label="Zoom in" onClick={()=>changeZoom(.25)}><Plus size={21}/></button><button disabled={!ready} aria-label="Zoom out" onClick={()=>changeZoom(-.25)}><Minus size={21}/></button><button disabled={!ready} aria-label="Find the animals" onClick={resetView}><Crosshair size={21}/></button>{world.plan.habitat==='freshwater'&&<button disabled={!ready} onClick={()=>{manual.current=pondView(world.plan.water);setViewName('Pond close-up · the same living world')}}><Drop size={20}/>Pond</button>}<button disabled={!ready} onClick={()=>{const patch=frame.patches.find(p=>p.biomass>.3)||frame.patches[0];if(patch){manual.current=null;onPick('plant:'+patch.id);setViewName('The food grows here')}}}><Plant size={20}/>Find plants</button><span>{viewName}</span></div>
+ {!ready&&!error&&<div className="making-world-overlay"><MakingScene source={world.background} kind="world" label="Preparing the painted ground and neighbours…" small/></div>}{error&&<p role="status" className="living-loading">{error}</p>}</>;
+}

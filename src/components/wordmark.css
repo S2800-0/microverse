@@ -1,0 +1,7 @@
+.app .site-header .wordmark{background:transparent!important;box-shadow:none;border:0;padding:12px 0;border-radius:0;overflow:visible;min-height:48px}
+.microverse-wordmark{display:inline-flex;align-items:baseline;gap:0;font-family:'Baloo 2',sans-serif;font-size:36px;font-weight:700;letter-spacing:-.035em;line-height:1.05;color:#1f4b49;white-space:nowrap;padding-top:.2em}
+.wordmark-letter-i{position:relative;display:inline-block;letter-spacing:-.035em}
+.wordmark-paw{position:absolute;width:.43em;height:.43em;left:50%;top:-.13em;transform:translateX(-48%) rotate(-13deg);color:#b86947;overflow:visible}
+@media(hover:hover){.wordmark:hover .wordmark-paw{transform:translateX(-48%) rotate(0);transition:transform .18s ease-out}}
+@media(max-width:700px){.microverse-wordmark{font-size:29px}.app .site-header .wordmark{padding:9px 0}}
+@media(prefers-reduced-motion:reduce){@media(hover:hover){.wordmark:hover .wordmark-paw{transition:none}}}

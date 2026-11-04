@@ -1,0 +1,90 @@
+{
+  "date": "2026-11-02",
+  "version": "V3",
+  "experienceTests": {
+    "passed": 10,
+    "failed": 0
+  },
+  "packagingTests": {
+    "passed": 4,
+    "failed": 0
+  },
+  "visualQA": "blocked: unresolved browser approval prerequisite",
+  "newBrowserCaptures": 0,
+  "suppliedScreenshots": 6,
+  "providerCalls": 0,
+  "storedProviderKeyInClient": false,
+  "sparkEnabled": false,
+  "mainProjectClean": true,
+  "mainHead": "5bda15b",
+  "narration": {
+    "clips": [
+      {
+        "id": "home",
+        "durationSeconds": 7.1,
+        "bytes": 49172
+      },
+      {
+        "id": "library",
+        "durationSeconds": 8.275,
+        "bytes": 57116
+      },
+      {
+        "id": "triage",
+        "durationSeconds": 5.525,
+        "bytes": 38420
+      },
+      {
+        "id": "review_water",
+        "durationSeconds": 4.85,
+        "bytes": 32516
+      },
+      {
+        "id": "review_tree",
+        "durationSeconds": 4.825958,
+        "bytes": 32756
+      },
+      {
+        "id": "review_grass",
+        "durationSeconds": 3.675,
+        "bytes": 23060
+      },
+      {
+        "id": "assumptions",
+        "durationSeconds": 8.625,
+        "bytes": 58868
+      },
+      {
+        "id": "predict",
+        "durationSeconds": 11.325,
+        "bytes": 78284
+      },
+      {
+        "id": "watch",
+        "durationSeconds": 10,
+        "bytes": 68372
+      },
+      {
+        "id": "explain",
+        "durationSeconds": 6.65,
+        "bytes": 44660
+      },
+      {
+        "id": "finish",
+        "durationSeconds": 8.6,
+        "bytes": 60404
+      },
+      {
+        "id": "route-help",
+        "durationSeconds": 7.65,
+        "bytes": 55196
+      }
+    ],
+    "totalBytes": 598824,
+    "networkCalls": 0,
+    "providerCalls": 0,
+    "listeningReview": "pending"
+  },
+  "wholeProductChecklistSurfaces": 46,
+  "build": "passed"
+}

@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-02",
+  "scope": "isolated prototype V3\u2013V5",
+  "browserApproval": "cleared by user; normal in-app browser",
+  "viewportChecks": [
+    "1487x1058",
+    "390x844",
+    "886x895 natural"
+  ],
+  "screenshots": "docs/screenshots/approved-review",
+  "fixed": [
+    "tutorial desktop collision",
+    "tutorial phone collision",
+    "phone record artwork overflow",
+    "dynamic motion React development reload"
+  ],
+  "automatedTests": 26,
+  "build": "passed",
+  "paidProviderCalls": 0,
+  "mainProject": "git status clean",
+  "notClaimed": [
+    "participant trial",
+    "new habitat engines",
+    "hardware camera/microphone test",
+    "subjective audio quality",
+    "full accessibility audit",
+    "complete 46-surface revamp"
+  ]
+}

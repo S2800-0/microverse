@@ -1,0 +1,17 @@
+{
+  "asset": "hero-landscape-v3",
+  "tool": "built-in image_gen",
+  "date": "2026-11-02",
+  "intent": "Separate clean environment layer from reference for independent local hero character motion.",
+  "references": [
+    "docs/assets/hero-stage.png",
+    "docs/reference/selected-option-3.png"
+  ],
+  "prompt": "Use case: precise-object-edit.\nAsset type: production high-resolution watercolor landscape background layer for Microverse hero. Input image 1 is the edit target; image 2 is the selected mockup for identity and composition only.\nPrimary request: Remove the entire fox and the little framed photograph from image 1, restoring the beautiful oak woodland and quiet ground behind them. Keep the main oak trunk/canopy framing upper left, the diagonal mossy log at lower left and middle, stump, pond bottom right, delicate garden/pergola far right, and distant soft conifers. Preserve the reference's specific crisp handmade watercolor/gouache natural-history picture-book rendering, amber/sage/forest green, pale ivory textured paper sky.\nComposition: wide landscape about 3:2; highest available natural image resolution, ideally 3072x2048. Leave right half mostly pale quiet sky from 10% to 65% image height for editable HTML heading and button later. Background should have real fine detail on leaves, bark, flowers and foreground, not smeared texture.\nConstraints: NO animals, NO fox, NO framed photograph, NO phone, NO UI, NO text, NO symbols, NO border, NO watermark. Do not add new focal objects. The image must work as a clean standalone environment layer under a separate animated fox. Keep the reference light and warm, rather than dark or photorealistic.",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "paidMetaOrBasetenCalls": 0,
+  "limitation": "Native output is 1536x1024, despite requested higher resolution. Do not claim this is native 4K."
+}

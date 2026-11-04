@@ -1,0 +1,11 @@
+{
+  "asset": "docs/assets/forest-dry.png",
+  "mode": "built-in imagegen edit",
+  "source": "/Users/shahy/Desktop/Skill Claude hackathon/microverse-demo-studio/public/art/forest.png",
+  "generatedOriginal": "/Users/shahy/.codex/generated_images/01a19b13-2941-7bc0-961a-b9401a5ba1c9/exec-4f001f64-0b17-4b89-adb7-24f0eb6aa68b.png",
+  "date": "2026-11-02",
+  "purpose": "Illustrative dry meadow story state, not a model-computed habitat image.",
+  "prompt": "Use case: lighting-weather edit. Asset type: watercolor ecological prototype game terrain state. Image 1 is the EDIT TARGET. Preserve the image's exact terrain geometry, all forest trees/canopy, edge foliage, rocks, blue creeks and water shapes, riverbanks, overhead perspective, brushwork, scale, margins and full composition. Change ONLY the open pale green grassy meadow into noticeably dry golden ochre/straw grass after sustained reduced rain in an illustrative model story. Retain tiny meadow plant details, adjusting grassy areas' coloration while keeping watercolor texture. Keep the creeks blue and exactly where they are; do not remove water or add new paths. This is the same map at a later illustrative state, not a different landscape. No animals, captions, UI, text, logos, new objects, fire, cracks, altered tree locations or altered terrain. Output target 1672x941 matching reference aspect ratio and dimensions. Full-bleed raster, no transparency. Keep all non-grass regions unchanged as closely as possible.",
+  "inspection": "Preserves composition, creeks, canopy and rocks; open meadow changes to ochre straw. Fine grass texture varies through generation; no animals, text or UI added.",
+  "runtimeAsset": "public/assets/forest-dry.webp"
+}

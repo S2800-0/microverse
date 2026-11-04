@@ -1,0 +1,49 @@
+{
+  "version": 14,
+  "date": "2026-11-03",
+  "files": [
+    {
+      "path": "src/world/species-catalog.js",
+      "sha256": "2aa151324151bb4d1c487539530ac38b17f20d45684d515dcba1f710b98131d5"
+    },
+    {
+      "path": "src/experience/navigation.js",
+      "sha256": "a8d6670e88a58849c7ad1235a754b29844c1e2cba47c70ec7de6264a2482ec02"
+    },
+    {
+      "path": "server/expansion-access.mjs",
+      "sha256": "eea013111811ae9da6d886ba2355070c7e9c058c5015a1c2ef992e22741dc6f7"
+    },
+    {
+      "path": "server/companion-bridge.mjs",
+      "sha256": "d49b03b69d1644375d070ef4b78270922b87451871da7527a0a5534236ebb6f6"
+    },
+    {
+      "path": "server/world-answer.mjs",
+      "sha256": "5c7a333cf03346f47c0951f95eeeba5e0b5562dc865733cc2aea7ab814563a11"
+    },
+    {
+      "path": "src/components/QuestionPanel.jsx",
+      "sha256": "d573a0c091dd4e89edcf8752fd077eacbabda09cb1e3397a6dd90d8124eb2d78"
+    },
+    {
+      "path": "src/companions/CompanionJourney.jsx",
+      "sha256": "e93391d44f173ac40fff93738b78ff844ba3f5b27a54e071f5ef48e3a9ab8be1"
+    },
+    {
+      "path": "src/experience/model-session.ts",
+      "sha256": "be3dde84ac9a6f4a8028166be0cce7b6139a8bdcfaa01d1961b141286671f172"
+    }
+  ],
+  "speciesProfiles": 8,
+  "automatedChecks": 59,
+  "approvedTotalMicroUsd": 2000000,
+  "reservedMicroUsdAtCheck": 1650000,
+  "providerAttemptsAtCheck": 33,
+  "notes": [
+    "User will upload their own images; prepared fixtures not transmitted.",
+    "No new paid calls for this knowledge/navigation work.",
+    "External API/motion dataset research is a roadmap, not installed/live retrieval.",
+    "Main remains unchanged at5bda15b."
+  ]
+}

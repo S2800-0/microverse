@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "title": "Sunny Island Reef",
+  "mode": "nature",
+  "habitat": "marine",
+  "visible": [
+    "Green island hill under blue sky",
+    "Clear water line across middle",
+    "Pink bumpy corals below",
+    "Two bright yellow fish",
+    "Pale corals on dark rocks"
+  ],
+  "assumptions": [
+    "A tiny pretend reef for play",
+    "Fish kinds are guessed broad groups",
+    "Not counted or health-checked",
+    "Not a real map of the place",
+    "Algae makes food here. Coral is an animal, not a plant."
+  ],
+  "landscape": "flat sandy seabed dotted with pink bumpy mounds and pale rocky patches",
+  "water": {
+    "x": 0,
+    "y": 0,
+    "w": 1,
+    "h": 1
+  },
+  "inhabitants": [
+    {
+      "id": 0,
+      "name": "Algae",
+      "look": "Small soft green tuft of marine algae, isolated watercolor clump",
+      "role": "producer",
+      "motion": "rooted",
+      "zone": "water"
+    },
+    {
+      "id": 1,
+      "name": "Yellow Reef Fish",
+      "look": "bright lemon-yellow round fish with blue cheeks",
+      "role": "grazer",
+      "motion": "swim",
+      "zone": "water"
+    },
+    {
+      "id": 2,
+      "name": "Coral Helper Shrimp",
+      "look": "tiny pale shrimp with long feelers",
+      "role": "companion",
+      "motion": "walk",
+      "zone": "water"
+    },
+    {
+      "id": 3,
+      "name": "Reef Parrotfish",
+      "look": "Turquoise and pink parrotfish with a beak-like mouth",
+      "role": "grazer",
+      "motion": "swim",
+      "zone": "water"
+    }
+  ],
+  "objects": []
+}

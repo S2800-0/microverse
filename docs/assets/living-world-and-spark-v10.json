@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "date": "2026-11-03",
+  "scope": "Isolated local Microverse prototype; not published",
+  "providers": {
+    "world_plan_and_anatomy": "Meta muse-spark-1.3",
+    "terrain_sprite_sheet_portrait": "Meta muse-image-1.0",
+    "narration": "Local Kokoro; prepared clips, no paid speech call"
+  },
+  "source_photos": {
+    "island": "User supplied Huahine reference; redistribution rights unresolved",
+    "sunny": "Existing licensed public example companion-dog-photo.jpg; see companion-reuse.json"
+  },
+  "decisions": [
+    "Raw Spark plan incorrectly treated coral as producer; compiler corrected to Algae before generation and simulation. Coral is an animal.",
+    "Initial v8 ground looked like dry rivers; rejected. reef-underwater-ground-v8.png used instead.",
+    "Fish landmark tail not confidently visible; rejected tail deformation. Fin, mouth and eye bounded regions retained.",
+    "Avatar v1 invented sunglasses absent from source; rejected. Avatar v3 accepted with no eyewear. v2 failed local input validation before provider request.",
+    "Cut sprite frames and connected white backgrounds in local code, preserving tall ears; no paid segmentation call for these sheets.",
+    "New consumer/producer rules are bounded invented teaching rules, not a researched species model."
+  ],
+  "receipts": [
+    "runtime/expansion-art/world-builder-plan-v8-raw.json",
+    "runtime/expansion-art/world-builder-plan-v8.json",
+    "runtime/expansion-art/world-builder-result-v8.json",
+    "runtime/expansion-art/reef-underwater-ground-v8.json",
+    "runtime/expansion-art/fish-landmarks-v9.json",
+    "runtime/expansion-art/avatar-test-v1.json",
+    "runtime/expansion-art/avatar-test-v2.json",
+    "runtime/expansion-art/avatar-test-v3.json"
+  ],
+  "budget": {
+    "approved_total_usd": 1.1,
+    "reserved_micro_usd": 1100000,
+    "reservations": 22,
+    "returned_images_including_rejected": 17,
+    "successful_spark_requests": 4,
+    "failed_network_attempts_reserved": 1,
+    "status": "Cap fully reserved; further paid tests stopped",
+    "billing": "Reservations are not verified charges, balance or payment-source proof.",
+    "reconciliation": "The fish helper initially used an encoded URL pathname and wrote a separate ledger. It now uses fileURLToPath; the missing reservation was reconciled into the shared ledger. The accidental folder was moved into runtime/archived-url-path-ledger. Audit receipt: runtime/expansion-art/reconciled-fish-reservation.json."
+  },
+  "assets": [
+    {
+      "path": "public/assets/reef-live-ground-v8.webp",
+      "sha256": "7e3c8af712023fef3e233e170a2fc8b8f83ea07b8766dd0be627b9e15cb0024a"
+    },
+    {
+      "path": "public/assets/reef-live-neighbours-v8.png",
+      "sha256": "e171599fc13a84c7ae4cd652d94376769bec47d1f9fa6d945873065b14cf1549"
+    },
+    {
+      "path": "public/assets/loading-fish-v8.png",
+      "sha256": "5a5e9a1119ca60ce628464e97322558c4d7e6f356ab68f52a453fe20691863d4"
+    },
+    {
+      "path": "public/assets/spark-sunny-0.png",
+      "sha256": "030c7a0ce29e2d8f0f17eb97b364f56659ba90fb4ffaa7871f250c2b12d44ea9"
+    },
+    {
+      "path": "public/assets/spark-sunny-1.png",
+      "sha256": "60f5dbad5d1e509d513a31fbf6465ce2d7693ca18cfb3b8ea3970500e8c70e6e"
+    },
+    {
+      "path": "public/assets/spark-sunny-2.png",
+      "sha256": "7b47858d3a8195e78b1698867d817292e9120c726d796ec0889070e8516e4435"
+    },
+    {
+      "path": "public/assets/spark-sunny-3.png",
+      "sha256": "799648a62aedaf7e6a56bc7de1a24edb79579b76f34856619615fe1461278a9f"
+    },
+    {
+      "path": "src/world/fish-motion-reviewed.json",
+      "sha256": "be73e0379ced3190fe0683b2d097844a61075c7f30e3638e0f78618a96c9d059"
+    },
+    {
+      "path": "src/world/saved-reef.json",
+      "sha256": "c329f3482fab782798f70a42a8e40b007ac97e9f8267dbdd1bd10a2a9b6a7499"
+    }
+  ]
+}

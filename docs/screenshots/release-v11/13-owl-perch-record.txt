@@ -1,0 +1,51 @@
+- main:
+  - button "Microverse home":
+    - text: m
+    - text: ı
+    - text: croverse
+  - button "Back":
+    - generic: Back
+  - button "Voice, music and sounds":
+  - img "The Shady Woodland. Day 7. 10 neighbours. 5 eating. Drag or use arrow keys to explore; plus and minus zoom; Escape returns to the animals."
+  - generic "Explore the map":
+    - button "Zoom in":
+    - button "Zoom out":
+    - button "Find the animals":
+    - generic: Drag to explore
+  - text: Day 7
+  - generic: Usual weather
+  - complementary:
+    - heading "The Shady Woodland" [level=1]
+    - paragraph: The neighbours look for food. Watch what changes when the weather changes.
+    - img "Close-up movement of Woodland Ivy"
+    - generic: Plenty of food
+    - generic "7 of 10 food marks"
+    - generic: Woodland Ivy
+    - strong: Wood Mouse is eating
+    - button "Show me a meal":
+      - text: Show me a meal
+    - button "Day 7 · a moment to notice Woodland Owl rested in Quiet oak. Take a closer look":
+      - generic: Day 7 · a moment to notice
+      - text: Woodland Owl rested in Quiet oak.
+      - generic: Take a closer look
+    - group "Choose an experiment":
+      - button "What if it rains less?":
+        - text: What if it rains less?
+      - button "What if a warm spell lasts?":
+        - text: What if a warm spell lasts?
+      - button "What if another Wood Mouse joins?":
+        - text: What if another Wood Mouse joins?
+      - button "Bring back usual weather"
+    - paragraph: We imagined who might live here.
+  - button "Let it live":
+    - text: Let it live
+  - button "Watch 7 days":
+    - text: Watch 7 days
+  - button "Meet a neighbour"
+  - button "Why did that happen?":
+    - text: Why did that happen?
+  - button "Another place"
+  - button "First adventure":
+    - text: First adventure
+  - button "Talk with Sunny":
+    - generic: Sunny

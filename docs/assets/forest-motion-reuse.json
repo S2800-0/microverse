@@ -1,0 +1,22 @@
+{
+  "mainCommit": "5bda15b",
+  "files": [
+    {
+      "path": "src/core/scene/meta-art-approved.js",
+      "sha256": "34403fc9980ea1f53e75fa76a23f9fc1999b8ba6948b8d6bc934101ef398027b"
+    },
+    {
+      "path": "public/assets/fox-portrait.png",
+      "sha256": "3d59669ebf5250ecf383e72cb41888fa38ae81afe9fb2d0372fd9fb9b4c12d7a"
+    },
+    {
+      "path": "public/assets/fawn.png",
+      "sha256": "d416a6c49dea720ca3dd1bbc127a8cdf3ab26777a87aa8682bebc15c611b8f74"
+    },
+    {
+      "path": "public/assets/doe.png",
+      "sha256": "772954138751b3abb4b0321585a37ec62e191875dd23d18da462bf142d3fa4d2"
+    }
+  ],
+  "animation": "Original reviewed rig settings and local 24-pose gait caches, prepared once per valid rig. No inference or new paid assets."
+}

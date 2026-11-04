@@ -1,0 +1,77 @@
+{
+  "version": 16,
+  "date": "2026-11-03",
+  "provider": "Meta Muse Image",
+  "approvedTotalCapMicroUsd": 2100000,
+  "reservedTotalMicroUsd": 1900000,
+  "newImageCalls": 2,
+  "identityNewLiveTest": false,
+  "tests": 65,
+  "preparation": "Programmatic 2x2 crops, connected-white removal, shared crop bounds and scale; no new faces drawn locally.",
+  "files": [
+    {
+      "path": "public/assets/spark-fox-0.png",
+      "sha256": "178fabffb3e42d4a4adc51ff81241438e46ff60972b8110537bb48f8f9d9b711",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "public/assets/spark-fox-1.png",
+      "sha256": "b1331500ed5b47c1128b8021d2e988eaca2e06ca8f1e4dc3f213bf9ec6eb944c",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "public/assets/spark-fox-2.png",
+      "sha256": "122d9d714e5c30c01d582e07a919544781cf5855e0ad75412537f5d40a47224d",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "public/assets/spark-fox-3.png",
+      "sha256": "e775abbe1d8242925082ef6d5caa08a5de540103ff394d1a05db4df2538cd745",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "public/assets/spark-clover-0.png",
+      "sha256": "a9b5c55370533bc3bf84532e4d0eea11649dea8c059eb93091082e1bd583550a",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "public/assets/spark-clover-1.png",
+      "sha256": "a2a2d4aa57f61c0f3606e428ef68c67f2be771989e2d634733c9ca5131e365fe",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "public/assets/spark-clover-2.png",
+      "sha256": "9d48e9e72b46b2f35594d8a6750477f7afc8d6663b2f2e10a769a4eb6b00e3b6",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "public/assets/spark-clover-3.png",
+      "sha256": "60fc7b30c020162b45efe6429cceb300281831955ef3856f9f5dcf81f98b8dda",
+      "size": [
+        512,
+        512
+      ]
+    }
+  ]
+}

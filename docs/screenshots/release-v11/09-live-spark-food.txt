@@ -1,0 +1,68 @@
+- main:
+  - button "Microverse home":
+    - text: m
+    - text: ı
+    - text: croverse
+  - button "Back":
+    - generic: Back
+  - button "Voice, music and sounds":
+  - img "Sunny Island Reef. Day 7. 9 neighbours. 2 eating. Drag or use arrow keys to explore; plus and minus zoom; Escape returns to the animals."
+  - generic "Explore the map":
+    - button "Zoom in":
+    - button "Zoom out":
+    - button "Find the animals":
+    - generic: Drag to explore
+  - text: Day 7
+  - generic: Usual weather
+  - complementary:
+    - heading "Sunny Island Reef" [level=1]
+    - paragraph: The neighbours look for food. Watch what changes when the weather changes.
+    - img "Close-up movement of Algae"
+    - generic: Plenty of food
+    - generic "7 of 10 food marks"
+    - generic: Algae
+    - strong: Reef Parrotfish is eating
+    - button "Show me a meal":
+      - text: Show me a meal
+    - button "Day 6 · a moment to notice Reef Parrotfish is eating Algae. Take a closer look":
+      - generic: Day 6 · a moment to notice
+      - text: Reef Parrotfish is eating Algae.
+      - generic: Take a closer look
+    - button "Try a what-if":
+      - text: Try a what-if
+    - paragraph: We imagined who might live here.
+  - button "Let it live":
+    - text: Let it live
+  - button "Watch 7 days":
+    - text: Watch 7 days
+  - button "Meet a neighbour"
+  - button "Why did that happen?":
+    - text: Why did that happen?
+  - button "Another place"
+  - button "First adventure":
+    - text: First adventure
+  - dialog "Talk with Sunny":
+    - button "Close companion chat":
+    - paragraph: Sunny
+    - heading "What are you wondering?" [level=2]
+    - paragraph: The bright Algae patches are food in this game. A bite makes that patch smaller. Plants can grow back, and more neighbours share the same food.
+    - paragraph: Yellow Reef Fish is eating Algae.
+    - paragraph: Reef Parrotfish is eating Algae.
+    - paragraph: Reef Parrotfish is eating Algae.
+    - generic: Meta Muse Spark · day 7
+    - button "Listen · Heart":
+      - text: Listen · Heart
+    - button "What are they eating?"
+    - button "What just happened?"
+    - button "What can I change?"
+    - generic: Your question
+    - textbox "Your question":
+      - /placeholder: Ask me something…
+      - text: Why are the fish nibbling the green patches?
+    - button "Ask Sunny":
+    - checkbox "Send my question and world records to Meta. My guide’s photo and name stay here." [checked]
+    - generic: Send my question and world records to Meta. My guide’s photo and name stay here.
+    - button "Change my guide":
+      - text: Change my guide
+  - button "Talk with Sunny" [expanded]:
+    - generic: Sunny
