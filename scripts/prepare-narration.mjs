@@ -3,7 +3,7 @@
 import {mkdir,writeFile,readFile,access} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
-import {createNaturalVoice} from '../../microverse-hackathon/server/natural-voice.mjs';
+import {createNaturalVoice} from '../server/earlier-app/server/natural-voice.mjs';
 import {NARRATION} from '../src/experience/narration.js';
 const out=fileURLToPath(new URL('../public/audio/',import.meta.url));
 await mkdir(out,{recursive:true});

@@ -1,5 +1,5 @@
 import {modelJson} from './model-json.mjs';
-import {createMetaProvider as baseProvider} from '../../microverse-hackathon/server/meta-provider.mjs';
+import {createMetaProvider as baseProvider} from './earlier-app/server/meta-provider.mjs';
 import {IDENTITY_SCHEMA,validateAnimalIdentity,creatureDesignPrompt} from '../src/core/creature/identity.js';
 import {pngDimensions} from '../src/core/creature/contract.js';
 export function createMetaProvider({apiKey,fetchImpl=fetch}){

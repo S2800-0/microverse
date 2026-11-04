@@ -2,7 +2,7 @@
 // credential file and production creature service remain unchanged.
 import {createHash} from 'node:crypto';
 import {createCreaturePipeline} from './creature-pipeline.mjs';
-import {createCreatureApi} from '../../microverse-hackathon/server/creature-api.mjs';
+import {createCreatureApi} from './earlier-app/server/creature-api.mjs';
 import {createMetaProvider} from './creature-provider.mjs';
 import {createBudget} from './credit-budget.mjs';
 import {expansionAccess,EXPANSION_LEDGER} from './expansion-access.mjs';

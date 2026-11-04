@@ -1,5 +1,5 @@
 import {createHash,randomBytes,timingSafeEqual} from 'node:crypto';
-import {readFileSync} from 'node:fs';
+import {existsSync,readFileSync} from 'node:fs';
 import {parseEnv} from 'node:util';
 import {fileURLToPath} from 'node:url';
 import {createBudget} from './credit-budget.mjs';
@@ -37,7 +37,7 @@ export function createPhotoCheck({enabled=false,creditsConfirmed=false,provider=
   }};
 }
 export function photoCheckPlugin(){
-  let env={};try{env=parseEnv(readFileSync(new URL('../../microverse-hackathon/.env',import.meta.url),'utf8'))}catch{/* Manual routes do not require a private configuration. */}
+  let env={};try{env=parseEnv(readFileSync(new URL(existsSync(new URL('../.env',import.meta.url))?'../.env':'../../microverse-hackathon/.env',import.meta.url),'utf8'))}catch{/* Manual routes do not require a private configuration. */}
   const provider=env.MICROVERSE_SPARK_PROVIDER||'baseten';
   const configuredCap=Number(env.MICROVERSE_SPARK_CAP_MICRO_USD);
   const cap=Number.isSafeInteger(configuredCap)&&configuredCap>=0?Math.min(configuredCap,CHECK_RESERVATION):0;

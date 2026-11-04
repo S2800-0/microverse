@@ -8,7 +8,7 @@ Due 9:00 PM ET, 4 November 2026. Fields below follow the submission form as capt
 |---|---|
 | Open source GitHub repository (the organizers call this mandatory) | MIT `LICENSE` added |
 | 3-minute video link | With Codex and the owner. Test it signed out |
-| Reef seabed painting | Used the old photo for coral colours. Repaint pending. See `docs/CREDITS.md` |
+| Island reef photo | Photographer and licence not identified yet. Add the credit if you find it. See `docs/CREDITS.md` |
 | Photos used in the trailer | **Check** that each one may be published |
 | Publicity permission on the form | Owner to read and accept. It lets Meta and Cerebral Valley publish the submitted materials |
 | Survey questions | Owner's own opinions, so left blank here |

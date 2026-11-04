@@ -5,14 +5,14 @@ import {expansionAccess,EXPANSION_LEDGER} from './expansion-access.mjs';
 import {randomBytes,timingSafeEqual,createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {pngDimensions} from '../src/core/creature/contract.js';
-import {createNaturalVoice} from '../../microverse-hackathon/server/natural-voice.mjs';
+import {createNaturalVoice} from './earlier-app/server/natural-voice.mjs';
 import {createAvatarPainter} from './avatar.mjs';
 import {createWorldAnswer} from './world-answer.mjs';
 import {createWorldGenerator} from './world-generation.mjs';
 import {createPoseSheet} from './pose-sheet.mjs';
 import {createBudget} from './credit-budget.mjs';
-import {createSparkProvider} from '../../microverse-hackathon/server/spark-provider.mjs';
-import {createSparkService} from '../../microverse-hackathon/server/spark-service.mjs';
+import {createSparkProvider} from './earlier-app/server/spark-provider.mjs';
+import {createSparkService} from './earlier-app/server/spark-service.mjs';
 export function landscapePrompt(kind){
  const place={garden:'a garden with flowers, fruit trees, a small pond and open grass',woodland:'a woodland clearing with ferns, broadleaf trees and a stream',reef:'a tropical island above clear water, with corals and reef fish below the surface'}[kind];
  if(!place)throw Error('Choose garden, woodland or reef.');

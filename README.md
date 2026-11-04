@@ -82,7 +82,20 @@ npm run dev
 
 The saved worlds, lessons and prepared Spark answers all work with no API key. Open a world, then press **This world's lesson**.
 
-Making new worlds and AI Spark replies run on the local dev server. They read a Meta API key and a local spending permit from outside this repository, so they stay off without that setup. See [`server/expansion-access.mjs`](server/expansion-access.mjs). The demo video shows them working.
+### Turning on AI features
+
+Making new worlds and AI Spark replies run on the local dev server, using your own Meta Model API key. They stay off until you set up both of these:
+
+1. Copy `.env.example` to `.env` and add your key.
+2. Create `runtime/expansion-permit.json`, which sets a spending cap and an end date. The cap must match `APPROVED_TEST_CAP_MICRO_USD` in [`server/expansion-access.mjs`](server/expansion-access.mjs), in millionths of a dollar:
+
+```json
+{"capMicroUsd": 5000000, "expiresAt": "2030-01-01T00:00:00Z"}
+```
+
+Requests are capped and never retried automatically. A static build has no server, so it has saved worlds and lessons only.
+
+The optional on-demand voice also needs a local Kokoro model in `runtime/kokoro-model/`. Prepared voice clips work without it.
 
 ```bash
 npm test
@@ -130,4 +143,4 @@ Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Code and documentation are [MIT licensed](LICENSE). Photos, artwork, music, fonts and voices keep their own terms, listed in [docs/CREDITS.md](docs/CREDITS.md).
 
-The reef library photo is by Borut Furlan (CC BY-SA 4.0). The woodland photo is by Derek Harper (CC BY-SA 2.0). Built by Shahesta Salama.
+The island reef photo's photographer hasn't been identified yet, so it isn't covered by the MIT licence. If it's yours, see [the credits](docs/CREDITS.md#a-photo-still-to-be-credited). The woodland photo is by Derek Harper (CC BY-SA 2.0). Built by Shahesta Salama.

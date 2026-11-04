@@ -4,7 +4,7 @@ Written 4 November 2026. Submission is due 9:00 PM ET today, which is also when 
 
 ## Read this first
 
-- **The reef photo in the library changed.** The old Huahine photo had no confirmed rights, so it was removed. It is now Borut Furlan's Moorea split-shot (CC BY-SA 4.0, credit required if shown). Reshoot any shot showing the old card.
+- **The reef photo stays the original Huahine one.** The owner chose to keep it, so earlier footage of that card is fine. Ignore any note saying it was replaced. Its photographer isn't identified yet, so there's no credit line to use until the owner finds it.
 - **Check the trailer's photos.** `scripts/prepare-opening-art.py` uses unlicensed-looking sources, including an iStock preview (`istockphoto-877356936-612x612.jpg`) and unnamed web images. The owner wants anything without a clear licence replaced with something similar before publishing, and the art made from those files is affected too.
 
 - **Reshoot anything filmed before commit `958b91c`.** It shows the old motion, pond and labels.

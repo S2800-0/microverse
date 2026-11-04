@@ -2,20 +2,23 @@
 
 The MIT licence in `LICENSE` covers original Microverse code and documentation only. Everything below keeps its own terms.
 
-## A known leftover
+## A photo still to be credited
 
-**Reef seabed (`public/assets/reef-live-ground-v8.webp`).** This Muse Image painting used an earlier reference photo for coral colours. That photo had no confirmed rights and was removed from the project. The painting does not reproduce the photo, but it should be repainted from a licensed reference.
+**Island reef (`public/assets/library-island-reference.webp`).** An over-and-under view of a reef and island at Huahine, French Polynesia, saved from a web article by the project owner. The photographer and licence have not been identified yet. This is a non-commercial project, but the photo is not covered by the MIT licence and is not cleared for reuse, so please don't copy it from here.
+
+If this is your photo, please [open an issue](https://github.com/S2800-0/microverse/issues). It will be credited the way you ask, or removed.
+
+The reef seabed painting (`public/assets/reef-live-ground-v8.webp`) was made by Muse Image with this photo as a reference for coral colours.
 
 ## Library photos
 
-All from Wikimedia Commons. Reduced in size and re-encoded for the app. The CC BY-SA photos stay under their own licences.
+From Wikimedia Commons, except the island reef photo above. Reduced in size and re-encoded for the app. The CC BY-SA photos stay under their own licences.
 
 | Photo | Author | Licence | Source |
 |---|---|---|---|
 | Garden | Jon Sullivan | Public domain | [Garden pond in park](https://commons.wikimedia.org/wiki/File:Garden_pond_in_park.jpg) |
 | Meadow (also used for the generation test) | Jasmine Horn / NPS | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) | [Wildflower Meadow](https://commons.wikimedia.org/wiki/File:Wildflower_Meadow_(6997737191).jpg) |
 | Woodland edge | Derek Harper | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) | [Woodland edge by A382](https://commons.wikimedia.org/wiki/File:Woodland_edge_by_A382_-_geograph.org.uk_-_7945943.jpg) |
-| Island reef | Borut Furlan | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [Blacktip reef sharks at Moorea 2025](https://commons.wikimedia.org/wiki/File:Blacktip_reef_sharks_at_Moorea_2025.jpg) |
 | Sunny, the dog | Mtlchung | CC0 1.0 | [Golden Retriever 88](https://commons.wikimedia.org/wiki/File:Golden_Retriever_88.JPG) |
 
 Demo animal photos (beagle, alpaca, parrot, hedgehog, goldfish) are listed in `docs/demo-assets/CREDITS.md`.
