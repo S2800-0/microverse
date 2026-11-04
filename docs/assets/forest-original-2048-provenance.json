@@ -1,0 +1,23 @@
+{
+  "asset": "forest-original-2048.webp",
+  "source": "/Users/shahy/Desktop/Skill Claude hackathon/microverse-hackathon/runtime/meta-art-batch-2026-10-28/game-map.png",
+  "source_sha256": "e255d1e1548ba344dc0a341c1a102aa01c8160446e3bebf59a9947e4f90c6ff6",
+  "output": "/Users/shahy/Desktop/Skill Claude hackathon/microverse-camera-prototype/public/assets/forest-original-2048.webp",
+  "output_sha256": "9d61aa14755df75d19a6d5253025cf24efcdcc3a95b6006486ae39a07f09ecb6",
+  "width": 2048,
+  "height": 1152,
+  "bytes": 830962,
+  "operation": "Reuse existing 2048\u00d71152 original as quality-94 WebP; no new generation, no upscaling, no geometry edits.",
+  "verified_relationship": "public/meta-art/game-map-live.png was explicitly resized from public/meta-art/game-map.png by scripts/prepare-meta-adoption.py. The runtime 2048 source visually matches the public 1920 master and current 1672 live terrain.",
+  "normalized_mae_to_current_webp": 2.1799472294396507,
+  "limitations": [
+    "2048 source is 22.5% wider than 1672 current raster, not 4K.",
+    "Dry variant still uses 1672\u00d7941 generated art; no higher-resolution source exists.",
+    "Excessive close-up/backdrop zoom still stretches pixels on Retina screens.",
+    "Terrain geometry and ecosystem model remain unchanged."
+  ],
+  "cost": "No generation or paid API call.",
+  "normalized_mae_to_live_png": 0.8261240968327495,
+  "webp_mae_to_original": 1.5807690090603297,
+  "visually_inspected": true
+}

@@ -1,0 +1,17 @@
+import {CompanionPreparing} from '../src/companions/CompanionPreparing.jsx';
+import '../src/companions/companions.css';
+// Development-only visual fixture. No API requests, generated-success mocks or billing changes.
+import React,{useEffect,useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import '../src/styles.css';
+import '../src/world/world.css';
+import '../src/components/making.css';
+import {LivingWorldCanvas} from '../src/world/LivingWorldCanvas.jsx';
+import {SeedGame} from '../src/components/SeedGame.jsx';
+import {createLivingWorld} from '../src/world/simulation.js';
+import {SAVED_WORLDS} from '../src/world/saved-places.js';
+const world=SAVED_WORLDS.woodland,sim=createLivingWorld(world.plan),id='e'.repeat(64);
+async function existingPoseSheet(){const images=await Promise.all([0,1,2,3].map(async i=>{const image=new Image();image.src='/assets/owl-flight-'+i+'-v11.png';await image.decode();return image}));const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=1024;const ctx=canvas.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,1024,1024);images.forEach((im,i)=>{const scale=Math.min(400/im.width,400/im.height),w=im.width*scale,h=im.height*scale;ctx.drawImage(im,(i%2)*512+(512-w)/2,Math.floor(i/2)*512+460-h,w,h)});return canvas.toDataURL('image/png')}
+function Checks(){const [frame,setFrame]=useState(sim.snapshot()),[art,setArt]=useState({}),[run,setRun]=useState(false),[focus,setFocus]=useState(null),[reduce,setReduce]=useState(false),[error,setError]=useState('');useEffect(()=>{if(!run)return;const t=setInterval(()=>setFrame(sim.step()),650);return()=>clearInterval(t)},[run]);async function add(){try{const atlas=await existingPoseSheet();setArt({[id]:atlas});setFrame(sim.addVisitor({id,name:'Prepared owl visitor',zone:'air',motion:'fly',family:'bird'}));setFocus(id);setRun(true)}catch(e){setError(e.message)}}return <main className="app"><div className="living-map" style={{position:'fixed',inset:0,width:'100%',height:'100svh'}}><LivingWorldCanvas world={world} frame={frame} paused={!run} reduced={reduce} focus={focus} onPick={setFocus} visitorArt={art}/></div><aside style={{position:'fixed',right:12,top:12,width:290,maxHeight:'65vh',overflow:'auto',padding:18,background:'#fff8e9f5',borderRadius:26,zIndex:10,fontSize:14}}><h1 style={{fontSize:24}}>Local renderer checks</h1><p>Prepared artwork. No AI call. This page is a test fixture, not a generated result.</p><button onClick={add} disabled={!!frame.visitors.length}>Add prepared owl visitor</button><button onClick={()=>setRun(!run)}>{run?'Pause fixture':'Run fixture'}</button><label><input type="checkbox" checked={reduce} onChange={e=>setReduce(e.target.checked)}/>Reduce motion</label><p role="status">Day {frame.tick} · {frame.visitors.length} visitor · {frame.visitors[0]?.activity||'Waiting'}</p>{error&&<p role="alert">{error}</p>}<SeedGame small/></aside></main>}
+function LoaderCheck(){const [stopped,setStopped]=useState(false);return <main className="app"><header className="site-header"><strong>Microverse · Loading layout check</strong></header>{stopped?<p className="flow-screen">Stopped the visual fixture. No AI request was made.</p>:<CompanionPreparing image="/assets/companion-cat.png" onCancel={()=>setStopped(true)}/>}</main>}
+createRoot(document.getElementById('root')).render(new URLSearchParams(location.search).get('view')==='loading'?<LoaderCheck/>:<Checks/>);

@@ -1,0 +1,8 @@
+// Explicit local integration check. Every stage uses the shared user-approved ledger.
+import {readFile,writeFile} from 'node:fs/promises';
+const stage=process.argv[2];if(!['plan','build'].includes(stage))throw Error('Choose one explicit stage.');
+const root=new URL('../runtime/expansion-art/',import.meta.url),photo='data:image/png;base64,'+(await readFile(new URL('island-api-test-input.png',root))).toString('base64');
+const status=await(await fetch('http://127.0.0.1:8860/api/world-tools/status')).json();
+const input={consent:true,image:photo};if(stage==='build')input.plan=JSON.parse(await readFile(new URL('world-builder-plan-v8.json',root),'utf8')).plan;
+const r=await fetch('http://127.0.0.1:8860/api/world-tools/'+stage,{method:'POST',headers:{'Content-Type':'application/json','Origin':'http://127.0.0.1:8860','X-Microverse-Session':status.session},body:JSON.stringify(input),signal:AbortSignal.timeout(540000)}),data=await r.json();
+if(!r.ok){console.log(JSON.stringify({stage,status:r.status,error:data.error}));process.exitCode=1}else if(stage==='plan'){await writeFile(new URL('world-builder-plan-v8.json',root),JSON.stringify(data,null,2));console.log(JSON.stringify({stage,status:r.status,plan:data.plan,usage:data.usage}));}else{for(const key of ['background','atlas'])await writeFile(new URL('world-builder-'+key+'-v8.png',root),Buffer.from(data[key].split(',')[1],'base64'));await writeFile(new URL('world-builder-result-v8.json',root),JSON.stringify({...data,background:'world-builder-background-v8.png',atlas:'world-builder-atlas-v8.png'},null,2));console.log(JSON.stringify({stage,status:r.status,files:['world-builder-background-v8.png','world-builder-atlas-v8.png']}))}

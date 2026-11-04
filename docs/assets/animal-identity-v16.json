@@ -1,0 +1,81 @@
+{
+  "version": 16,
+  "date": "2026-11-03",
+  "provider": "Meta Muse Image",
+  "approvedTotalCapMicroUsd": 2100000,
+  "reservedTotalMicroUsd": 1900000,
+  "newImageCalls": 2,
+  "identityNewLiveTest": false,
+  "tests": 65,
+  "preparation": "Programmatic 2x2 crops, connected-white removal, shared crop bounds and scale; no new faces drawn locally.",
+  "files": [
+    {
+      "path": "public/assets/spark-fox-0.png",
+      "sha256": "1f948c7ad9f9a22028c674e4de952490f78d97b922a0d568aa1483b9e8771e50",
+      "size": [
+        512,
+        512
+      ],
+      "realigned": "2026-11-04: moved and scaled locally so all four frames share one centre. No new drawing or AI call."
+    },
+    {
+      "path": "public/assets/spark-fox-1.png",
+      "sha256": "fc3f4473ce68919dd1264de591e12deade70e1cd4e98577d5b23cee077045c72",
+      "size": [
+        512,
+        512
+      ],
+      "realigned": "2026-11-04: moved and scaled locally so all four frames share one centre. No new drawing or AI call."
+    },
+    {
+      "path": "public/assets/spark-fox-2.png",
+      "sha256": "1192f72c943f55372bf2532d7931f17d8ea0a4a8be4acc0431e37a2fc817ef91",
+      "size": [
+        512,
+        512
+      ],
+      "realigned": "2026-11-04: moved and scaled locally so all four frames share one centre. No new drawing or AI call."
+    },
+    {
+      "path": "public/assets/spark-fox-3.png",
+      "sha256": "b958540078e854edbde8094fad63a0d40ed58237f4f5cb9c78e52a61be93ec07",
+      "size": [
+        512,
+        512
+      ],
+      "realigned": "2026-11-04: moved and scaled locally so all four frames share one centre. No new drawing or AI call."
+    },
+    {
+      "path": "public/assets/spark-clover-0.png",
+      "sha256": "a9b5c55370533bc3bf84532e4d0eea11649dea8c059eb93091082e1bd583550a",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "public/assets/spark-clover-1.png",
+      "sha256": "a2a2d4aa57f61c0f3606e428ef68c67f2be771989e2d634733c9ca5131e365fe",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "public/assets/spark-clover-2.png",
+      "sha256": "9d48e9e72b46b2f35594d8a6750477f7afc8d6663b2f2e10a769a4eb6b00e3b6",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "path": "public/assets/spark-clover-3.png",
+      "sha256": "60fc7b30c020162b45efe6429cceb300281831955ef3856f9f5dcf81f98b8dda",
+      "size": [
+        512,
+        512
+      ]
+    }
+  ]
+}

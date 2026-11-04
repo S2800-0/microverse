@@ -1,0 +1,165 @@
+{
+  "date": "2026-11-02",
+  "generator": "Meta Muse Image / muse-image-1.0",
+  "status": "Installed local prototype assets; original main project unchanged",
+  "assets": [
+    {
+      "path": "public/assets/world-garden-v7.webp",
+      "pixels": [
+        1920,
+        1280
+      ],
+      "sha256": "1ca4143322503eaf945f9921bcf07765af01f4880cbef93166b7dcaba78b493b",
+      "sourceReceipt": "runtime/expansion-art/world-garden-v7.json"
+    },
+    {
+      "path": "public/assets/world-island-pale-v7.webp",
+      "pixels": [
+        1920,
+        1280
+      ],
+      "sha256": "f3d3715585a724c662bdd69bd989f4744faf1096da778211168e00023d6470b0",
+      "sourceReceipt": "runtime/expansion-art/world-island-pale-v7.json"
+    },
+    {
+      "path": "public/assets/world-island-v7.webp",
+      "pixels": [
+        1920,
+        1280
+      ],
+      "sha256": "28ae80b73487850e0f1e03eeb8a129a57dae818f7c0abb6b030fd9d9cb60a908",
+      "sourceReceipt": "runtime/expansion-art/world-island-v7.json"
+    },
+    {
+      "path": "public/assets/world-woodland-v7.webp",
+      "pixels": [
+        1920,
+        1280
+      ],
+      "sha256": "d22cc86e088d49ee09e8ee594745d80c8016fcfd81c73da45cfc0f5135cd1ab9",
+      "sourceReceipt": "runtime/expansion-art/world-woodland-v7.json"
+    },
+    {
+      "path": "public/assets/food-fern-v7.webp",
+      "pixels": [
+        280,
+        217
+      ],
+      "sha256": "1a2b7160bd15323f0dc5a0a17a0b8c50f75e9ed686902f594020717df80f8e20",
+      "sourceReceipt": "runtime/expansion-art/food-plants-v7.json"
+    },
+    {
+      "path": "public/assets/food-grass-v7.webp",
+      "pixels": [
+        280,
+        210
+      ],
+      "sha256": "2707f2285243a89ae3f39e1486dff0fb3d73d0443b4f64a4fec965d39f5e89ff",
+      "sourceReceipt": "runtime/expansion-art/food-plants-v7.json"
+    },
+    {
+      "path": "public/assets/food-herb-v7.webp",
+      "pixels": [
+        280,
+        190
+      ],
+      "sha256": "7da712d129226778299af06e34135a5f7bb499dc847348f37a0c215ac7c84242",
+      "sourceReceipt": "runtime/expansion-art/food-plants-v7.json"
+    },
+    {
+      "path": "public/assets/food-shrub-v7.webp",
+      "pixels": [
+        274,
+        220
+      ],
+      "sha256": "88ab8416ca6c9ce7b0aa7cb3813c980926b727b3c951c68811bd9800512a8fff",
+      "sourceReceipt": "runtime/expansion-art/food-plants-v7.json"
+    },
+    {
+      "path": "public/assets/leaf-v7-0.webp",
+      "pixels": [
+        180,
+        236
+      ],
+      "sha256": "aa0c2e9c056dd65114043c9fdea851a56343e483472aba4381e62e8a75069043",
+      "sourceReceipt": "runtime/expansion-art/hero-face-leaves-v7-network.json"
+    },
+    {
+      "path": "public/assets/leaf-v7-1.webp",
+      "pixels": [
+        180,
+        236
+      ],
+      "sha256": "dd577fba68ddb820fff10e1e724b8f434d0557616c49c2954e744a674c545d0a",
+      "sourceReceipt": "runtime/expansion-art/hero-face-leaves-v7-network.json"
+    },
+    {
+      "path": "public/assets/leaf-v7-2.webp",
+      "pixels": [
+        180,
+        237
+      ],
+      "sha256": "25dcc7543d60cf6cf470e574e1402353e93b4ed38bc00130d0767a95e7c54aa8",
+      "sourceReceipt": "runtime/expansion-art/hero-face-leaves-v7-network.json"
+    },
+    {
+      "path": "public/assets/leaf-v7-3.webp",
+      "pixels": [
+        180,
+        237
+      ],
+      "sha256": "dbd2ba461a1ffc54c04e4081ada165a740548e859575b8e9ea941468f1247a64",
+      "sourceReceipt": "runtime/expansion-art/hero-face-leaves-v7-network.json"
+    },
+    {
+      "path": "public/assets/microverse-logo-128.png",
+      "pixels": [
+        128,
+        124
+      ],
+      "sha256": "6f0232b85fadb3cbbe7a0773cf4015a8005fe05ced7530e402b29d4a78f1b643",
+      "sourceReceipt": "runtime/expansion-art/brand-selected-logo-v7.json"
+    },
+    {
+      "path": "public/assets/microverse-logo-64.png",
+      "pixels": [
+        64,
+        62
+      ],
+      "sha256": "279c3f564642917f703417301c87c14573a97d52a05c3252e18900139cb84a0a",
+      "sourceReceipt": "runtime/expansion-art/brand-selected-logo-v7.json"
+    },
+    {
+      "path": "public/assets/microverse-logo-v7.png",
+      "pixels": [
+        512,
+        496
+      ],
+      "sha256": "6546773c538bbac58a2da52922957b0f9c04970af38b95ef8366b8509e7c7c76",
+      "sourceReceipt": "runtime/expansion-art/brand-selected-logo-v7.json"
+    }
+  ],
+  "sources": {
+    "reef": "User-supplied Huahine island/reef image; redistribution rights unverified",
+    "gardenWoodland": "Original curated terrain used as layout reference; generated scenery is illustrative, not measured reconstruction",
+    "logo": "Approved Little Field Club board, third displayed option",
+    "leaves": "Cut from generated reference sheet with local image processing; head candidates rejected for angle mismatch"
+  },
+  "motion": "Existing fox raster mesh and CSS/canvas motion execute locally; no video inference per frame",
+  "budget": {
+    "authorizedUsd": 1,
+    "reservedUsd": 0.75,
+    "attempts": 15,
+    "returnedImages": 12,
+    "failedNetworkAttempts": 1,
+    "sparkCalls": 2,
+    "note": "Reservation is conservative local bookkeeping, not a billing receipt. Published image rate implies $0.12 for 12 images, plus Spark usage; billing balance not rechecked."
+  },
+  "dynamicTest": {
+    "report": "runtime/expansion-art/paint-api-smoke.json",
+    "painting": "runtime/expansion-art/paint-api-island.png",
+    "matchingPalePainting": "runtime/expansion-art/paint-api-island-pale.png",
+    "proof": "docs/screenshots/expansion-v7/photo-to-watercolor-comparison.jpg"
+  },
+  "terms": "MIT intent for original code does not transfer rights in reference photos, models, fonts or generated assets. Confirm source rights before public release."
+}

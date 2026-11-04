@@ -1,71 +1,27 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {createForestController} from '../src/scene/controller.ts';
-import {buildTerrain,MEADOW_V2_TERRAIN} from '../src/scene/terrain.js';
-import {World,SCENE_PARAMS} from '../src/sim/engine.ts';
-import {validatePhotoFile} from '../src/scene/creature-import.js';
+import {startModel} from '../src/experience/model-session.ts';
+import {createExploration,forestRecords,neighbourChoices,forestTime} from '../src/forest/exploration.ts';
+function experiment(){const s=startModel({food:'Some',review:{grass:'seen',tree:'seen',water:'unsure'}});s.seek(52);return s}
+function snapshot(s){return {...s.experiment.toReplay().initial,selectedId:null,appearances:[],world:s.getState().baseline.world.toSnapshot()}}
 
-test('the same scene seed reproduces the model independently of selection',()=>{
-  const a=createForestController(),b=createForestController();
-  a.select(1);a.step(52);b.step(52);
-  assert.deepEqual(a.getState().world.animals,b.getState().world.animals);
-  assert.deepEqual(a.getState().world.events,b.getState().world.events);
-  assert.equal(b.getState().selectedId,null);
+test('open exploration forks the usual-rain forest without altering experiment or its random state',()=>{
+ const s=experiment(),before=JSON.stringify(s.export()),copy=snapshot(s),original=JSON.stringify(copy),f=createExploration(copy);
+ for(let i=0;i<10;i++)f.step();assert.equal(f.getState().week,62);
+ assert.equal(JSON.stringify(s.export()),before);assert.equal(JSON.stringify(copy),original);assert.equal(f.getState().world.interventions.length,0);
 });
-test('custom identity is retained and reset clears image/rig memory',()=>{
-  const c=createForestController({populated:false});
-  const a=c.add({species:'dog',name:'Maple',image:'local-png',rig:{reviewed:true}});
-  assert.equal(c.getState().appearances.get(a.id).name,'Maple');
-  assert.equal(c.getState().selectedId,a.id);
-  c.reset(false);assert.equal(c.getState().appearances.size,0);
-  assert.equal(c.getState().selectedId,null);assert.equal(c.getState().animals.length,0);
+test('the exploring year is bounded, and restarting repeats its exact states and records',()=>{
+ const f=createExploration(snapshot(experiment()));for(let i=0;i<52;i++)f.step();const end=f.snapshot(),records=f.records();assert.throws(()=>f.step());f.restart();assert.equal(f.getState().week,52);assert.equal(f.records().length,0);for(let i=0;i<52;i++)f.step();assert.deepEqual(f.snapshot(),end);assert.deepEqual(f.records(),records);
 });
-test('terrain initialization, births and arrivals stay on open ground',()=>{
-  const c=createForestController();
-  for(let i=0;i<104;i++){
-    const s=c.getState();
-    for(const a of s.animals)assert(s.terrain.walkable(a.x,a.y/s.world.params.height*100),`animal ${a.id} at week ${i}`);
-    c.step();
-  }
+test('journal IDs refer to real new events and never invent or expose pre-exploration moments',()=>{
+ const f=createExploration(snapshot(experiment()));const start=f.getState().world.events.length;for(let i=0;i<8;i++)f.step();const all=f.getState().world.events,records=f.records();assert(records.length>0);
+ for(const r of records){assert(r.eventIndex>=start);assert.deepEqual(r.record,all[r.eventIndex]);assert.equal(r.id,'forest.event.'+r.eventIndex);assert(['birth','arrive','death','kill'].includes(r.type));if(r.livingAnimalId!==null)assert(f.getState().animals.some(a=>a.id===r.livingAnimalId));}
 });
-test('a model change preserves an imported companion',()=>{
-  const c=createForestController({populated:false});
-  c.add({species:'dog',name:'Maple'});c.add({species:'wolf'});
-  c.schedule('remove-wolves');c.step();
-  assert.equal(c.getState().counts.wolf,0);assert.equal(c.getState().counts.dog,1);
-  assert.equal(c.getState().appearances.get(c.getState().animals[0].id).name,'Maple');
-  assert.throws(()=>c.schedule('invented'),/Unsupported/);
-  assert.throws(()=>c.step(Infinity),/between/);
+test('death and hunt records do not offer absent creatures as living close-ups',()=>{
+ const state={world:{animals:[{id:2,species:'fox'}],events:[{type:'death',t:1,id:1,species:'rabbit',cause:'eaten'},{type:'kill',t:1,id:2,prey:1,preySpecies:'rabbit'}]},animals:[{id:2,species:'fox'}]};
+ const [hunt,death]=forestRecords(state);assert.equal(hunt.species,'fox');assert.equal(hunt.livingAnimalId,2);assert.equal(death.livingAnimalId,null);assert(death.detail.includes('predator'));assert.equal(hunt.record.prey,1);
 });
-test('reset restores the same seed and initial resources',()=>{
-  const c=createForestController(),original=structuredClone(c.getState().world.animals);
-  const grass=Array.from(c.getState().world.grass);
-  c.step(30);c.add({species:'cat'});c.reset(true);
-  assert.deepEqual(c.getState().world.animals,original);
-  assert.deepEqual(Array.from(c.getState().world.grass),grass);
-});
-test('terrain rejects invalid coordinates and checks both ends of a path',()=>{
-  const t=buildTerrain(MEADOW_V2_TERRAIN);
-  assert(!t.walkable(-1,50));assert(!t.walkable(NaN,20));assert(!t.walkable(100,50));
-  assert(!t.clear(50,50,Infinity,20));assert(!t.clear(0,0,50,50));assert(!t.clear(50,50,0,0));
-});
-test('predators cannot walk or hunt across a blocked channel',()=>{
-  const p=structuredClone(SCENE_PARAMS);p.width=20;p.height=20;p.initial={};delete p.immigration;
-  const walkable=(x,y)=>x>=0&&y>=0&&x<20&&y<20&&(x<9||x>11);
-  const traverse=(x0,y0,x1,y1)=>{for(let i=0;i<=100;i++)if(!walkable(x0+(x1-x0)*i/100,y0+(y1-y0)*i/100))return false;return true;};
-  const w=new World(p,7,[],walkable,traverse);
-  w.addCreature({species:'wolf',x:8,y:10});w.addCreature({species:'deer',x:12,y:10});
-  for(let i=0;i<5;i++){
-    const before=new Map(w.animals.map(a=>[a.id,{x:a.x,y:a.y}]));w.step();
-    for(const a of w.animals.filter(a=>a.alive)){const b=before.get(a.id);if(b)assert(traverse(b.x,b.y,a.x,a.y));}
-  }
-  assert(!w.events.some(e=>e.type==='kill'));
-});
-test('fully blocked terrain fails instead of spawning in an obstacle',()=>{
-  assert.throws(()=>new World(structuredClone(SCENE_PARAMS),7,[],()=>false),/no open ground/);
-});
-test('photo import rejects unsupported files and oversized inputs',()=>{
-  validatePhotoFile({type:'image/png',size:100});
-  assert.throws(()=>validatePhotoFile({type:'image/svg+xml',size:100}),/JPEG/);
-  assert.throws(()=>validatePhotoFile({type:'image/png',size:11*1024*1024}),/10 MB/);
+test('neighbour choices disable absent species and model clock follows real season boundaries',()=>{
+ const choices=neighbourChoices({animals:[{id:7,species:'rabbit'}]});assert.equal(choices.length,4);assert.equal(choices.find(c=>c.species==='rabbit').animalId,7);assert(choices.filter(c=>c.species!=='rabbit').every(c=>c.animalId===null));
+ for(const [w,season]of [[0,'Spring'],[13,'Summer'],[26,'Autumn'],[39,'Winter'],[52,'Spring']])assert.equal(forestTime(w).season,season);assert.equal(forestTime(52).year,2);
 });

@@ -1,0 +1,26 @@
+{
+  "asset": "hero-fox-v3",
+  "tool": "built-in image_gen",
+  "date": "2026-11-02",
+  "intent": "Transparent matching character layer for independent local hero motion.",
+  "references": [
+    "docs/assets/hero-stage.png"
+  ],
+  "prompt": "Use case: background-extraction / identity-preserve.\nAsset type: standalone transparent character layer for Microverse watercolor website hero.\nInput image 1 is the identity reference and desired pose. Extract/recreate ONLY this same full-body curious red fox, preserving the friendly amber eyes, slightly tilted head looking toward viewer/right, long pointed ears, fine amber watercolor fur, dark lower legs, white breast and muzzle, fluffy tail to left with white tip. Character should face three-quarter right with whole paws and whole tail visible. The fox is intended to stand at the left of a wide hero page, matching this exact picture-book watercolor/gouache natural-history illustration rather than a cartoon redesign.\nComposition/framing: full-body fox centered and occupying about85% canvas width/height, landscape or square canvas, all extremities within image, generous8% transparent safety margin.\nBackground: genuinely transparent alpha, NOT white, NOT checkerboard. No scenery, ground, flowers, leaves, log, photograph, text, UI, watermark, or oval shadow. Keep natural four-legged anatomy, no additional animals.\nRender at highest practical native resolution. Fine crisp watercolor edge detail. This separate image will receive subtle local breathing and head-curiosity movement; preserve fox identity and expression from reference.",
+  "paidMetaOrBasetenCalls": 0,
+  "transparentBackground": true,
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    254
+  ],
+  "nativeTransparentOutput": true,
+  "limitations": [
+    "Whole-body raster layer; head and tail are not independently rigged.",
+    "Native output1536x1024; do not describe as4K."
+  ]
+}

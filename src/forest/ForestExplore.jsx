@@ -1,0 +1,54 @@
+import {useEffect,useMemo,useRef,useState} from 'react';
+import {AnimatePresence,motion,MotionConfig} from 'motion/react';
+import {Play,Pause,ArrowRight,ArrowLeft,BookOpen,PawPrint,ArrowCounterClockwise,X,Leaf,ArrowUpRight} from '@phosphor-icons/react';
+import {createExploration,FOREST_PROFILES,neighbourChoices,forestTime} from './exploration.ts';
+import {DialogGuide} from '../spark/SparkSpeech.jsx';
+import {Coachmark} from '../components/Coachmark.jsx';
+import {WorldCanvas,frameFor} from '../experience/WorldCanvas.jsx';
+
+export function ForestExplore({initial,sessionRef,heading,paused,reduced,landscape,tutorialEnabled=true,onTutorialDone=()=>{},onReturn,onCompanions}){
+ const [guideStep,setGuideStep]=useState(0);
+ const guide=[{voiceKey:'hint_forest_play',target:'.forest-play',text:'One week is seven pretend days. Tap Let it grow, or One week, to watch time pass.'},{voiceKey:'hint_forest_meet',target:'.forest-meet',text:'Choose Meet a neighbour for a closer look at one animal and what it needs.'},{voiceKey:'hint_forest_journal',target:'.forest-journal',text:'The journal keeps real moments from this run. A new arrival or hunt will invite you to look closer.'}];
+ function guideNext(){if(guideStep>=2){onTutorialDone();setGuideStep(3)}else setGuideStep(guideStep+1)}
+ const [session]=useState(()=>sessionRef.current||(sessionRef.current=createExploration(initial)));
+ const [state,setState]=useState(()=>session.getState()),[running,setRunning]=useState(false),[panel,setPanel]=useState(null),[picked,setPicked]=useState(null),[record,setRecord]=useState(null),[focusId,setFocusId]=useState(null),[error,setError]=useState('');
+ const dialog=useRef(null),opener=useRef(null);
+ const frame=useMemo(()=>frameFor(state),[state]);
+ const elapsed=state.week-session.startWeek,time=forestTime(state.week),records=session.records();
+ const invitation=records.find(r=>r.livingAnimalId!==null);
+ const neighbours=neighbourChoices(state);
+ function next(){try{setState(session.step());setError('')}catch(e){setRunning(false);setError(e.message)}}
+ useEffect(()=>{if(!running||elapsed>=52){if(elapsed>=52)setRunning(false);return}const id=setInterval(()=>{if(!document.hidden)next()},1600);return()=>clearInterval(id)},[running,elapsed]);
+ useEffect(()=>{const hidden=()=>{if(document.hidden)setRunning(false)};document.addEventListener('visibilitychange',hidden);return()=>document.removeEventListener('visibilitychange',hidden)},[]);
+ useEffect(()=>{if(panel&&!dialog.current.open)dialog.current.showModal();else if(!panel&&dialog.current.open)dialog.current.close()},[panel]);
+ function rememberOpener(event){if(dialog.current?.open)return;const target=event?.currentTarget;opener.current=target&&target.tabIndex>=0?target:document.querySelector('.forest-meet')}
+ function open(nextPanel,event){setRunning(false);rememberOpener(event);setRecord(null);setPanel(nextPanel)}
+ function meet(id,event){if(id===null){setFocusId(null);setPicked(null);setPanel(null);return}const animal=state.animals.find(a=>a.id===id);if(!animal)return;setPicked({id:animal.id,species:animal.species});setFocusId(animal.id);open('animal',event)}
+ function close(){setPanel(null);setFocusId(null);opener.current?.focus?.()}
+ function showRecord(item,event){setRecord(item);rememberOpener(event);setPanel('record')}
+ function restart(){setRunning(false);setPanel(null);setFocusId(null);setState(session.restart());setError('')}
+ const profile=picked?FOREST_PROFILES[picked.species]:null;
+ const personalRecords=picked?records.filter(r=>r.animalId===picked.id):[];
+ return <MotionConfig reducedMotion={paused?'always':'user'}><section className={'forest-explore'+(tutorialEnabled&&guideStep<3?' forest-learning':'')} aria-label="Explore your living meadow">
+  <WorldCanvas landscape={landscape} frame={frame} focusId={focusId} paused={paused} reduced={reduced} onSelectAnimal={meet} label={`${time.season} meadow, ${state.week} weeks have passed. Use Meet a neighbour to choose an animal with a keyboard.`}/>
+  <div className="forest-clock"><span>{time.season}</span><span>{state.week} weeks have passed</span></div>
+  <div className="forest-invitation"><h1 ref={heading} tabIndex={-1}>Watch a week.<br/>Meet a neighbour.</h1><p>Time moves when you press play.<br/>One week means seven pretend days.</p></div>
+  {invitation&&elapsed>0&&(!tutorialEnabled||guideStep>=3)&&<motion.button className="forest-moment" key={invitation.id} initial={reduced||paused?false:{opacity:0,y:14}} animate={{opacity:1,y:0}} transition={{type:'spring',stiffness:280,damping:26}} onClick={e=>{setRunning(false);open('journal',e);showRecord(invitation,e)}}><span className="forest-moment-icon"><Leaf size={23}/></span><span>{invitation.title}<small>A recorded moment · take a closer look</small></span><ArrowUpRight size={22}/></motion.button>}
+  <div className="forest-controls"><button className="forest-play" aria-pressed={running} onClick={()=>{if(guideStep===0)setGuideStep(1);if(elapsed>=52)restart();else setRunning(!running)}}>{elapsed>=52?<ArrowCounterClockwise size={22}/>:running?<Pause size={22} weight="fill"/>:<Play size={22} weight="fill"/>}<span>{elapsed>=52?'Replay this year':running?'Pause weeks':'Let it grow'}</span></button><button className="forest-step" onClick={()=>{next();if(guideStep===0)setGuideStep(1)}} disabled={running||elapsed>=52}>One week <ArrowRight size={21}/></button><button className="forest-meet" onClick={e=>{open('neighbours',e);if(guideStep===1)setGuideStep(2)}}><PawPrint size={23}/><span>Meet a neighbour</span></button><button className="forest-journal" onClick={e=>{open('journal',e);if(guideStep===2){onTutorialDone();setGuideStep(3)}}}><BookOpen size={23}/><span>Forest journal</span></button></div>
+  <p className="forest-explore-note">Usual rain · a separate exploring forest. Your experiment stays as you left it.</p>
+  {error&&<p className="forest-error" role="status">{error}</p>}
+  {tutorialEnabled&&guideStep<3&&!panel&&<Coachmark step={guide[guideStep]} onDismiss={guideNext} onSkip={()=>{onTutorialDone();setGuideStep(3)}}/>}
+  <dialog ref={dialog} className={'forest-dialog forest-panel-'+(panel||'closed')} aria-labelledby="forest-panel-heading" onCancel={close} onClose={()=>{setPanel(null);setFocusId(null);opener.current?.focus?.()}}><DialogGuide dialogRef={dialog} clip="dialog_forest"/>
+   <button className="close-dialog" aria-label="Return to the forest" onClick={close}><X size={25}/></button>
+   <AnimatePresence mode="wait" initial={false}>
+    <motion.div key={panel||'closed'} className="forest-panel-content" initial={reduced||paused?false:{opacity:0,y:18}} animate={{opacity:1,y:0}} exit={reduced||paused?{}:{opacity:0,y:-8}} transition={{type:'spring',stiffness:300,damping:30}}>
+     {panel==='neighbours'&&<><h2 id="forest-panel-heading">Who caught your eye?</h2><p className="forest-panel-intro">Choose a neighbour to meet.</p><div className="forest-neighbours">{neighbours.map(n=><button key={n.species} disabled={n.animalId===null} onClick={e=>meet(n.animalId,e)}><img src={n.image} alt=""/><span>{n.name}<small>{n.animalId===null?'None here at this week':'Take a closer look'}</small></span>{n.animalId!==null&&<ArrowRight size={22}/>}</button>)}</div></>}
+     {panel==='animal'&&profile&&<><div className="forest-portrait"><img src={profile.image} alt={'Watercolor '+profile.name.toLowerCase()}/></div><h2 id="forest-panel-heading">Meet a {profile.name.toLowerCase()}.</h2><p className="forest-panel-intro">{profile.needs}</p><div className="forest-connection"><Leaf size={24}/><p>{profile.connection}</p></div><p className="forest-record-label">{personalRecords.length?'This neighbour’s latest record':'What do we know about this neighbour?'}</p><p className="forest-animal-record">{personalRecords[0]?`${personalRecords[0].title} Recorded at week ${personalRecords[0].week}.`: 'They are present in this run. We haven’t recorded a birth or arrival for them since you opened this forest.'}</p><p className="quiet">Model rules and records, rather than a claim about an animal in your real photo.</p><div className="forest-panel-actions"><button className="primary" onClick={close}>Back to the meadow <ArrowRight size={22}/></button><button className="text-action" onClick={e=>{open('neighbours',e);if(guideStep===1)setGuideStep(2)}}>Meet someone else</button></div></>}
+     {panel==='journal'&&<><h2 id="forest-panel-heading">The forest remembers.</h2><p className="forest-panel-intro">Little moments from this exploring run.</p>{records.length?<div className="forest-record-list">{records.slice(0,6).map(r=><button key={r.id} onClick={e=>showRecord(r,e)}><span className="record-week">Week {r.week}</span><span>{r.title}<small>{r.type==='birth'?'A new life':r.type==='arrive'?'A new arrival':r.type==='kill'?'A food-web connection':'Part of this life cycle'}</small></span><ArrowRight size={21}/></button>)}</div>:<div className="forest-journal-empty"><BookOpen size={48} weight="light"/><h3>A new page.</h3><p>Watch a week or two. Births, arrivals and other moments will appear here when the model records them.</p></div>}<details className="forest-raw-records"><summary>Exact counts and earlier records</summary><p>These are model records, not measurements of your photograph.</p><dl>{neighbours.map(n=><div key={n.species}><dt>{n.plural}</dt><dd>{state.counts[n.species]}</dd></div>)}</dl><ol>{records.map(r=><li key={r.id}>{r.title} Week {r.week}. <small>{r.id}</small></li>)}</ol></details></>}
+     {panel==='record'&&record&&<><button className="text-action forest-panel-back" onClick={()=>setPanel('journal')}><ArrowLeft size={20}/>All forest moments</button><div className="forest-record-illustration">{record.species&&FOREST_PROFILES[record.species]?<img src={FOREST_PROFILES[record.species].image} alt=""/>:<BookOpen size={70} weight="light"/>}</div><h2 id="forest-panel-heading">{record.title}</h2><p className="forest-panel-intro">{record.detail}</p><p className="forest-record-meta">Recorded at week {record.week}.</p>{record.livingAnimalId!==null&&state.animals.some(a=>a.id===record.livingAnimalId)?<button className="primary" onClick={e=>meet(record.livingAnimalId,e)}>Meet this neighbour now <ArrowRight size={23}/></button>:<p className="quiet">This is an earlier record. That animal isn’t present in the meadow at this week.</p>}<details className="forest-raw-records"><summary>See the original record</summary><pre>{JSON.stringify(record.record,null,2)}</pre><p className="quiet">{record.id}. One record helps us inspect this run; it does not establish a single cause.</p></details></>}
+    </motion.div>
+   </AnimatePresence>
+   <div className="forest-return-actions"><button className="text-action" onClick={()=>{close();onReturn()}}>Back to my experiment</button><button className="text-action" onClick={()=>{close();onCompanions()}}>My companions</button></div>
+  </dialog>
+ </section></MotionConfig>;
+}

@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "title": "The Garden Pond",
+  "mode": "nature",
+  "habitat": "freshwater",
+  "visible": [
+    "dark still pond in front",
+    "pale rounded boulders edging water",
+    "tall green reeds and bushes",
+    "pine trees on a hill",
+    "wooden trellis under blue sky"
+  ],
+  "assumptions": [
+    "Reeds and pond plants are imagined as the growers",
+    "Snails and insects are guessed visitors, not seen",
+    "Fish and dragonflies are playful guesses",
+    "A teaching model, not a real survey; three animal groups are curated guesses.",
+    "The pond uses a reviewed open-water rectangle, not a measured shoreline."
+  ],
+  "landscape": "rocky pond bank with pale boulders and pebbles, grassy mounds and piney hill behind",
+  "water": {
+    "x": 0.03,
+    "y": 0.85,
+    "w": 0.94,
+    "h": 0.13
+  },
+  "inhabitants": [
+    {
+      "id": 0,
+      "name": "Pond Reeds",
+      "look": "tall spiky tufts of green reeds",
+      "role": "producer",
+      "motion": "rooted",
+      "zone": "water"
+    },
+    {
+      "id": 1,
+      "name": "Pond Snail",
+      "look": "small brown spiral shell with soft body",
+      "role": "grazer",
+      "motion": "walk",
+      "zone": "water"
+    },
+    {
+      "id": 2,
+      "name": "Pond Dragonfly",
+      "look": "shiny blue darting wings over water",
+      "role": "companion",
+      "motion": "fly",
+      "zone": "air"
+    },
+    {
+      "id": 3,
+      "name": "Pond Goldfish",
+      "look": "An imagined small orange goldfish with flowing fins",
+      "role": "grazer",
+      "motion": "swim",
+      "zone": "water"
+    }
+  ],
+  "events": [
+    {
+      "kind": "dry-spell",
+      "title": "What if it rains less?",
+      "why": "Less rain means less water for growing food."
+    },
+    {
+      "kind": "warm-spell",
+      "title": "What if a warm spell lasts?",
+      "why": "In our teaching rules, warmth uses more water."
+    },
+    {
+      "kind": "new-arrival",
+      "title": "What if another Pond Snail joins?",
+      "why": "More plant-eaters share the same food."
+    }
+  ],
+  "objects": [
+    {
+      "id": 0,
+      "kind": "tree",
+      "name": "Garden tree",
+      "x": 0.78,
+      "y": 0.42,
+      "radius": 0.045
+    }
+  ]
+}

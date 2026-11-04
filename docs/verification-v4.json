@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-02",
+  "version": "V4 companions",
+  "tests": {
+    "passed": 20,
+    "failed": 0
+  },
+  "build": "passed",
+  "copiedCompanionModulesUnchanged": true,
+  "copiedCompanionModuleCount": 10,
+  "mainClean": true,
+  "mainHead": "5bda15b",
+  "storedProviderKeyInClient": false,
+  "metaImageEnabled": false,
+  "metaImageCap": 0,
+  "sparkEnabled": false,
+  "paidCallsThisPass": 0,
+  "companionLedgerCreated": false,
+  "narrationClips": 20,
+  "visualQA": "blocked: earlier browser approval prerequisite unresolved",
+  "cameraTest": "pending",
+  "listeningTest": "pending",
+  "newBrowserCaptures": 0
+}

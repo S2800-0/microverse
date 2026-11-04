@@ -1,14 +1,6 @@
 node_modules/
-.env
-.env.*
-!.env.example
-.DS_Store
-coverage/
-.next/
 dist/
+.env
+.DS_Store
 runtime/
-uploads/
-*.log
-*.pem
-*.key
-.aws/
+docs/screenshots/

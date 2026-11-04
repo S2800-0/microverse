@@ -1,0 +1,253 @@
+{
+  "model": "Kokoro-82M",
+  "voice": "bf_emma",
+  "license": "Apache-2.0",
+  "mode": "Prepared locally once, no remote speech calls",
+  "clips": [
+    {
+      "id": "hint_forest",
+      "text": "Let the weeks grow, meet a neighbour, or open the journal. Your experiment is kept safe while you explore.",
+      "file": "hint_forest.mp3"
+    },
+    {
+      "id": "hint_pet_source",
+      "text": "Try a saved creature to see how the photo, painting and movement connect. Your own photo is welcome too.",
+      "file": "hint_pet_source.mp3"
+    },
+    {
+      "id": "hint_pet_motion",
+      "text": "Watch their feet and markings. Choose the movement that looks right to you.",
+      "file": "hint_pet_motion.mp3"
+    },
+    {
+      "id": "hint_pet_welcome",
+      "text": "Keep your companion here if you want. Saving is your choice, and stays in this browser.",
+      "file": "hint_pet_welcome.mp3"
+    },
+    {
+      "id": "hint_review",
+      "text": "Look at this part of your photo. You decide whether it looks right.",
+      "file": "hint_review.mp3"
+    },
+    {
+      "id": "hint_assumptions",
+      "text": "Choose how much plant food to start with. We can try another amount later.",
+      "file": "hint_assumptions.mp3"
+    },
+    {
+      "id": "hint_predict",
+      "text": "Make a guess before we try less rain. “Not sure” is a good place to start.",
+      "file": "hint_predict.mp3"
+    },
+    {
+      "id": "hint_watch",
+      "text": "This badge shows the weather and time. Press the large Watch 7 days button to move time forward. Tapping the map does not move time.",
+      "file": "hint_watch.mp3"
+    },
+    {
+      "id": "hint_compare",
+      "text": "Switch to usual rain to compare the same week. Only the rainfall changes.",
+      "file": "hint_compare.mp3"
+    },
+    {
+      "id": "hint_explain",
+      "text": "Tap what you noticed. Your choices build a discovery—no typing needed.",
+      "file": "hint_explain.mp3"
+    },
+    {
+      "id": "hint_surface",
+      "text": "This world has separate living pieces. Tap a neighbour or find the plants. Follow the pond arrow to explore underwater. Ask your guide to add or change something.",
+      "file": "hint_surface.mp3"
+    },
+    {
+      "id": "hint_pond",
+      "text": "You are beneath the pond. Find plants, follow a neighbour, or ask your guide to change something. Back to the surface keeps both worlds.",
+      "file": "hint_pond.mp3"
+    },
+    {
+      "id": "hint_world",
+      "text": "Watch the bright food patches. A neighbour swims or walks over, takes a bite, and the patch gets smaller. Plants can grow back. Press Watch 7 days to see time pass.",
+      "file": "hint_world.mp3"
+    },
+    {
+      "id": "hint_forest_play",
+      "text": "Press Let it grow to let time run, or press One week to watch seven days pass. You can pause whenever you like.",
+      "file": "hint_forest_play.mp3"
+    },
+    {
+      "id": "hint_forest_meet",
+      "text": "Press Meet a neighbour. Choose one animal for a closer look at what it needs.",
+      "file": "hint_forest_meet.mp3"
+    },
+    {
+      "id": "hint_forest_journal",
+      "text": "The journal keeps real moments from this run. Open a moment to see what happened.",
+      "file": "hint_forest_journal.mp3"
+    },
+    {
+      "id": "dialog_records",
+      "text": "Here is what our little world recorded. Compare the same point in time with usual rain and less rain. Food, hunting and chance can all affect the result.",
+      "file": "dialog_records.mp3"
+    },
+    {
+      "id": "dialog_world",
+      "text": "Plants make food in this game. Plant eaters use that food. Hunters can eat smaller animals. Watch the bright patches and follow one neighbour to see the connections.",
+      "file": "dialog_world.mp3"
+    },
+    {
+      "id": "dialog_forest",
+      "text": "This is a closer look at a real moment in your little world. The journal keeps the record. We can return to the world when you are ready.",
+      "file": "dialog_forest.mp3"
+    },
+    {
+      "id": "guide_intro",
+      "text": "Who will explore with you? You can choose me, Sunny or Clover, or use a picture of your own pet. Choose a guide, then press Let us explore together.",
+      "file": "guide_intro.mp3"
+    },
+    {
+      "id": "recap_start",
+      "text": "Both worlds started with the same animals and food. We changed one thing. One world got less rain. Let us look back together.",
+      "file": "recap_start.mp3"
+    },
+    {
+      "id": "recap_grass_less",
+      "text": "There was less grass to eat in the world with less rain. Look at the bright grass patches. Now compare them with the usual rain world.",
+      "file": "recap_grass_less.mp3"
+    },
+    {
+      "id": "recap_grass_more",
+      "text": "At this point there was more grass in the world with less rain. We follow the record, even when it surprises us.",
+      "file": "recap_grass_more.mp3"
+    },
+    {
+      "id": "recap_grass_same",
+      "text": "At this point both worlds still had about the same grass. Some changes take longer. Let us keep looking.",
+      "file": "recap_grass_same.mp3"
+    },
+    {
+      "id": "recap_rabbits_less",
+      "text": "By the end, the world with less rain had fewer rabbits. Food, hunters and chance all played a part. We can look at the actual moments from this run.",
+      "file": "recap_rabbits_less.mp3"
+    },
+    {
+      "id": "recap_rabbits_more",
+      "text": "By the end, the world with less rain had more rabbits. That may surprise us. Food, hunters and chance all played a part. One result does not tell us the whole story.",
+      "file": "recap_rabbits_more.mp3"
+    },
+    {
+      "id": "recap_rabbits_same",
+      "text": "By the end, both worlds had the same number of rabbits. Changes can affect a world in different ways. We can look at the actual moments from this run.",
+      "file": "recap_rabbits_same.mp3"
+    },
+    {
+      "id": "recap_end",
+      "text": "One small change can affect other neighbours. Now it is your turn. Start your own world, make a creature, or choose another place to explore. I am coming with you.",
+      "file": "recap_end.mp3"
+    },
+    {
+      "id": "forest",
+      "text": "Watch a week. Meet a neighbour, or open the forest journal. Each step shows seven days passing in our pretend world. You can pause whenever you like. Your earlier experiment stays safe while you explore.",
+      "file": "forest.mp3"
+    },
+    {
+      "id": "pet-collection",
+      "text": "Your little companions. Bring a familiar face into an imaginary world. Create a creature, or choose someone you already saved.",
+      "file": "pet-collection.mp3"
+    },
+    {
+      "id": "pet-source",
+      "text": "Who is coming with you? Choose a photo, take one, or meet Sunny and Clover. Your own photo stays here unless you choose to send it to Meta.",
+      "file": "pet-source.mp3"
+    },
+    {
+      "id": "pet-details",
+      "text": "Tell us who we are meeting. Choose a dog or a cat. You can give them a name, or leave it for later.",
+      "file": "pet-details.mp3"
+    },
+    {
+      "id": "pet-look",
+      "text": "A familiar face, a little magic. You can keep the picture, check a cutout, or explore the saved watercolor example. You will review the movement before welcoming your friend.",
+      "file": "pet-look.mp3"
+    },
+    {
+      "id": "pet-paint",
+      "text": "Keep what makes them them. You can add appearance details. A photo only goes to Meta when painting is available and you choose to send it.",
+      "file": "pet-paint.mp3"
+    },
+    {
+      "id": "pet-motion",
+      "text": "Does it still feel like your little friend? Check the face, markings and feet. Choose the movement you like. Gentler whole-picture movement is always an option.",
+      "file": "pet-motion.mp3"
+    },
+    {
+      "id": "pet-welcome",
+      "text": "Hello, little friend. You can keep your companion in this browser, save their picture, or explore a place. They are an imaginary visitor, separate from the classroom food web.",
+      "file": "pet-welcome.mp3"
+    },
+    {
+      "id": "pet-profile",
+      "text": "Your companion is here. Explore a place, return to your collection, or save their picture. Removing a companion is a separate choice.",
+      "file": "pet-profile.mp3"
+    },
+    {
+      "id": "home",
+      "text": "Small world, big consequences. Take a photo of a place you know, or choose a place from our library.",
+      "file": "home.mp3"
+    },
+    {
+      "id": "library",
+      "text": "Where shall we explore? Choose the garden, the woodland edge, or the island reef. Each place has its own watercolor landscape. Try pond snails in the garden, mice and owls in the woods, or fish in the reef. Our first adventure is a separate little rain experiment.",
+      "file": "library.mp3"
+    },
+    {
+      "id": "triage",
+      "text": "What is in your photo? Choose a place, a plant, an animal, or something else.",
+      "file": "triage.mp3"
+    },
+    {
+      "id": "review_water",
+      "text": "Can you spot water? Look at the photo, then tell us what you see.",
+      "file": "review_water.mp3"
+    },
+    {
+      "id": "review_tree",
+      "text": "Can you spot trees? You can choose not sure if it is hard to tell.",
+      "file": "review_tree.mp3"
+    },
+    {
+      "id": "review_grass",
+      "text": "Can you spot grass? You get the final say.",
+      "file": "review_grass.mp3"
+    },
+    {
+      "id": "assumptions",
+      "text": "How much plant food should we start with? None, a little, some, or lots? This is a starting choice, not something measured from your photo.",
+      "file": "assumptions.mp3"
+    },
+    {
+      "id": "predict",
+      "text": "What if it rains less? Our little world will get half its usual rain for a year. What might change first: the plants, or the animals? Not sure is a good answer too.",
+      "file": "predict.mp3"
+    },
+    {
+      "id": "watch",
+      "text": "Take a closer look. You can move forward in time, compare with usual rain, or open the records to see what happened. The animals may surprise us.",
+      "file": "watch.mp3"
+    },
+    {
+      "id": "explain",
+      "text": "What did you notice? Tap the things you saw to build your discovery. You do not need to type.",
+      "file": "explain.mp3"
+    },
+    {
+      "id": "finish",
+      "text": "Small world, big consequences. Save your discovery, run the same experiment again, or try a different amount of plant food.",
+      "file": "finish.mp3"
+    },
+    {
+      "id": "route-help",
+      "text": "This photo needs a different kind of experiment. You can choose another photo, or explore a place from our library.",
+      "file": "route-help.mp3"
+    }
+  ]
+}

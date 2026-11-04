@@ -1,0 +1,85 @@
+{
+  "mainCommit": "5bda15b",
+  "modules": [
+    {
+      "source": "src/motion/rig.js",
+      "copy": "src/core/motion/rig.js",
+      "sha256": "f6cba079c1b5ff6d6c4fac864b9ba3cc0a1bd9752a68aac5f39ebed47886e83b"
+    },
+    {
+      "source": "src/motion/rig-analysis.js",
+      "copy": "src/core/motion/rig-analysis.js",
+      "sha256": "c208cfe074b0d57e9cd72732b56ff4f7a819ebf08780ec277ae0099b574d6d63"
+    },
+    {
+      "source": "src/motion/rig-fitting.js",
+      "copy": "src/core/motion/rig-fitting.js",
+      "sha256": "bb03181314496ac087005af5b931fe1ff99fc184031439693ab6d070754145f7"
+    },
+    {
+      "source": "src/motion/puppet-motion.js",
+      "copy": "src/core/motion/puppet-motion.js",
+      "sha256": "f5eb60681a7b32cea0fd577a3130e05e4f4a52a7bb802a6734cb698fd4b4e16a"
+    },
+    {
+      "source": "src/motion/motion-library.js",
+      "copy": "src/core/motion/motion-library.js",
+      "sha256": "168aaa0250901b10fbdfd37f39f9a435a9c97d9032070b3481444bb234479b01"
+    },
+    {
+      "source": "src/motion/sprite-edges.js",
+      "copy": "src/core/motion/sprite-edges.js",
+      "sha256": "bf7718948dfc4b18cecad38b3ddf092debe404f4e6e94b14c525ef2a8347bc1b"
+    },
+    {
+      "source": "src/motion/rig-review.js",
+      "copy": "src/core/motion/rig-review.js",
+      "sha256": "4a8b311305758171d8aa2c6e0aaa5f5233a6e1adf10e9628b80c986cf32ecab0"
+    },
+    {
+      "source": "src/scene/creature-library.js",
+      "copy": "src/core/scene/creature-library.js",
+      "sha256": "9df0ed2b49645d2c2790c7e128eb6d9e7ac54a6584e64ddcb099b2a22cee9cc1"
+    },
+    {
+      "source": "src/creature/client.js",
+      "copy": "src/core/creature/client.js",
+      "sha256": "f5b012b21a3c637b753ed2370392c34784f9d76cc3a63143ec9a4c828b8007dd"
+    },
+    {
+      "source": "src/creature/public-job.js",
+      "copy": "src/core/creature/public-job.js",
+      "sha256": "b79566e1f95efe5a7cd80b994a4fe65754e017c4f6d20ee367eccbdc5a4ebf27"
+    }
+  ],
+  "assets": {
+    "companion-dog.png": "public/meta-art/game-dog.png",
+    "companion-cat.png": "public/meta-art/game-cat-standing.png",
+    "companion-dog-photo.jpg": "public/entrance/dog-photo.jpg",
+    "companion-dog-painted.webp": "public/entrance/dog-watercolor.webp"
+  },
+  "dogPairAttribution": [
+    {
+      "file": "dog-photo.jpg",
+      "sha256": "91b3250da493ca6f3328c6af30cf9aaacc2b6a675c37608a7bac2f7eb9e5d89f",
+      "width": 330,
+      "height": 385,
+      "processing": "Metadata-free crop of licensed source photo.",
+      "source": "https://commons.wikimedia.org/wiki/File:Golden_Retriever_88.JPG",
+      "author": "Mtlchung",
+      "sourceLicense": "CC0 1.0",
+      "model": null
+    },
+    {
+      "file": "dog-watercolor.webp",
+      "sha256": "5feb2f456a612e7d7087c6c3cbea6b6dc17da8beb6f4b9e0c32dcb385115176d",
+      "width": 940,
+      "height": 740,
+      "processing": "Actual Muse Image edit of the licensed dog photo; SAM cutout composed locally, cropped and resized.",
+      "source": "https://commons.wikimedia.org/wiki/File:Golden_Retriever_88.JPG",
+      "author": "Mtlchung",
+      "sourceLicense": "CC0 1.0",
+      "model": "muse-image-1.0 + sam-3.1"
+    }
+  ]
+}

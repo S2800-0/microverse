@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-02",
+  "scope": "isolated camera prototype, live-model extension",
+  "build": "passed",
+  "experienceTests": {
+    "passed": 7,
+    "failed": 0
+  },
+  "copiedEngine": {
+    "sourceCommit": "5bda15b",
+    "modules": 12,
+    "allRecordedHashesMatch": true
+  },
+  "originalRepository": {
+    "head": "5bda15b",
+    "workingTreeClean": true
+  },
+  "privacy": {
+    "storedProviderKeysInClient": false,
+    "downloadContainsImageBytes": false
+  },
+  "inference": {
+    "liveCallsMadeForExtension": 0,
+    "sparkSwitch": "off, unchanged",
+    "photoLedgerCreated": false
+  },
+  "downloadReplay": {
+    "week": 52,
+    "rabbits": {
+      "usualRain": 13,
+      "lessRain": 24
+    },
+    "validated": true
+  },
+  "finalVisualQa": {
+    "status": "blocked",
+    "cause": "Automatic browser approval still references earlier usage-limit restriction. No browser workaround attempted.",
+    "remaining": [
+      "unsupported-photo screen checks",
+      "current paired screenshots",
+      "final console and keyboard checks"
+    ]
+  }
+}

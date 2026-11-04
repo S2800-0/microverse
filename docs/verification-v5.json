@@ -1,0 +1,25 @@
+{
+  "version": "V5 forest",
+  "date": "2026-11-02",
+  "tests": {
+    "passed": 25,
+    "failed": 0
+  },
+  "build": "passed",
+  "motionVersion": "14.9.0",
+  "lazyForestChunk": true,
+  "copiedCompanionModulesUnchanged": true,
+  "mainClean": true,
+  "mainHead": "5bda15b",
+  "storedProviderKeyInClient": false,
+  "sparkEnabled": false,
+  "imageEnabled": false,
+  "imageCap": 0,
+  "paidCallsThisPass": 0,
+  "newBrowserCaptures": 0,
+  "narrationClips": 21,
+  "visualQA": "blocked: fresh automatic review rejected tab inventory as bypass of earlier restriction",
+  "usageCheck": "ordinary work allowed; no active account rate-limit block reported",
+  "cameraTest": "pending",
+  "listeningTest": "pending"
+}

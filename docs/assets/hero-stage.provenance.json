@@ -1,0 +1,10 @@
+{
+  "asset": "docs/assets/hero-stage.png",
+  "purpose": "HeroStage full-bleed background illustration for the selected third visual concept",
+  "method": "Built-in ImageGen edit; no Meta or Baseten API calls",
+  "reference": "/Users/shahy/.codex/generated_images/01a17990-e2fa-7161-abbd-8ae948a781b8/exec-16195043-ec13-496b-a054-8cea0fdeb383.png",
+  "generated_source": "/Users/shahy/.codex/generated_images/01a19b11-26ce-7df2-b962-2b7c894c1eb5/exec-fbd3e184-5b55-476e-a03b-b4fcde9f63ef.png",
+  "prompt": "Edit the provided watercolor web-game screen into the SAME composition as a clean raster background illustration. Remove ONLY the following UI: all text including microverse top left, all heading and subtitle words across upper/right center, the dark green camera button including icon, both underlined links, the circular sound toggle top right, and the small footer text bottom right. Inpaint those specific UI regions with continuous quiet pale warm watercolor sky/paper matching their surroundings. Preserve the exact watercolor fox on left: same pose, proportions, expression, eyes, fur, paws planted on log. Preserve foreground tree, foliage and moss log; preserve the small actual garden photograph on stump bottomcenter; preserve pond, rocks, reeds, flowers, distant forest and atmospheric painterly landscape. Do not add anything. Do not change framing, zoom, camera angle, fox scale, or photographic content. Keep right half quiet with generous empty pale sky suitable for editable web controls. Full-bleed opaque raster, no transparency, no lettering, no symbols, no icons, no UI. Match the reference aspect ratio, ideally1488 x1056 pixels.",
+  "inspection": "All lettering, camera button, sound toggle and text links removed. Fox, log, foliage, photograph, pond and quiet upper/right sky retained. ImageGen edit retains the composition closely but is a regenerated raster, not pixel-identical artwork.",
+  "runtimeAsset": "public/assets/hero-stage.webp"
+}

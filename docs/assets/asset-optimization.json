@@ -1,0 +1,29 @@
+[
+  {
+    "asset": "hero-stage",
+    "original_bytes": 2923312,
+    "webp_bytes": 411560,
+    "pixels": [
+      1490,
+      1056
+    ]
+  },
+  {
+    "asset": "forest",
+    "original_bytes": 3345771,
+    "webp_bytes": 485822,
+    "pixels": [
+      1672,
+      941
+    ]
+  },
+  {
+    "asset": "forest-dry",
+    "original_bytes": 3399737,
+    "webp_bytes": 556116,
+    "pixels": [
+      1672,
+      941
+    ]
+  }
+]

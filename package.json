@@ -1,26 +1,58 @@
 {
   "name": "microverse",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/prepare-sites-build.mjs",
+    "preview": "vite preview",
+    "test:sites": "node --test tests/sites-worker.test.mjs",
+    "test:experience": "node --test tests/experience.test.mjs",
+    "test:companions": "node --test tests/companions.test.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:forest": "node --test tests/forest.test.mjs"
+  },
+  "dependencies": {
+    "@fontsource/atkinson-hyperlegible": "^5.3.0",
+    "@fontsource/baloo-2": "5.3.0",
+    "@fontsource/fraunces": "^5.3.0",
+    "@meta-sam/parser": "0.1.0",
+    "@phosphor-icons/react": "^2.1.10",
+    "@vitejs/plugin-react": "5.0.4",
+    "motion": "14.9.0",
+    "pixi.js": "8.22.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "vite": "6.4.2"
+  },
+  "description": "Turn a photo of a real place into a living little world, then change one thing and see what happens.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/S2800-0/microverse.git"
+  },
+  "homepage": "https://github.com/S2800-0/microverse#readme",
+  "bugs": {
+    "url": "https://github.com/S2800-0/microverse/issues"
+  },
+  "keywords": [
+    "ecology",
+    "education",
+    "simulation",
+    "pixijs",
+    "react",
+    "muse-spark",
+    "muse-image",
+    "sam",
+    "meta-ai",
+    "hackathon"
+  ],
   "engines": {
     "node": ">=24"
   },
-  "scripts": {
-    "preview": "node scripts/preview.mjs",
-    "preview:meta": "node --env-file-if-exists=.env scripts/creature-server.mjs",
-    "preview:motion": "node scripts/preview.mjs --motion",
-    "build": "node scripts/build.mjs",
-    "test": "node --test",
-    "check": "node scripts/check-syntax.mjs",
-    "setup:voice": "node scripts/setup-natural-voice.mjs"
-  },
-  "dependencies": {
+  "optionalDependencies": {
     "@huggingface/transformers": "3.8.1",
-    "@meta-sam/parser": "0.1.0",
     "kokoro-js": "1.2.1"
-  },
-  "overrides": {
-    "sharp": "0.35.5"
   }
 }

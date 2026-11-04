@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "title": "The Shady Woodland",
+  "mode": "nature",
+  "habitat": "land",
+  "visible": [
+    "Tall thin trees with bright green leaves",
+    "Ivy climbing up tree trunks",
+    "Long fallen log on the forest floor",
+    "Low leafy green ground cover",
+    "Soft dappled sunlight through canopy"
+  ],
+  "assumptions": [
+    "There might be tiny insects hiding under leaves",
+    "The log might be soft and home to fungi",
+    "Small mammals might visit to nibble plants",
+    "The soil is probably damp and shady",
+    "Three animal groups and habitat objects are chosen for this teaching game."
+  ],
+  "landscape": "Shady woodland floor with leaf litter and low green cover, tall slender tree trunks, and one long fallen hollow log",
+  "water": {
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0
+  },
+  "inhabitants": [
+    {
+      "id": 0,
+      "name": "Woodland Ivy",
+      "look": "Bright green heart-shaped leaves forming a low carpet and climbing stems",
+      "role": "producer",
+      "motion": "rooted",
+      "zone": "land"
+    },
+    {
+      "id": 1,
+      "name": "Wood Mouse",
+      "look": "Small brown furry mouse with big ears and long tail",
+      "role": "grazer",
+      "motion": "walk",
+      "zone": "land"
+    },
+    {
+      "id": 2,
+      "name": "Woodland Owl",
+      "look": "Small brown speckled owl with wide round eyes",
+      "role": "predator",
+      "motion": "fly",
+      "zone": "air"
+    },
+    {
+      "id": 3,
+      "name": "Woodland Fox",
+      "look": "Red fox with dark paws and a cream tail tip",
+      "role": "predator",
+      "motion": "walk",
+      "zone": "land"
+    }
+  ],
+  "events": [
+    {
+      "kind": "dry-spell",
+      "title": "What if it rains less?",
+      "why": "Less rain means less water for growing food."
+    },
+    {
+      "kind": "warm-spell",
+      "title": "What if a warm spell lasts?",
+      "why": "In our teaching rules, warmth uses more water."
+    },
+    {
+      "kind": "new-arrival",
+      "title": "What if another Wood Mouse joins?",
+      "why": "More plant-eaters share the same food."
+    }
+  ],
+  "objects": [
+    {
+      "id": 0,
+      "kind": "tree",
+      "name": "Oak perch",
+      "x": 0.25,
+      "y": 0.32,
+      "radius": 0.045
+    },
+    {
+      "id": 1,
+      "kind": "tree",
+      "name": "Fern-side perch",
+      "x": 0.73,
+      "y": 0.61,
+      "radius": 0.04
+    },
+    {
+      "id": 2,
+      "kind": "tree",
+      "name": "Quiet oak",
+      "x": 0.85,
+      "y": 0.25,
+      "radius": 0.045
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "choices": [
+    {
+      "id": "garden",
+      "name": "The garden",
+      "hint": "A pond, plants and little hiding places.",
+      "src": "/assets/garden.png",
+      "width": 288,
+      "height": 384,
+      "kind": "sample",
+      "credit": "Jon Sullivan · public domain",
+      "source": "https://commons.wikimedia.org/wiki/File:Garden_pond_in_park.jpg",
+      "license": "Public domain",
+      "position": "50% 50%",
+      "processing": "Resized and re-encoded to WebP without metadata; garden is the pre-existing PNG derivative. UI applies a display crop.",
+      "sha256": "3bb1f3f6086ea58cd75c8cc095d3e4fcd477e8e2360f4bbedfd814eb5b7afbba"
+    },
+    {
+      "id": "meadow",
+      "name": "The meadow",
+      "hint": "Flowers, grass and hungry neighbours.",
+      "src": "/assets/library-meadow.webp",
+      "width": 1280,
+      "height": 960,
+      "kind": "library",
+      "credit": "Jasmine Horn / NPS · CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Wildflower_Meadow_(6997737191).jpg",
+      "license": "https://creativecommons.org/licenses/by/2.0/",
+      "position": "50% 65%",
+      "processing": "Resized and re-encoded to WebP without metadata; garden is the pre-existing PNG derivative. UI applies a display crop.",
+      "sha256": "d4fb005428d331d2ba2887b0540cf98d897edd791ebd5cec1ce09848fdc5b9ab"
+    },
+    {
+      "id": "woodland",
+      "name": "The woodland edge",
+      "hint": "Trees, shade and a clearing to explore.",
+      "src": "/assets/library-woodland.webp",
+      "width": 850,
+      "height": 1280,
+      "kind": "library",
+      "credit": "Derek Harper · CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Woodland_edge_by_A382_-_geograph.org.uk_-_7945943.jpg",
+      "license": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "position": "50% 55%",
+      "processing": "Resized and re-encoded to WebP without metadata; garden is the pre-existing PNG derivative. UI applies a display crop.",
+      "sha256": "7f431d8a12a293c4fa5ef1198dff48dc80e5986e6d93bcdb4bcc985debefa266"
+    }
+  ],
+  "model": "All inspire the same fixed meadow model. Only garden has recorded SAM masks."
+}
