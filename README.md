@@ -97,7 +97,10 @@ Requests are capped and never retried automatically. A static build has no serve
 
 The optional on-demand voice also needs a local Kokoro model in `runtime/kokoro-model/`. Prepared voice clips work without it.
 
+To run the tests, build first, because the packaging test checks the build output:
+
 ```bash
+npm run build
 npm test
 ```
 
