@@ -1,6 +1,7 @@
 import {ACTIVITIES} from './locomotion.js';
 import {validateVisitor} from './visitors.js';
 import {compileBlueprint} from './blueprint.js';
+import {isWalkable,nextWaypoint} from './walk-grid.js';
 const clamp=(n,a=0,b=1)=>Math.max(a,Math.min(b,n));
 function random(seed){let a=seed|0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 export function inZone(plan,zone,x,y){const w=plan.water,wet=w.w>0&&w.h>0&&x>=w.x&&x<=w.x+w.w&&y>=w.y&&y<=w.y+w.h;return zone==='air'||(zone==='water'?wet:!wet)}
@@ -8,8 +9,10 @@ export function inZone(plan,zone,x,y){const w=plan.water,wet=w.w>0&&w.h>0&&x>=w.
 export function createLivingWorld(raw,seed=17,{behaviours=true}={}){
  const initialPlan=compileBlueprint(raw),plan=structuredClone(initialPlan);if(!Number.isSafeInteger(seed)||seed<0||seed>0xffffffff)throw Error('Choose a bounded world seed.');
  const actions=[],rnd=random(seed);let tick=0,nextId=1,nextEvent=1,resource=.7,water=.8,heat=0,condition='usual',agents=[],patches=[],events=[],visitors=[];
- function onGround(x,y){return !plan.objects.some(o=>Math.hypot(x-o.x,y-o.y)<o.radius*.3)}
- function place(zone){for(let n=0;n<400;n++){const x=.05+rnd()*.9,y=.07+rnd()*.84;if(inZone(plan,zone,x,y)&&(zone==='air'||onGround(x,y)))return{x,y}}const z=plan.water;if(zone==='water'&&z.w&&z.h)return{x:z.x+z.w*.5,y:z.y+z.h*.5};for(let iy=1;iy<99;iy++)for(let ix=1;ix<99;ix++){const x=ix/100,y=iy/100;if(inZone(plan,zone,x,y)&&(zone==='air'||onGround(x,y)))return{x,y}}throw Error('There is no usable area for this inhabitant.');}
+ function onGround(x,y,zone='land'){return (zone!=='land'||isWalkable(plan.ground,x,y))&&!plan.objects.some(o=>Math.hypot(x-o.x,y-o.y)<o.radius*.3)}
+ // Land animals follow the walkable map around ponds, beds and rocks. Older records have no map and walk straight.
+ function aimFor(zone,from,to){return zone==='land'&&plan.ground?nextWaypoint(plan.ground,from,to):to}
+ function place(zone){for(let n=0;n<400;n++){const x=.05+rnd()*.9,y=.07+rnd()*.84;if(inZone(plan,zone,x,y)&&(zone==='air'||onGround(x,y,zone)))return{x,y}}const z=plan.water;if(zone==='water'&&z.w&&z.h)return{x:z.x+z.w*.5,y:z.y+z.h*.5};for(let iy=1;iy<99;iy++)for(let ix=1;ix<99;ix++){const x=ix/100,y=iy/100;if(inZone(plan,zone,x,y)&&(zone==='air'||onGround(x,y,zone)))return{x,y}}throw Error('There is no usable area for this inhabitant.');}
  const plant=plan.inhabitants.find(a=>a.role==='producer');for(let i=0;i<22;i++)patches.push({...place(plant.zone),id:i,phase:rnd()*6,biomass:.55+rnd()*.3,grown:0,eaten:0});
  const foodMean=()=>patches.reduce((n,p)=>n+p.biomass,0)/patches.length;resource=foodMean();
  function spawn(type){const a={id:nextId++,type:type.id,...place(type.zone),energy:.7,phase:rnd()*6,direction:1,target:null,activity:'exploring',foodPatchId:null,bite:null,feedingStreak:0,perchId:null};agents.push(a);return a}
@@ -20,7 +23,7 @@ export function createLivingWorld(raw,seed=17,{behaviours=true}={}){
   if(tick>=180)return snapshot();tick++;const marine=plan.habitat==='marine',old=resource;water=clamp(water+(condition==='dry'?-.018:condition==='warm'?-.008:.012));heat=clamp(heat+(condition==='warm'?.025:-.012));
   for(const p of patches){const before=p.biomass,rate=marine?.019*(1-heat):.027*water;p.biomass=clamp(p.biomass+rate*(1-p.biomass*.75));p.grown=p.biomass-before;p.eaten=0;}
   for(const a of [...agents]){
-   if(!agents.includes(a))continue;const type=plan.inhabitants[a.type];a.bite=null;a.chasing=false;if(['rest','sleep','eat'].includes(a.activityMode)){a.activity=a.activityMode==='sleep'?'sleeping':a.activityMode==='eat'?'eating':'resting';continue;}if(['move','run'].includes(a.activityMode)){if(!a.target||Math.hypot(a.x-a.target.x,a.y-a.target.y)<.025)a.target=place(type.zone);const dx=a.target.x-a.x,dy=a.target.y-a.y,len=Math.hypot(dx,dy)||1,speed=(type.motion==='fly'?.025:type.motion==='hop'?.018:.012)*(a.activityMode==='run'?1.8:1),distance=Math.min(speed,len),x=a.x+dx/len*distance,y=a.y+dy/len*distance;if(inZone(plan,type.zone,x,y)&&(type.zone==='air'||onGround(x,y))){a.x=x;a.y=y;if(Math.abs(dx)>.001)a.direction=dx>=0?1:-1}else a.target=null;a.activity=type.motion==='hop'?'hopping':type.motion==='fly'?'flying':type.motion==='swim'?'swimming':a.activityMode==='run'?'running':'walking';a.perchId=null;continue;}if(behaviours&&type.motion!=='rooted'&&a.energy>.25&&(type.motion!=='fly'||a.perchId!==null)){const nap=(tick+a.id*41)%90;if(nap<10){a.activity=nap<2||nap>7?'resting':'sleeping';continue}}a.bite=null;a.activity=type.role==='companion'?'exploring':'looking';let target;
+   if(!agents.includes(a))continue;const type=plan.inhabitants[a.type];a.bite=null;a.chasing=false;if(['rest','sleep','eat'].includes(a.activityMode)){a.activity=a.activityMode==='sleep'?'sleeping':a.activityMode==='eat'?'eating':'resting';continue;}if(['move','run'].includes(a.activityMode)){if(!a.target||Math.hypot(a.x-a.target.x,a.y-a.target.y)<.025)a.target=place(type.zone);const aim=aimFor(type.zone,a,a.target),dx=aim.x-a.x,dy=aim.y-a.y,len=Math.hypot(dx,dy)||1,speed=(type.motion==='fly'?.025:type.motion==='hop'?.018:.012)*(a.activityMode==='run'?1.8:1),distance=Math.min(speed,len),x=a.x+dx/len*distance,y=a.y+dy/len*distance;if(inZone(plan,type.zone,x,y)&&(type.zone==='air'||onGround(x,y,type.zone))){a.x=x;a.y=y;if(Math.abs(dx)>.001)a.direction=dx>=0?1:-1}else a.target=null;a.activity=type.motion==='hop'?'hopping':type.motion==='fly'?'flying':type.motion==='swim'?'swimming':a.activityMode==='run'?'running':'walking';a.perchId=null;continue;}if(behaviours&&type.motion!=='rooted'&&a.energy>.25&&(type.motion!=='fly'||a.perchId!==null)){const nap=(tick+a.id*41)%90;if(nap<10){a.activity=nap<2||nap>7?'resting':'sleeping';continue}}a.bite=null;a.activity=type.role==='companion'?'exploring':'looking';let target;
    const tree=type.motion==='fly'&&type.role==='predator'&&a.energy>.45?plan.objects.filter(o=>o.kind==='tree').sort((b,c)=>Math.hypot(a.x-b.x,a.y-b.y)-Math.hypot(a.x-c.x,a.y-c.y))[0]:null;
    a.perchId=null;if(tree)target=tree;else if(type.role==='predator')target=agents.filter(b=>plan.inhabitants[b.type].role==='grazer').sort((b,c)=>Math.hypot(a.x-b.x,a.y-b.y)-Math.hypot(a.x-c.x,a.y-c.y))[0];
    else if(type.role==='grazer'){
@@ -34,7 +37,7 @@ export function createLivingWorld(raw,seed=17,{behaviours=true}={}){
    // Stop at the actual food patch; do not overshoot and flip left/right every tick.
    if(tree&&len<.028){a.perchId=tree.id;a.activity='perched';a.x=tree.x;a.y=tree.y;if(!events.some(e=>e.kind==='perch'&&e.agentId===a.id&&e.treeId===tree.id))log('perch',type.name+' rested in '+tree.name+'.',{agentId:a.id,treeId:tree.id});}
    const atFood=type.role==='grazer'&&target.biomass!==undefined&&len<.032;
-   if(!atFood&&a.perchId===null){const step=Math.min(speed,len),x=clamp(a.x+dx/(len||1)*step,.02,.98),y=clamp(a.y+dy/(len||1)*step,.03,.97);if(inZone(plan,type.zone,x,y)&&(type.zone==='air'||onGround(x,y))){if(Math.abs(dx)>.001)a.direction=dx>=0?1:-1;a.x=x;a.y=y}else{a.target=null;const side=a.id%2?1:-1,sx=clamp(a.x-dy/(len||1)*speed*side,.02,.98),sy=clamp(a.y+dx/(len||1)*speed*side,.03,.97);if(inZone(plan,type.zone,sx,sy)&&(type.zone==='air'||onGround(sx,sy))){a.x=sx;a.y=sy}}}
+   if(!atFood&&a.perchId===null){const aim=aimFor(type.zone,a,target),mx=aim.x-a.x,my=aim.y-a.y,ml=Math.hypot(mx,my),step=Math.min(speed,ml),x=clamp(a.x+mx/(ml||1)*step,.02,.98),y=clamp(a.y+my/(ml||1)*step,.03,.97);if(inZone(plan,type.zone,x,y)&&(type.zone==='air'||onGround(x,y,type.zone))){if(Math.abs(mx)>.001)a.direction=mx>=0?1:-1;a.x=x;a.y=y}else{a.target=null;const side=a.id%2?1:-1,sx=clamp(a.x-my/(ml||1)*speed*side,.02,.98),sy=clamp(a.y+mx/(ml||1)*speed*side,.03,.97);if(inZone(plan,type.zone,sx,sy)&&(type.zone==='air'||onGround(sx,sy,type.zone))){a.x=sx;a.y=sy}}}
    if(type.role==='grazer'){
     if(atFood&&target.biomass>.14){const amount=Math.min(.09,target.biomass-.06);target.biomass-=amount;target.eaten+=amount;a.bite={tick,patchId:target.id,amount};a.activity='eating';a.feedingStreak++;a.energy=clamp(a.energy+.018-(heat>.7?.005:0));if(a.feedingStreak===1)log('feed',type.name+' is eating '+plant.name+'.',{agentId:a.id,patchId:target.id,amount});}
     else a.energy=clamp(a.energy-(resource>.25?.003:.012)-(heat>.7?.005:0));
@@ -45,9 +48,9 @@ export function createLivingWorld(raw,seed=17,{behaviours=true}={}){
   for(const v of visitors){
    if(['rest','sleep','eat'].includes(v.activityMode)){v.activity=v.activityMode==='sleep'?'sleeping':v.activityMode==='eat'?'nibbling':'resting';continue;}if(behaviours&&v.motion!=='fly'){const nap=(tick+visitors.indexOf(v)*29)%90;if(nap<10){v.activity=nap<2||nap>7?'resting':'sleeping';continue}}
    if(!v.target||Math.hypot(v.x-v.target.x,v.y-v.target.y)<.025)v.target=place(v.zone);
-   const dx=v.target.x-v.x,dy=v.target.y-v.y,len=Math.hypot(dx,dy),speed=(v.motion==='fly'?.022:v.motion==='swim'?.015:v.motion==='hop'?.018:.012)*(v.activityMode==='run'?1.8:1);
+   const aim=aimFor(v.zone,v,v.target),dx=aim.x-v.x,dy=aim.y-v.y,len=Math.hypot(dx,dy),speed=(v.motion==='fly'?.022:v.motion==='swim'?.015:v.motion==='hop'?.018:.012)*(v.activityMode==='run'?1.8:1);
    const x=clamp(v.x+dx/(len||1)*Math.min(speed,len),.02,.98),y=clamp(v.y+dy/(len||1)*Math.min(speed,len),.03,.97);
-   if(inZone(plan,v.zone,x,y)&&(v.zone==='air'||onGround(x,y))){v.x=x;v.y=y;if(Math.abs(dx)>.001)v.direction=dx>=0?1:-1}else v.target=null;
+   if(inZone(plan,v.zone,x,y)&&(v.zone==='air'||onGround(x,y,v.zone))){v.x=x;v.y=y;if(Math.abs(dx)>.001)v.direction=dx>=0?1:-1}else v.target=null;
    v.activity='exploring';const neighbour=agents.find(a=>Math.hypot(a.x-v.x,a.y-v.y)<.07&&inZone(plan,v.zone,a.x,a.y));
    if(neighbour){v.activity='meeting a neighbour';if(!events.some(e=>e.kind==='greeting'&&e.visitorId===v.id&&e.agentId===neighbour.id))log('greeting',v.name+' met a '+plan.inhabitants[neighbour.type].name+'.',{visitorId:v.id,agentId:neighbour.id});}
   }

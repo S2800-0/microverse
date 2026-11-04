@@ -1,3 +1,12 @@
+# V22 craft pass and per-world lessons · 4 November 2026
+- Sizes come from `src/world/creature-scale.js`, storybook proportions by name, not measurements. Beneath the pond everyone is 1.45x as a close-up.
+- Eating, sleeping and chasing use PNG stickers in `public/assets/fx/`, made locally from Baloo 2 (OFL). They replace the old meal label and text z in the Pixi stage. The lesson's `WorldCanvas` is unchanged.
+- Running no longer swaps two drawings. `poseFor` keeps runA and `deformPoint` swings legs found from the drawing's alpha by `legStations`. This is artistic motion, not a gait. Visitors bend poses[0] the same way. Owl flight crossfades its frames.
+- Water is `src/world/water-art.js`: colour-rule mask, moving pigment, light layers, procedural pond bed. A picture effect, not a fluid simulation.
+- Paths are `src/world/walk-grid.js`: a colour rule, not AI scene understanding. Saved grids live in `walk-grids.json` (rebuild with `node scripts/make-walk-grids.mjs`). Generated worlds compute theirs on the device. Woodland uses a looser shade rule and is rough: ferns and the log block, some bushes and trunks do not. Records without `plan.ground` still walk straight, so old replays hold.
+- Lessons are `src/world/lessons.js` and `LessonCard.jsx`. Comparison replays the same seed with only the lesson's action removed. Cards are our own words. Do not use OpenStax: its terms forbid generative AI ingestion without written permission. No predator lesson: no source was verified and the simulation keeps at least one predator.
+- The planner may pick `lesson` from `LESSON_MENU`. This is not live tested; `lessonFor` ignores a choice the world cannot run.
+
 # V21 less-rain story, Spark world control, git · 4 November 2026
 
 This current status supersedes historical notes below.
