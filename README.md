@@ -8,13 +8,15 @@
 [![License: MIT](https://img.shields.io/badge/code-MIT-green.svg)](LICENSE)
 [![Built with Muse Spark, Muse Image and SAM 3.1](https://img.shields.io/badge/Meta-Muse%20Spark%20%C2%B7%20Muse%20Image%20%C2%B7%20SAM%203.1-1f4b49.svg)](docs/SUBMISSION.md)
 
-[How it works](#how-it-works) · [Run it](#run-it) · [Open source tools](#open-source-tools)
+**[Try it live](https://microverseeducate.vercel.app)** · [How it works](#how-it-works) · [Run it](#run-it) · [Open source tools](#open-source-tools)
 
 ![The Microverse home screen: a watercolor fox in a sunny woodland, asking What could your world become?](docs/images/home.jpg)
 
 </div>
 
 Microverse is a playful ecology sandbox for curious kids, built for the Meta Global AI Developer Hackathon. Ecology is about connections, and connections are hard to see in a real place. You can't make it rain less over your local park and watch what happens. In Microverse, you can try that on a small model inspired by the place.
+
+The [live site](https://microverseeducate.vercel.app) has the saved worlds, all four lessons, prepared Spark answers and the rain story. Making new worlds or companions and custom AI Spark replies need the local server, so see [Run it](#run-it).
 
 ## See it
 

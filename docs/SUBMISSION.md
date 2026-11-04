@@ -110,7 +110,9 @@ Don't present the "before the event" items as new. Earlier notes say the guide a
 
 ## Live product
 
-The form has no live site field, though the guide says the live product should be available for judging. A static site includes the saved worlds, all four lessons, prepared Spark answers and the rain story. It does not include making new worlds, new companions or AI Spark replies, which run on the local server. The video shows those.
+https://microverseeducate.vercel.app
+
+The form has no live site field, though the guide says the live product should be available for judging. The static site includes the saved worlds, all four lessons, prepared Spark answers and the rain story. It does not include making new worlds, new companions or AI Spark replies, which run on the local server. The video shows those.
 
 ## Video description
 

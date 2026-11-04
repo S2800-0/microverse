@@ -1,0 +1,6 @@
+.env
+.env.*
+!.env.example
+runtime/
+docs/screenshots/
+docs/CODEX-DEMO-RESHOOT-HANDOFF.md
