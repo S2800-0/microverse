@@ -8,7 +8,7 @@ Written 4 November 2026. Submission is due 9:00 PM ET today, which is also when 
 - **Any footage of a newly generated world made on `958b91c` itself would be a failed attempt.** Live generation was broken at that commit. It is fixed in the commit after it.
 - **Use this local folder, `microverse-camera-prototype`, at its latest commit.** Do not use the `microverse-hackathon` folder or `main` on `S2800-0/microverse`. Those are an older, different codebase and have none of this.
 - **Run it locally to film generation or AI Spark:** `http://127.0.0.1:8860/`. Those features only exist on the local dev server. A static deployment has the saved worlds and lessons only.
-- **Budget:** $0.40 is left of the $5 cap. One full new world reserves $0.30, and the app refuses to start one below $0.30. **So there is one more generated world available, and no retakes.** Do not reset the ledger, and do not spend it without the user's approval.
+- **Budget:** the cap and the ledger changed after this was first written, so read the current balance from `/api/world-tools/status`. One full new world reserves $0.30, and the app refuses to start one below $0.30. Do not reset the ledger, and do not spend without the user's approval.
 - **Keep the browser window visible while recording.** A hidden pane stalls image loading and world motion.
 
 ## What looks different on screen

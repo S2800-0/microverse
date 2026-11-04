@@ -1,3 +1,33 @@
+# Microverse
+
+Turn a photo of a real place into a living little world, then test one change to see what it does. Built for the Meta Global AI Developer Hackathon with Muse Spark 1.3, Muse Image 1.0 and SAM 3.1.
+
+- **Live site:** `ADD URL` (saved worlds and lessons)
+- **Video:** `ADD URL`
+- **What it does, what was built when, and its limits:** [docs/SUBMISSION.md](docs/SUBMISSION.md)
+- **Credits:** [docs/CREDITS.md](docs/CREDITS.md)
+
+## Try it
+
+The saved worlds, lessons and prepared Spark answers work with no API key:
+
+```bash
+npm install
+npm run dev
+```
+
+Open a world, then press **This world's lesson**.
+
+Making new worlds and AI Spark replies run on the local dev server. They currently read a key and a local spending permit from outside this repository, so they stay off without that setup. The video shows them working.
+
+```bash
+npm test
+```
+
+The notes below are the development log, newest first. Older entries describe earlier states of the project.
+
+---
+
 # V18 layered worlds and route audit · 4 November 2026
 
 This current status supersedes historical notes below.
