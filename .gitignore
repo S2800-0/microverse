@@ -4,3 +4,5 @@ dist/
 .DS_Store
 runtime/
 docs/screenshots/
+.vercel
+docs/CODEX-DEMO-RESHOOT-HANDOFF.md
