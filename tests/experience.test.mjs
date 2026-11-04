@@ -50,7 +50,7 @@ test('forged rules, mismatched initial food, wrong scenario and invented evidenc
   const extra=structuredClone(file);extra.context.review.image='data:image/png;base64,private';const loaded=loadDiscovery(extra).session.export();assert(!JSON.stringify(loaded).includes('private'));
 });
 test('observation wording follows actual comparisons, including unexpected population directions',()=>{
-  const s=start();s.seek(26);const choices=observationChoices(s);const rabbit=choices.find(o=>o.id==='population.rabbit');
+  const s=startModel({food:'Some',review,seed:7});s.seek(26);const choices=observationChoices(s);const rabbit=choices.find(o=>o.id==='population.rabbit');
   assert.equal(rabbit.text,'More rabbits');assert.equal(rabbit.difference,s.getState().changed.counts.rabbit-s.getState().baseline.counts.rabbit);
 });
 function png(){const b=Buffer.alloc(33);Buffer.from([137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82]).copy(b);b.writeUInt32BE(2,16);b.writeUInt32BE(2,20);return 'data:image/png;base64,'+b.toString('base64')}
@@ -174,4 +174,9 @@ test('browser history restores only screens that can really draw',()=>{
  assert.equal(canShow('triage',{photo:{kind:'personal'}}),true);
  assert.equal(canShow('watch',{}),false);assert.equal(canShow('forest',{}),false);assert.equal(canShow('living-world',{}),false);
  assert.equal(canShow('pet-motion',{}),false);assert.equal(canShow('pet-collection',{}),true);assert.equal(canShow('home',{}),true);
+});
+test('the rain tally shown to children is what the model actually does',async()=>{
+ const {startModel,RAIN_RUNS,FOOD_LEVELS,LESSON_SEED}=await import('../src/experience/model-session.ts');const review={grass:'seen',tree:'seen',water:'seen'};
+ for(const food of Object.keys(FOOD_LEVELS)){const tally={fewer:0,more:0,same:0};for(let seed=1;seed<=RAIN_RUNS.runs;seed++){const f=startModel({food,review,seed}).seek(RAIN_RUNS.week),d=f.changed.counts.rabbit-f.baseline.counts.rabbit;tally[d<0?'fewer':d>0?'more':'same']++}assert.deepEqual(tally,{...RAIN_RUNS[food]},food);
+  const lesson=startModel({food,review,seed:LESSON_SEED});for(const w of [13,26,52]){const f=lesson.seek(w);assert.ok(f.changed.counts.rabbit<f.baseline.counts.rabbit,food+' week '+w);assert.ok(f.changed.grass<f.baseline.grass,food+' grass week '+w)}}
 });

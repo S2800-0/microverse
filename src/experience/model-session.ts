@@ -6,7 +6,15 @@ import {canUseForest} from './photo-routing.js';
 export const FOOD_LEVELS={ None:0,'A little':.25,Some:.55,Lots:.85 } as const;
 export const OBSERVATION_WEEKS=[0,1,4,13,26,52];
 export const RAIN_CHANGE={kind:'rain' as const,rain:.5,durationWeeks:52};
-export function startModel({food,review,route='greenspace',source='manual',sourceHash='',dimensions=null,seed=7,habitat='meadow'}:any){
+// The lesson opens on a run that shows the usual result at every food level. It is not a rigged result:
+// RAIN_RUNS reports how often that result happened, and a test recomputes the table from the model.
+export const LESSON_SEED=12;
+export const RAIN_RUNS={runs:20,week:52,'None':{fewer:11,more:7,same:2},'A little':{fewer:17,more:3,same:0},'Some':{fewer:18,more:2,same:0},'Lots':{fewer:15,more:5,same:0}} as const;
+export function rainRunsNote(session:any){
+  const tally=(RAIN_RUNS as any)[session.context?.startingFood?.label];if(!tally)return '';
+  return `We also ran this ${RAIN_RUNS.runs} times with different luck. By week ${RAIN_RUNS.week}, less rain had fewer rabbits in ${tally.fewer} of them.`;
+}
+export function startModel({food,review,route='greenspace',source='manual',sourceHash='',dimensions=null,seed=LESSON_SEED,habitat='meadow'}:any){
   if(!['garden','woodland','meadow'].includes(habitat))throw new Error('Choose a supported land world.');
   if(!Object.hasOwn(FOOD_LEVELS,food)||!canUseForest(route,review))throw new Error('Review an outdoor place and choose starting food first.');
   if(Object.keys(review).length!==3||!['grass','tree','water'].every(k=>['seen','unsure','not-visible'].includes(review[k])))throw new Error('Finish the three photo-review choices first.');
@@ -69,7 +77,7 @@ export function observationChoices(session:any){
 export function modelCaption(session:any){
   const s=session.getState();if(!s.elapsed)return {title:'This rabbit needs grass.',text:'Let’s give the world less rain. Watch the bright grass patches: will there still be enough to eat?'};
   const food=s.changed.grass-s.baseline.grass;
-  if(s.elapsed>=13){const rabbits=s.changed.counts.rabbit-s.baseline.counts.rabbit;return {title:rabbits<0?'There are fewer rabbits here.':rabbits>0?'There are more rabbits here.':'Both worlds have the same number of rabbits.',text:'This is compared with the usual-rain world. Food, hunters and chance all play a part. Open What happened to see the record.'}}
+  if(s.elapsed>=13){const rabbits=s.changed.counts.rabbit-s.baseline.counts.rabbit;return {title:rabbits<0?'There are fewer rabbits here.':rabbits>0?'There are more rabbits here.':'Both worlds have the same number of rabbits.',text:`${s.changed.counts.rabbit} rabbits here, ${s.baseline.counts.rabbit} with usual rain. Only the rain is different. Food, hunters and chance all play a part.`}}
   return {title:Math.abs(food)<.00005?'The grass looks much the same so far.':food<0?'Less grass for the animals.':'More grass for the animals.',text:s.elapsed===1?(Math.abs(food)<.00005?'Both worlds still have about the same grass. Keep watching.':food<0?'There is a little less grass than in the usual-rain world. The animals have not all changed yet. Keep watching.':'There is a little more grass than in the usual-rain world. Keep watching.'):'Compare the bright food patches with the usual-rain world. What do you notice?'};
 }
 export function recordedMoment(session:any,branch:'baseline'|'changed'='changed'){

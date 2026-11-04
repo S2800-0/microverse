@@ -11,35 +11,39 @@
   "files": [
     {
       "path": "public/assets/spark-fox-0.png",
-      "sha256": "178fabffb3e42d4a4adc51ff81241438e46ff60972b8110537bb48f8f9d9b711",
+      "sha256": "1f948c7ad9f9a22028c674e4de952490f78d97b922a0d568aa1483b9e8771e50",
       "size": [
         512,
         512
-      ]
+      ],
+      "realigned": "2026-11-04: moved and scaled locally so all four frames share one centre. No new drawing or AI call."
     },
     {
       "path": "public/assets/spark-fox-1.png",
-      "sha256": "b1331500ed5b47c1128b8021d2e988eaca2e06ca8f1e4dc3f213bf9ec6eb944c",
+      "sha256": "fc3f4473ce68919dd1264de591e12deade70e1cd4e98577d5b23cee077045c72",
       "size": [
         512,
         512
-      ]
+      ],
+      "realigned": "2026-11-04: moved and scaled locally so all four frames share one centre. No new drawing or AI call."
     },
     {
       "path": "public/assets/spark-fox-2.png",
-      "sha256": "122d9d714e5c30c01d582e07a919544781cf5855e0ad75412537f5d40a47224d",
+      "sha256": "1192f72c943f55372bf2532d7931f17d8ea0a4a8be4acc0431e37a2fc817ef91",
       "size": [
         512,
         512
-      ]
+      ],
+      "realigned": "2026-11-04: moved and scaled locally so all four frames share one centre. No new drawing or AI call."
     },
     {
       "path": "public/assets/spark-fox-3.png",
-      "sha256": "e775abbe1d8242925082ef6d5caa08a5de540103ff394d1a05db4df2538cd745",
+      "sha256": "b958540078e854edbde8094fad63a0d40ed58237f4f5cb9c78e52a61be93ec07",
       "size": [
         512,
         512
-      ]
+      ],
+      "realigned": "2026-11-04: moved and scaled locally so all four frames share one centre. No new drawing or AI call."
     },
     {
       "path": "public/assets/spark-clover-0.png",

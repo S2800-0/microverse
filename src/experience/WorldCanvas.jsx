@@ -50,7 +50,7 @@ export function WorldCanvas({frame,focusId=null,paused=false,reduced=false,onSel
       const focused=animals.find(a=>a.id===props.focusId);
       const zoom=focused?1.08:1;
       const scale=Math.max(width/f.width,height/f.height)*zoom;
-      const desired={x:focused?focused.x+(width>700?width/scale*.2:0):f.width/2,y:focused?focused.y+(width<=700?height/scale*.18:0):f.height/2};
+      const desired={x:focused?focused.x+(width>700?width/scale*.2:-width/scale*.2):f.width/2,y:focused?focused.y+(width<=700?height/scale*.18:0):f.height/2};
       desired.x=Math.max(width/scale/2,Math.min(f.width-width/scale/2,desired.x));desired.y=Math.max(height/scale/2,Math.min(f.height-height/scale/2,desired.y));
       if(!camera||props.reduced){camera={...desired};lastFocus=props.focusId}else if(!props.paused){const blend=1-Math.exp(-dt*5);camera.x+=(desired.x-camera.x)*blend;camera.y+=(desired.y-camera.y)*blend}
       const project=(x,y)=>({x:width/2+(x-camera.x)*scale,y:height/2+(y-camera.y)*scale});

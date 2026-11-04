@@ -131,7 +131,7 @@ h1,h2,h3,.forest-panel-content h2,.forest-journal-empty h3,.forest-moment>span:n
  .screen-watch .model-screen.real-world{position:relative;height:100svh;min-height:100svh;overflow:hidden}
  .screen-watch .world-condition{position:fixed;top:98px;left:20px;right:20px}
  .screen-watch .grass-story{position:fixed;top:239px;left:20px;bottom:auto;max-width:245px;padding:10px 14px}
- .screen-watch .model-screen .live-copy{position:absolute;left:20px;right:20px;top:355px;bottom:76px;margin:0;width:auto;padding:20px;max-height:none;overflow:auto;display:flex;flex-direction:column;overscroll-behavior:contain}
+ .screen-watch .model-screen .live-copy{position:fixed;left:20px;right:20px;top:auto;bottom:76px;margin:0;width:auto;padding:20px;max-height:calc(100svh - 431px);overflow:auto;display:flex;flex-direction:column;overscroll-behavior:contain}
  .screen-watch .live-copy h1{font-size:29px;line-height:1.06;margin:0}
  .screen-watch .live-copy>p:not(.eyebrow){font-size:16px;line-height:1.4;margin-top:12px}
  .screen-watch .live-copy .primary{font-size:18px;min-height:52px;margin-top:16px;padding:12px 18px;flex-shrink:0}
@@ -141,7 +141,7 @@ h1,h2,h3,.forest-panel-content h2,.forest-journal-empty h3,.forest-moment>span:n
  .screen-watch .world-tools button{font-size:13px;padding:10px 8px;min-height:44px}
  .screen-watch .time-passing{position:fixed;top:150px;left:20px;z-index:5}
 }
-@media(max-width:700px) and (max-height:760px){.screen-watch .grass-story{top:210px}.screen-watch .model-screen .live-copy{top:315px}}
+@media(max-width:700px) and (max-height:760px){.screen-watch .grass-story{top:210px}.screen-watch .model-screen .live-copy{max-height:calc(100svh - 391px)}}
 
 /* Polish pass: press feedback, overlays, photo edges, icon swaps and the shared status note. */
 button,a,summary{-webkit-tap-highlight-color:transparent}
@@ -153,3 +153,4 @@ dialog,.spark-speech,.living-story,.coachmark,.forest-dialog,.spark-studio-overl
 .icon-swap[data-first=true]>span:last-child,.icon-swap[data-first=false]>span:first-child{opacity:0;scale:.25;filter:blur(4px)}
 .photo-status-float{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:30;width:max-content;max-width:calc(100vw - 32px);margin:0;padding:12px 20px;border-radius:999px;background:#fff8e9;color:#1f4b49;font-weight:700;box-shadow:0 8px 28px #203d2b30}
 .own-adventure .explore-forest{display:flex;width:fit-content;margin:6px auto 18px}
+.recap-runs{font-size:.92em;opacity:.82}

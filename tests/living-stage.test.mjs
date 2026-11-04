@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createLivingWorld,restoreLivingWorld,SAVED_REEF_PLAN} from '../src/world/simulation.js';
-import {parseWorldCommand,validateWorldCommand} from '../src/world/world-commands.js';
+import {parseWorldCommand,validateWorldCommand,worldFact} from '../src/world/world-commands.js';
 import {sceneTransition,hasPond} from '../src/world/scene-navigation.js';
 import {makePondWorld} from '../src/world/pond-world.js';
 import {SAVED_WORLDS} from '../src/world/saved-places.js';
@@ -61,4 +61,15 @@ test('cancellation or an incomplete budget reservation stops before any provider
 test('an incompatible animal design stops before spending an image call',async()=>{
  let calls=0;const service=createNewNeighbour({apiKey:'fake',budget:{reserve:async()=>{}},fetchImpl:async()=>{calls++;return new Response(JSON.stringify({choices:[{message:{content:JSON.stringify({animal:'Flying fish',look:'blue fish',zone:'water',motion:'fly',family:'fish',fits:true})}}]}))}});
  await assert.rejects(()=>service.run({consent:true,animal:'fish',replay:createLivingWorld(land).toReplay()}));assert.equal(calls,1);
+});
+test('Spark understands how children ask, and every activity is a real controller',()=>{
+ const plan=SAVED_WORLDS.woodland.plan,context={plan,companions:[]},kind=q=>parseWorldCommand(q,context)?.kind;
+ for(const q of ['can you add a fox','Could you add a fox please','i want a fox','spark add a fox','bring a fox','get rid of the fox','take away a mouse'])assert.ok(['add-animal','remove-animal'].includes(kind(q)),q);
+ for(const [q,value] of [['make the fox sleep','sleep'],['put the owl to bed','sleep'],['Can you make the mouse run?','run'],['feed the fox','eat'],['wake the fox up','auto'],['wake up the owl','auto'],['let the fox rest','rest'],['make the owl walk','move']]){const c=parseWorldCommand(q,context);assert.equal(c.kind,'set-activity',q);assert.equal(c.value,value,q)}
+ assert.throws(()=>parseWorldCommand('make the dragon sleep',context),/no dragon/);
+ assert.equal(kind('where is the owl'),'focus-animal');assert.equal(kind('add a dragon'),'generate-animal');assert.equal(kind('stop the rain'),'weather');
+ assert.equal(parseWorldCommand('put a tree by the pond',context),null);
+ assert.throws(()=>validateWorldCommand({kind:'set-activity',target:'Woodland Fox',value:'dance'},context));
+ const w=createLivingWorld(plan,5),fox=w.snapshot().agents.find(a=>plan.inhabitants[a.type].name==='Woodland Fox');w.setActivity(fox.id,'sleep');for(let i=0;i<6;i++)w.step();assert.equal(w.snapshot().agents.find(a=>a.id===fox.id).activity,'sleeping');
+ const frame=w.snapshot();assert.match(worldFact('how many foxes are there?',{plan,frame}),/Woodland Fox/);assert.match(worldFact('how much food is left',{plan,frame}),/food/);assert.equal(worldFact('why is the food going down',{plan,frame}),null);assert.match(worldFact('what eats the mouse?',{plan,frame}),/Woodland Owl and Woodland Fox hunt Wood Mouse/);assert.match(worldFact('what hunts the fox',{plan,frame}),/Nothing hunts/);
 });

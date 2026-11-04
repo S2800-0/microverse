@@ -1,3 +1,17 @@
+# V21 less-rain story, Spark world control, git · 4 November 2026
+
+This current status supersedes historical notes below.
+
+- Git started here: local only, no remote, no push. Before going public, check docs/screenshots/user-feedback-2026-11-02/ and docs/screenshots/approved-review/24-personal-photo-fallback.jpg for private content.
+- The lesson opened on seed 7, an outlier that ended with more rabbits under less rain. It now opens on LESSON_SEED 12. This is a representative run, not a rigged result: RAIN_RUNS reports 20 seeds at week 52 (fewer rabbits: None 11, A little 17, Some 18, Lots 15) and is shown to the child. A test recomputes the table. Grass was lower in every run checked. Surprising results still follow the record; the tests keep seed 7 for that.
+- At Some food the lesson now reads 47 rabbits against 72 at week 52. Any older footage or script saying more rabbits is out of date.
+- Watch shows real counts and Week N of 52. From week 13 the view opens out to the whole meadow, and Look closer still follows one animal.
+- Spark: polite phrasing is stripped before matching. New set-activity command (sleep, rest, run, move, eat, auto) uses the same sim.setActivity as the buttons; a snack stays animation only. How many, how much food and who eats whom are answered free from the frame and role rules. The lesson explains its fair test instead of changing anything. The world keeps running after an applied command. Replies that used Spark are labelled as such.
+- Spark's fox frames were off-centre and jumped about 110px of 512 between frames while talking. Re-registered locally to one centre and 90% scale. No new drawing or AI call. Provenance hashes updated.
+- Music choices and required credits: docs/demo-assets/music/README.md. Agents have not listened to them. The FreePD files came from a third-party mirror because the site has closed.
+- Spark test calls reserved $0.25 (5 attempts). All five returned; world-answer gave nothing useful for who eats whom, which is now free. Ledger $4.25 reserved, $0.75 remains under the $5 cap.
+- 100 tests, 4 sites tests and build pass. Still unverified: physical touch, camera, participant comprehension. Known small flaw: an event label can overlap the Grass to eat card.
+
 # V20 drawn behaviour poses · 4 November 2026
 
 This current status supersedes historical notes below.
