@@ -6,7 +6,7 @@ import {isWalkable,nextWaypoint,groundFromPixels,validateGround,walkablePixel} f
 import {isWaterPixel,waterWave} from '../src/world/water-art.js';
 import {createLivingWorld,restoreLivingWorld} from '../src/world/simulation.js';
 import {SAVED_WORLDS} from '../src/world/saved-places.js';
-import {compileBlueprint} from '../src/world/blueprint.js';
+import {compileBlueprint,WORLD_SCHEMA} from '../src/world/blueprint.js';
 import {LESSONS,WATCH_DAYS,compareWithoutChange,lessonCommand,lessonFor,outcomeOf,resultLine} from '../src/world/lessons.js';
 
 test('an owl is smaller than a fox and larger than a mouse, even with wings spread',()=>{
@@ -57,6 +57,10 @@ test('the walkable map survives planning and replay',()=>{
 test('water helpers: blue is water, leaves are not, and the wave is small',()=>{
  assert.equal(isWaterPixel(70,130,190),true);assert.equal(isWaterPixel(90,150,70),false);
  for(let t=0;t<20;t+=1.3){const w=waterWave(300,200,t);assert.ok(Math.abs(w.x)<=4.1&&Math.abs(w.y)<=1.6)}
+});
+test('the planner schema obeys strict mode: every property of every object is required',()=>{
+ const walk=(n,path)=>{if(!n||typeof n!=='object')return;if(n.type==='object'){assert.equal(n.additionalProperties,false,path);assert.deepEqual([...(n.required||[])].sort(),Object.keys(n.properties||{}).sort(),path)}for(const [k,v] of Object.entries(n.properties||{}))walk(v,path+'.'+k);if(n.items)walk(n.items,path+'[]')};
+ walk(WORLD_SCHEMA,'$');
 });
 test('each saved world has its own fitting lesson with a source',()=>{
  assert.equal(lessonFor(SAVED_WORLDS.garden.plan,'garden').id,'rain-and-plants');
