@@ -4,9 +4,12 @@ Written 4 November 2026. Submission is due 9:00 PM ET today, which is also when 
 
 ## Read this first
 
+- **The reef photo in the library changed.** The old Huahine photo had no confirmed rights, so it was removed. It is now Borut Furlan's Moorea split-shot (CC BY-SA 4.0, credit required if shown). Reshoot any shot showing the old card.
+- **Check the trailer's photos.** `scripts/prepare-opening-art.py` uses unlicensed-looking sources, including an iStock preview (`istockphoto-877356936-612x612.jpg`) and unnamed web images. The owner wants anything without a clear licence replaced with something similar before publishing, and the art made from those files is affected too.
+
 - **Reshoot anything filmed before commit `958b91c`.** It shows the old motion, pond and labels.
 - **Any footage of a newly generated world made on `958b91c` itself would be a failed attempt.** Live generation was broken at that commit. It is fixed in the commit after it.
-- **Use this local folder, `microverse-camera-prototype`, at its latest commit.** Do not use the `microverse-hackathon` folder or `main` on `S2800-0/microverse`. Those are an older, different codebase and have none of this.
+- **Use this local folder, `microverse-camera-prototype`, at its latest commit.** Do not use the `microverse-hackathon` folder, which is an older codebase.
 - **Run it locally to film generation or AI Spark:** `http://127.0.0.1:8860/`. Those features only exist on the local dev server. A static deployment has the saved worlds and lessons only.
 - **Budget:** the cap and the ledger changed after this was first written, so read the current balance from `/api/world-tools/status`. One full new world reserves $0.30, and the app refuses to start one below $0.30. Do not reset the ledger, and do not spend without the user's approval.
 - **Keep the browser window visible while recording.** A hidden pane stalls image loading and world motion.

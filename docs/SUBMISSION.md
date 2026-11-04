@@ -6,12 +6,13 @@ Due 9:00 PM ET, 4 November 2026. Fields below follow the submission form as capt
 
 | Item | Status |
 |---|---|
-| Open source GitHub repository (the organizers call this mandatory) | `LICENSE` added. Choose the repository link below |
+| Open source GitHub repository (the organizers call this mandatory) | MIT `LICENSE` added |
 | 3-minute video link | With Codex and the owner. Test it signed out |
-| Island reef photo rights | **Open.** See `docs/CREDITS.md` |
+| Reef seabed painting | Used the old photo for coral colours. Repaint pending. See `docs/CREDITS.md` |
 | Photos used in the trailer | **Check** that each one may be published |
 | Publicity permission on the form | Owner to read and accept. It lets Meta and Cerebral Valley publish the submitted materials |
 | Survey questions | Owner's own opinions, so left blank here |
+| Video link in `README.md` | Add near the top once the video is up |
 
 ## Form answers
 
@@ -25,9 +26,8 @@ Due 9:00 PM ET, 4 November 2026. Fields below follow the submission form as capt
 
 **Most Viral Track X link:** Only if entering that track
 
-**Public GitHub repository:** https://github.com/S2800-0/microverse/tree/camera-prototype
+**Public GitHub repository:** https://github.com/S2800-0/microverse
 
-The default branch of that repository is an older codebase, so this link must include the branch.
 
 **3-minute demo video:** `ADD URL`
 
@@ -98,7 +98,7 @@ Claude Code and Codex as coding assistants. Codex's image tool made the home scr
 
 ## Built during the event
 
-The form has no field for this, but the Participant Guide says the demo must identify what was built during the event. Git history in this repository starts on 4 November, so it does not show these dates. They come from provenance notes in this repository and in the earlier project's `PROVENANCE.md`.
+The form has no field for this, but the Participant Guide says the demo must identify what was built during the event. The repository's history runs from 26 October. This app was developed in a separate local folder from 2 November and its git history begins on 4 November, so the last row rests on notes rather than commits. The dates come from provenance notes in this repository and in `docs/PROVENANCE-EARLIER-APP.md`.
 
 | Period | Work |
 |---|---|
@@ -117,7 +117,7 @@ The form has no live site field, though the guide says the live product should b
 ```text
 Microverse turns a photo of a real place into a living little world you can experiment with. Built with Muse Spark, Muse Image and SAM 3.1.
 
-Code: https://github.com/S2800-0/microverse/tree/camera-prototype
+Code: https://github.com/S2800-0/microverse
 
 Music: ADD CREDIT LINE IF THE CHOSEN TRACK NEEDS ONE
 Full credits: docs/CREDITS.md in the repository

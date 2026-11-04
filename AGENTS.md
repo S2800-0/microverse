@@ -3,7 +3,7 @@
 - Commit 958b91c broke live generation: `lesson` was in WORLD_SCHEMA but not `required`, so strict mode returned 400. Fixed, and a test now checks the whole schema.
 - LessonCard stays mounted while an animal is selected; `add-animal` used to focus the newcomer and wipe the lesson. Keep watching resumes after Watch 7 days.
 - First real test of the V22 prompt and lesson pick: meadow photo gave pale connected paths, 76% walkable, rain lesson. This pass reserved $0.35 including one failed plan. Ledger $4.60, $0.40 remains; a full world needs $0.30. Reservations are not billing.
-- Reshoot notes: docs/CODEX-DEMO-RESHOOT-HANDOFF.md. Not pushed or deployed: the agent's push and Vercel deploy were blocked by a permission check and need the user. Planned target is branch camera-prototype of S2800-0/microverse, whose main is an older codebase.
+- Reshoot notes: docs/CODEX-DEMO-RESHOOT-HANDOFF.md. Later that day the Huahine reef photo and world-island paintings were removed for unconfirmed rights. Library card is now Borut Furlan's Moorea photo, CC BY-SA 4.0. reef-live-ground-v8 still used the old photo as a colour reference; a $0.05 repaint needs the user's approval. Repository main holds this app, merged with all earlier history.
 
 # V22 craft pass and per-world lessons · 4 November 2026
 - Sizes come from `src/world/creature-scale.js`, storybook proportions by name, not measurements. Beneath the pond everyone is 1.45x as a close-up.

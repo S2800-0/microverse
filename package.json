@@ -1,5 +1,5 @@
 {
-  "name": "microverse-camera-prototype",
+  "name": "microverse",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -24,5 +24,30 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "vite": "6.4.2"
+  },
+  "description": "Turn a photo of a real place into a living little world, then change one thing and see what happens.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/S2800-0/microverse.git"
+  },
+  "homepage": "https://github.com/S2800-0/microverse#readme",
+  "bugs": {
+    "url": "https://github.com/S2800-0/microverse/issues"
+  },
+  "keywords": [
+    "ecology",
+    "education",
+    "simulation",
+    "pixijs",
+    "react",
+    "muse-spark",
+    "muse-image",
+    "sam",
+    "meta-ai",
+    "hackathon"
+  ],
+  "engines": {
+    "node": ">=24"
   }
 }

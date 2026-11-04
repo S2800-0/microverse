@@ -84,7 +84,7 @@ test('tutorial notes stay inside phone/desktop viewports around edge targets',()
 test('three photo choices use local files and only garden claims saved SAM',()=>{
   assert.deepEqual(PLACE_LIBRARY.map(p=>p.id),['garden','woodland','reef']);
   assert.equal(PLACE_LIBRARY.filter(p=>p.kind==='sample').length,1);
-  for(const p of PLACE_LIBRARY){assert(p.src.startsWith('/assets/'));assert(existsSync(new URL('../public'+p.src,import.meta.url)));assert(p.credit);if(p.id!=='reef')assert(p.source.startsWith('https://commons.wikimedia.org/'));else assert.equal(p.source,null);assert(p.width<=1600&&p.height<=1600)}
+  for(const p of PLACE_LIBRARY){assert(p.src.startsWith('/assets/'));assert(existsSync(new URL('../public'+p.src,import.meta.url)));assert(p.credit);assert(p.source.startsWith('https://commons.wikimedia.org/'));assert(p.width<=1600&&p.height<=1600)}
 });
 test('every narrated state maps to a real prepared clip and the same fixed script',()=>{
   const manifest=JSON.parse(readFileSync(new URL('../public/audio/credits.json',import.meta.url)));
